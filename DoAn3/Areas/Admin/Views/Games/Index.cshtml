@@ -1,0 +1,268 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<div ng-controller="getDataGameIndex">
+   
+    <div class="d-flex " style="justify-content:space-between;width:98%">
+        <p class="btn btn-primary">
+            <a href="/Admin/Games/Create" class="text-light" style="text-decoration:none"> Thêm game mới  </a>
+        </p>
+        <div class="form-group w-25">
+            <select class="form-control" id="filterGame" ng-model="myOrderBy">
+                <option value="-MaGame">Sắp xếp theo mã giảm dần</option>
+                <option value="MaGame">Sắp xếp theo mã tăng dần</option>
+                <option value="-GiaTien">Sắp xếp theo giá giảm dần</option>
+                <option value="GiaTien">Sắp xếp theo giá tăng dần</option>
+            </select>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search game" id="SearchName">
+            <div class="input-group-append">
+                <button type="button" class="btn bg-transparent" style="margin-left: -40px; z-index: 100;" ng-click="Reset()">
+                    <i class="fa fa-times"></i>
+                </button>
+                <button class="btn btn-secondary" type="button" ng-click="GetAllGame()">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <table class="table" ng-init="GetAllGame()">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên Game
+            </th>
+            <th>
+                Ảnh minh họa
+            </th>
+            <th>
+                Giá tiền
+            </th>
+
+            <th>
+                Trạng thái
+            </th>
+            <th>
+                Thể loại game
+            </th>
+            <th>
+                Thể loại máy
+            </th>
+            <th>
+                Nhà phát hành
+            </th>
+            <th>
+                UVD
+            </th>
+        </tr>
+
+        <tr ng-repeat="game in filteredTodos | orderBy:myOrderBy">
+            <td>
+                {{$index +1}}
+            </td>
+            <td>
+                {{game.TenGame}}
+            </td>
+            <td>
+                <img ng-src="{{game.AnhGame}}" height="200" width="150" />
+            </td>
+            <td>
+                {{game.GiaTien | myCurrency}}
+            </td>
+
+            <td>
+                {{game.TrangThai}}
+            </td>
+            <td>
+                {{game.TenLoai}}
+            </td>
+            <td>
+                {{game.TenMay}}
+            </td>
+            <td>
+                {{game.TenNPH}}
+            </td>
+            <td>
+                <a class="btn btn-warning fa-solid fa-pencil" href="@Url.Action("Edit", "Games")/{{game.MaGame}}"> </a>
+                <a class="btn btn-primary fa-solid fa-eye" href="@Url.Action("Details", "Games")/{{game.MaGame}}"> </a>
+                <a class="btn btn-success fa-solid fa-trash" ng-click="DeleteButton(game.MaGame)"> </a>
+
+
+            </td>
+        </tr>
+
+    </table>
+    <div class="d-flex justify-content-center">
+        <pagination ng-model="currentPage"
+                    total-items="games.length"
+                    max-size="maxSize"
+                    boundary-links="true">
+        </pagination>
+    </div>
+</div>
+
+@section scripts{
+    @*<script src="~/Areas/Admin/Contents/js/AngularJsAdmin/Game.js"></script>*@
+    <script>
+        var myApp = angular.module("myApp", ['ui.bootstrap']).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+
+        myApp.filter('myCurrency', ['$filter', function ($filter) {
+            return function (input) {
+                input = parseFloat(input);
+                input = input.toFixed(input % 1 === 0 ? 0 : 2);
+                return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " ₫";
+            };
+        }]);
+
+        myApp.directive('ckEditor', function () {
+            return {
+                require: '?ngModel',
+                link: function (scope, elm, attr, ngModel) {
+                    var ck = CKEDITOR.replace(elm[0]);
+
+                    if (!ngModel) return;
+
+                    ck.on('instanceReady', function () {
+                        ck.setData(ngModel.$viewValue);
+                    });
+
+                    function updateModel() {
+                        scope.$apply(function () {
+                            ngModel.$setViewValue(ck.getData());
+                        });
+                    }
+
+                    ck.on('change', updateModel);
+                    ck.on('key', updateModel);
+                    ck.on('dataReady', updateModel);
+
+                    ngModel.$render = function (value) {
+                        ck.setData(ngModel.$viewValue);
+                    };
+                }
+            };
+        });
+
+        myApp.controller("getDataGameIndex", getDataGameIndex);
+        function getDataGameIndex($scope, $http) {
+
+            $scope.orderByMe = function () {
+                $scope.myOrderBy = document.getElementById("filterGame").value;
+            }
+
+            $scope.filteredGames = {}
+                , $scope.currentPage = 1
+                , $scope.numPerPage = 10
+                , $scope.maxSize = 5;
+
+            $scope.DeleteButton = function (id) {
+                var deleteItem = window.confirm("Bạn có muốn xóa sản phẩm này không ?")
+                if (deleteItem == true) {
+                    $scope.Game = {};
+                    $scope.Game.MaGame = id;
+                }
+                $http({
+                    method: "post",
+                    url: "/Admin/Games/DeleteGame/?id=" + $scope.Game,
+                    dataType: "json",
+                    data: JSON.stringify($scope.Game)
+
+                }).then(function (res) {
+                    $scope.games = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.games || !$scope.games.length) { return }
+                        $scope.filteredTodos = $scope.games.slice(begin, end);
+                    });
+                });
+
+            }
+
+            
+
+            $http({
+                method: "GET",
+                url: "/Admin/Games/GameIndex"
+
+
+            }).then(function (res) {
+                $scope.games = res.data;
+
+                $scope.$watch('currentPage + numPerPage', function () {
+                    var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                    if (!$scope.games || !$scope.games.length) { return }
+                    $scope.filteredTodos = $scope.games.slice(begin, end);
+                });
+            });
+
+
+            $scope.GetAllGame = function () {
+
+                var searchString = document.getElementById('SearchName').value;
+                /// game pagination
+                $scope.filteredGames = {}
+                    , $scope.currentPage = 1
+                    , $scope.numPerPage = 10
+                    , $scope.maxSize = 5;
+
+                $http({
+                    method: "get",
+                    url: "/Admin/Games/DataSearch/?name=" + searchString
+                }).then(function (res) {
+                    $scope.games = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.games || !$scope.games.length) { return }
+                        $scope.filteredTodos = $scope.games.slice(begin, end);
+                    });
+                });
+
+            };
+
+            $scope.Reset = function () {
+
+                var searchString = document.getElementById('SearchName').value;
+                searchString = " "
+                /// game pagination
+                $scope.filteredGames = {}
+                    , $scope.currentPage = 1
+                    , $scope.numPerPage = 10
+                    , $scope.maxSize = 5;
+
+                $http({
+                    method: "get",
+                    url: "/Admin/Games/DataSearch/?name=" + searchString
+                }).then(function (res) {
+                    $scope.games = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.games || !$scope.games.length) { return }
+                        $scope.filteredTodos = $scope.games.slice(begin, end);
+                    });
+                });
+
+            };
+        }
+    </script>
+}
+

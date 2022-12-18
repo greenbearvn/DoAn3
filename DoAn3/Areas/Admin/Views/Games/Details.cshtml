@@ -1,0 +1,151 @@
+﻿@model DoAn3.Models.Game
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div class="bg-white" ng-controller="DetailGame">
+    <h4>Game</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TenGame)
+        </dt>
+
+        <dd>
+            {{game.TenGame}}
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnhGame)
+        </dt>
+
+        <dd>
+            <img ng-src="{{game.AnhGame}}" width="150" height="200" />
+
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoTa)
+        </dt>
+
+        <dd>
+
+            {{game.MoTa}}
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SoLuong)
+        </dt>
+
+        <dd>
+            {{game.SoLuong}}
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GiaTien)
+        </dt>
+
+        <dd>
+            {{game.GiaTien}}
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Likes)
+        </dt>
+
+        <dd>
+            {{game.Likes}}
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Views)
+        </dt>
+
+        <dd>
+            {{game.Views}}
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Favouries)
+        </dt>
+
+        <dd>
+
+            {{game.Favouries}}
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrangThai)
+        </dt>
+
+        <dd>
+
+            {{game.TrangThai}}
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LoaiGame.TenLoai)
+        </dt>
+
+        <dd>
+
+            {{game.TenLoai}}
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LoaiMay.TenMay)
+        </dt>
+
+        <dd>
+
+            {{game.TenMay}}
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NhaPhatHanh.TenNPH)
+        </dt>
+
+        <dd>
+
+            {{game.TenNPH}}
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MaGame }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+@section scripts{
+
+    <script>
+        var myApp = angular.module("myApp", []).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+
+        myApp.controller("DetailGame", DetailGame);
+        function DetailGame($scope, $http) {
+
+            var url = window.location.pathname;
+            var id = url.substring(url.lastIndexOf('/') + 1);
+
+            $http({
+                method: "GET",
+                url: "/Admin/Games/GameDetail/" + id,
+
+
+            }).then(function (res) {
+                $scope.game = res.data;
+                console.log(game)
+            });
+
+        }
+        
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+}

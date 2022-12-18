@@ -1,0 +1,46 @@
+﻿@model IEnumerable<DoAn3.Models.LoaiMay>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2 style="margin-top:10%">Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table" ng-controller="LoaiMayIndex">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TenMay)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoTa)
+        </th>
+        <th></th>
+    </tr>
+
+
+    <tr ng-repeat="data in datas">
+        <td>
+            {{data.TenMay}}
+        </td>
+        <td>
+            {{data.MoTa}}
+        </td>
+        <td>
+            <a class="btn btn-warning" ng-href="/Admin/LoaiMays/Edit/{{data.MaMay}}"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a class="btn btn-primary" ng-href="/Admin/LoaiMays/Details/{{data.MaMay}}"><i class="fa-solid fa-circle-info"></i></a>
+            <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaMay)"><i class="fa-solid fa-trash"></i></a>
+        </td>
+    </tr>
+
+
+</table>
+
+@section scripts{
+
+    <script src="~/Areas/Admin/Contents/js/AngularJsAdmin/LoaiMay.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+}

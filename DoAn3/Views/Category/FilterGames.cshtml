@@ -1,0 +1,202 @@
+﻿<aside class="page-sidebar" id="faceted-search-container">
+    <nav>
+        
+        <div id="facetedSearch" class="facetedSearch sidebarBlock">
+
+
+            <a href="#facetedSearch-navList" role="button" class="facetedSearch-toggle toggleLink" data-collapsible="">
+                <span class="facetedSearch-toggle-text">
+                    Browse by Brand, Color &amp; more
+
+                </span>
+
+                <span class="facetedSearch-toggle-indicator">
+                    <span class="toggleLink-text toggleLink-text--on">
+                        Hide Filters
+
+                        <i class="icon" aria-hidden="true">
+                            <svg><use xlink:href="#icon-keyboard-arrow-up"></use></svg>
+                        </i>
+                    </span>
+
+                    <span class="toggleLink-text toggleLink-text--off">
+                        Show Filters
+
+                        <i class="icon" aria-hidden="true">
+                            <svg><use xlink:href="#icon-keyboard-arrow-down"></use></svg>
+                        </i>
+                    </span>
+                </span>
+            </a>
+           
+            <div id="facetedSearch-navList" class="facetedSearch-navList blocker-container">
+                <div class="accordion accordion--navList" ng-submit="filters()">
+                    <div class="accordion-block">
+                        <div class="accordion-navigation toggleLink  is-open " role="button" data-collapsible="#facetedSearch-content--brand">
+                            <h5 class="accordion-title">
+                                Nhà phát hành
+                            </h5>
+
+                            <div class="accordion-navigation-actions">
+                                <svg class="icon accordion-indicator toggleLink-text toggleLink-text--off">
+                                    <use xlink:href="#icon-add"></use>
+                                </svg>
+                                <svg class="icon accordion-indicator toggleLink-text toggleLink-text--on">
+                                    <use xlink:href="#icon-remove"></use>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div id="facetedSearch-content--brand" class="accordion-content  is-open ">
+                            <div class="flex justify-center">
+                                <div class="mb-3 xl:w-96">
+                                    <select class="form-select appearance-none
+                                                  block
+                                                  w-full
+                                                  px-3
+                                                  py-1.5
+                                                  text-base
+                                                  font-normal
+                                                  text-gray-700
+                                                  bg-white bg-clip-padding bg-no-repeat
+                                                  border border-solid border-gray-300
+                                                  rounded
+                                                  transition
+                                                  ease-in-out
+                                                  m-0
+                                                  focus:text-gray-700 focus:bg-white
+                                            focus:border-blue-600 focus:outline-none" aria-label="Default select example" id="nph">
+
+                                        <option ng-repeat="data in nph" value="{{data.MaNPH}}">{{data.TenNPH}}</option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="accordion-block">
+                        <div class="accordion-navigation toggleLink  is-open " role="button" data-collapsible="#facetedSearch-content--Color">
+                            <h5 class="accordion-title">
+                                Loại game
+                            </h5>
+
+                            <div class="accordion-navigation-actions">
+                                <svg class="icon accordion-indicator toggleLink-text toggleLink-text--off">
+                                    <use xlink:href="#icon-add"></use>
+                                </svg>
+                                <svg class="icon accordion-indicator toggleLink-text toggleLink-text--on">
+                                    <use xlink:href="#icon-remove"></use>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div id="facetedSearch-content--Color" class="accordion-content  is-open ">
+
+                            <div class="flex justify-center">
+                                <div class="mb-3 xl:w-96">
+                                    <select class="form-select appearance-none
+                                                  block
+                                                  w-full
+                                                  px-3
+                                                  py-1.5
+                                                  text-base
+                                                  font-normal
+                                                  text-gray-700
+                                                  bg-white bg-clip-padding bg-no-repeat
+                                                  border border-solid border-gray-300
+                                                  rounded
+                                                  transition
+                                                  ease-in-out
+                                                  m-0
+                                                  focus:text-gray-700 focus:bg-white
+                                            focus:border-blue-600 focus:outline-none" aria-label="Default select example" id="loaigame">
+
+                                        <option ng-repeat="data in loaigame" value="{{data.MaLoai}}">{{data.TenLoai}}</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="accordion-block">
+                        <div class="accordion-navigation toggleLink  is-open " role="button" data-collapsible="#facetedSearch-content--price">
+                            <h5 class="accordion-title">
+                                Price
+                            </h5>
+
+                            <div class="accordion-navigation-actions">
+                                <svg class="icon accordion-indicator toggleLink-text toggleLink-text--off">
+                                    <use xlink:href="#icon-add"></use>
+                                </svg>
+                                <svg class="icon accordion-indicator toggleLink-text toggleLink-text--on">
+                                    <use xlink:href="#icon-remove"></use>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div id="facetedSearch-content--price" class="accordion-content  is-open ">
+                            <div class="relative pt-1">
+                                <label for="customRange3" class="form-label">Giá thấp</label>
+                                <input type="range"
+                                       class="
+                                          form-range
+                                          appearance-none
+                                          w-full
+                                          h-6
+                                          p-0
+                                          bg-transparent
+                                          focus:outline-none focus:ring-0 focus:shadow-none
+    "
+                                       min="0"
+                                       max="10000000"
+                                       step="5"
+                                       value="0"
+                                       id="smallestPrice" oninput="this.nextElementSibling.value = this.value" />
+                                <output class="flex justify-content-center text-red"></output>
+                            </div>
+
+                            <div class="relative pt-1">
+                                <label for="customRange3" class="form-label">Giá cao</label>
+                                <input type="range"
+                                       class="
+                                          form-range
+                                          appearance-none
+                                          w-full
+                                          h-6
+                                          p-0
+                                          bg-transparent
+                                          focus:outline-none focus:ring-0 focus:shadow-none
+    "
+                                       min="0"
+                                       max="10000000"
+                                       step="5"
+                                       id="biggestPrice" oninput="this.nextElementSibling.value = this.value" />
+                                <output class="flex justify-content-center text-red"></output>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="flex">
+                        <button type="submit" ng-click="filters()" class="bg-red-600 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center mt-6 justify-content-center">
+                            <i class="fa-solid fa-filter text-white"></i>
+                            <span class="text-white ml-3">Filter</span>
+                        </button>
+                        <button type="submit" ng-click="reset()" class="bg-blue-600 hover:bg-blue-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center mt-6 ml-3 justify-content-center">
+                            <i class="fa-sharp fa-solid fa-filter-slash text-white"></i>
+                            <span class="text-white ml-3">Reset</span>
+                        </button>
+                    </div>
+                    
+                </div>
+
+                <div class="blocker" style="display: none;"></div>
+            </div>
+        </div>
+    </nav>
+</aside>

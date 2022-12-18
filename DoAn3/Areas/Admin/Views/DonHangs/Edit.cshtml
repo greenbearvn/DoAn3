@@ -1,0 +1,415 @@
+﻿@model DoAn3.Models.DonHang
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<div ng-controller="Edit">
+    <form ng-submit="addData()">
+
+
+        <div class="form-horizontal container">
+            <h4>Đơn hàng</h4>
+            <hr />
+
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    <h6>Tên khách hàng</h6>
+
+                    <select ng-model="dh.MaKH" class="custom-select" ng-options="x.MaKH as x.TenKH for x in kh">
+                        @*<option   value="{{item.MaKH}}">{{item.TenKH}}</option>*@
+                    </select>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+
+                <div class="col-md-10">
+                    <h6>
+                        Trạng thái đơn hàng
+
+                    </h6>
+                    <select ng-model="dh.TinhTrang" class="custom-select">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                <div class="col-md-10">
+                    <h6>
+                        Ngày tạo đơn
+                    </h6>
+                    <input type="date" class="form-control" ng-model="dh.NgayLap" id="ngaylap" />
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                <div class="col-md-10">
+                    <h6>
+                        Tổng tiền
+                    </h6>
+                    <input class="form-control" value="{{infor.Tongtien}}" readonly id="totalMoneyBefore" />
+
+                    @*<div class="text-danger" id="totalMoneyBefore">{{infor.Tongtien}}</div>*@
+                </div>
+            </div>
+
+
+        </div>
+
+        <h5 class="mt-5">Chi tiết đơn hàng</h5>
+        <hr />
+
+        <table class="table">
+            <tr>
+                <th>
+                    STT
+                </th>
+                <th>
+                    Tên Game
+                </th>
+                <th>
+                    Ảnh minh họa
+                </th>
+                <th>
+                    Giá tiền
+                </th>
+
+                <th>
+                    Trạng thái
+                </th>
+                <th></th>
+            </tr>
+
+
+            <tr ng-repeat="data in orderDetails">
+                <td>
+                    {{$index +1}}
+                </td>
+                <td>
+                    {{data.TenGame}}
+                </td>
+                <td>
+                    <img ng-src="{{data.AnhGame}}" height="200" width="150" />
+                </td>
+                <td>
+                    {{data.Gia}}
+                </td>
+                <td>
+                    {{data.TrangThai}}
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    <a class="btn btn-danger text-white" ng-click="DeleteButton(data.MaDH,data.MaGame)">Delete</a>
+                </td>
+                @*<td style="display:none;visibility:hidden">@{totalBill += (item.Game.GiaTien);}</td>*@
+            </tr>
+
+        </table>
+
+        
+
+        @Html.Action("ViewEditcart")
+
+        <div class="d-flex">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Lưu thông tin" class="btn btn-success" />
+                </div>
+            </div>
+            <div class="col-md-offset-2 col-md-10">
+                <a href="/Admin/DonHangs/Index" class="btn btn-danger">Quay về đơn hàng</a>
+            </div>
+        </div>
+
+    </form>
+
+    
+    
+    <hr />
+    <h4> Danh sach game</h4>
+    <div class="d-flex justify-content-end">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search game" id="SearchName">
+            <div class="input-group-append">
+                <button type="button" class="btn bg-transparent" style="margin-left: -40px; z-index: 100;" ng-click="Reset()">
+                    <i class="fa fa-times"></i>
+                </button>
+                <button class="btn btn-secondary" type="button" ng-click="GetAllGame()">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <table class="table" ng-init="GetAllGame()">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên Game
+            </th>
+            <th>
+                Ảnh minh họa
+            </th>
+            <th>
+                Giá tiền
+            </th>
+
+            <th>
+                Trạng thái
+            </th>
+            <th>
+                Thể loại game
+            </th>
+            <th>
+                Thể loại máy
+            </th>
+            <th>
+                Nhà phát hành
+            </th>
+            <th>
+                UVD
+            </th>
+        </tr>
+
+        <tr ng-repeat="game in filteredTodos ">
+            <td>
+                {{$index+1}}
+            </td>
+            <td>
+                {{game.TenGame}}
+            </td>
+            <td>
+                <img ng-src="{{game.AnhGame}}" height="200" width="150" />
+            </td>
+            <td>
+                {{game.GiaTien | myCurrency}}
+            </td>
+
+            <td>
+                {{game.TrangThai}}
+            </td>
+            <td>
+                {{game.TenLoai}}
+            </td>
+            <td>
+                {{game.TenMay}}
+            </td>
+            <td>
+                {{game.TenNPH}}
+            </td>
+            <td>
+                <a class="btn btn-warning fa-solid fa-pencil" href="@Url.Action("Edit", "Games")/{{game.MaGame}}"> </a>
+                <a class="btn btn-primary fa-solid fa-circle-plus"  ng-click="addCart(game.MaGame)"></a>
+                <a class="btn btn-success fa-solid fa-trash" ng-click="DeleteButton(game.MaGame)"> </a>
+
+
+            </td>
+
+        </tr>
+
+
+    </table>
+    <div class="d-flex justify-content-center">
+        <pagination ng-model="currentPage"
+                    total-items="games.length"
+                    max-size="maxSize"
+                    boundary-links="true">
+        </pagination>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script>
+        var myApp = angular.module("myApp", ['ui.bootstrap']).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+
+        myApp.filter('myCurrency', ['$filter', function ($filter) {
+            return function (input) {
+                input = parseFloat(input);
+                input = input.toFixed(input % 1 === 0 ? 0 : 2);
+                return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " ₫";
+            };
+        }]);
+        
+        myApp.controller('Edit', function ($scope, $http, $httpParamSerializerJQLike) {
+
+            var url = window.location.pathname;
+            var id = url.substring(url.lastIndexOf('/') + 1);
+
+            $scope.dh = {};
+            $scope.dh.MaDh = id;
+
+
+            /*$scope.dh.NgayLap = document.getElementById("ngaylap").value;*/
+
+            $http({
+                method: "GET",
+                url: "/Admin/DonHangs/OrderDetail/" + Number(id)
+
+            }).then(function (res) {
+                $scope.infor = res.data;
+                $scope.dh.MaKH = $scope.infor.MaKH;
+
+                $scope.dh.TinhTrang = $scope.infor.TinhTrang;
+                $scope.dh.NgayLap = $scope.infor.NgayLap;
+                //$scope.NgayLap = $scope.infor.NgayLap;
+                
+            });
+
+            $scope.addCart = function (magame) {
+                var url = window.location.pathname;
+                var id = url.substring(url.lastIndexOf('/') + 1);
+                $http({
+                    method: "post",
+                    url: "/Admin/DonHangs/AddEditCart/?id=" + magame + "&MaDH=" + id
+
+                }).then(function (res) {
+                    $scope.sp = res.data;
+                    window.location.reload();
+
+                    
+                });
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////////////
+            $scope.addData = function () {
+
+               
+
+                var moneyBefore = document.getElementById("totalMoneyBefore").value;
+                var moneyAfter = document.getElementById("totalMoney").innerHTML;
+                $scope.dh.Tongtien = moneyAfter /*+ moneyBefore*/;
+               
+                Token = angular.element('input[name="__RequestVerificationToken"]').attr('value');
+                $scope.dh.__RequestVerificationToken = Token;
+                dataRequest = $scope.dh;
+                console.log(dataRequest);
+                $http({
+                    method: 'POST',
+                    url: '/Admin/DonHangs/EditDH/?moneyBefore=' + moneyBefore,
+                    data: $httpParamSerializerJQLike(dataRequest),
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+
+                }).then(function (res) {
+                    $scope.data = res.data;
+                    if ($scope.data == false) {
+                        alert("Lỗi sửa thông tin hóa đơn");
+                    }
+                    else {
+                        alert("Sửa thông tin hóa đơn thành công");
+                        window.location.href = "/Admin/DonHangs/Index";
+                    }
+                });
+            };
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////
+            $scope.DeleteButton = function (id, magame) {
+                var deleteItem = window.confirm("Bạn có muốn xóa chi tiết đơn hàng này không ?")
+                if (deleteItem == true) {
+
+                    $scope.paramater = {}
+                    $scope.paramater.MaDH = Number(id);
+                    $scope.paramater.MaGame = Number(magame);
+                    window.location.reload();
+                }
+                $http({
+                    method: "post",
+                    url: "/Admin/ChiTietDonHangs/DeleteConfirmed/?id=" + $scope.paramater.MaDH + "&magame=" + $scope.paramater.MaGame,
+                    dataType: "json",
+                    data: JSON.stringify($scope.paramater)
+
+                }).then(function (res) {
+                    $scope.alert = res.data;
+                    alert($scope.alert)
+                });
+
+            }
+            ////////////////////////////////////////////////////////////////////////////////
+
+            $http({
+                method: "get",
+                url: "/Admin/DonHangs/DataEditCart?id=" + Number(id)
+            }).then(function (res) {
+                $scope.orderDetails = res.data;
+            });
+
+            $http({
+                method: "get",
+                url: "/Admin/DonHangs/getKhachHang"
+
+
+            }).then(function (res) {
+                $scope.kh = res.data;
+            });
+
+
+            $scope.GetAllGame = function () {
+
+                var searchString = document.getElementById('SearchName').value;
+                /// game pagination
+                $scope.filteredGames = {}
+                    , $scope.currentPage = 1
+                    , $scope.numPerPage = 10
+                    , $scope.maxSize = 5;
+
+                $http({
+                    method: "get",
+                    url: "/Admin/Games/DataSearch/?name=" + searchString
+                }).then(function (res) {
+                    $scope.games = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.games || !$scope.games.length) { return }
+                        $scope.filteredTodos = $scope.games.slice(begin, end);
+                    });
+                });
+
+            };
+
+            $scope.Reset = function () {
+
+                var searchString = document.getElementById('SearchName').value;
+                searchString = " "
+                /// game pagination
+                $scope.filteredGames = {}
+                    , $scope.currentPage = 1
+                    , $scope.numPerPage = 10
+                    , $scope.maxSize = 5;
+
+                $http({
+                    method: "get",
+                    url: "/Admin/Games/DataSearch/?name=" + searchString
+                }).then(function (res) {
+                    $scope.games = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.games || !$scope.games.length) { return }
+                        $scope.filteredTodos = $scope.games.slice(begin, end);
+                    });
+                });
+
+            };
+
+        });
+    </script>
+}

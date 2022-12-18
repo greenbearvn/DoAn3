@@ -1,0 +1,171 @@
+﻿@model IEnumerable<DoAn3.Models.DonHang>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2 >Index</h2> 
+
+<div class="d-flex " style="justify-content:space-between;width:98%">
+    <p class="btn btn-primary">
+        <a href="/Admin/DonHangs/Create" class="text-light" style="text-decoration:none"> Thêm đơn hàng mới  </a>
+    </p>
+    <div class="form-group w-25">
+        <div class="form-group has-search">
+            <input type="text" class="form-control" placeholder="Search" ng-model="search">
+        </div>
+    </div>
+</div>
+<div ng-controller="DonHangIndex">
+    <table class="table">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên khách hàng
+            </th>
+            <th>
+                Ngày lập
+            </th>
+            <th>
+                Tình trạng
+            </th>
+            <th>
+                Tổng tiền
+            </th>
+            <th></th>
+        </tr>
+
+
+        <tr ng-repeat="data in filteredTodos | filter:search | orderBy:'-MaDH'">
+            <td>
+                {{$index + 1}}
+            </td>
+            <td>
+                {{data.TenKH}}
+            </td>
+            <td>
+                {{data.NgayLap.slice(6, -2) | date: 'dd-MM-yyyy'}}
+            </td>
+            <td class="d-flex">
+                <div class="form-check" >
+                    <input class="form-check-input" type="checkbox" ng-click="ChangStatus(data.MaDH,data.TinhTrang)"  ng-model="TinhTrang" id="defaultCheck1">
+
+                </div>
+                <p>{{data.TinhTrang}} </p>
+            </td>
+            <td>
+                {{data.Tongtien | myCurrency}}
+            </td>
+            <td>
+                <a class="btn btn-warning" ng-href="/Admin/DonHangs/Edit/{{data.MaDH}}"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a class="btn btn-primary" ng-href="/Admin/DonHangs/Details/{{data.MaDH}}"><i class="fa-solid fa-circle-info"></i></a>
+                <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaDH)"><i class="fa-solid fa-trash"></i></a>
+            </td>
+        </tr>
+
+
+    </table>
+    <div class="d-flex justify-content-center">
+        <pagination ng-model="currentPage"
+                    total-items="games.length"
+                    max-size="maxSize"
+                    boundary-links="true">
+        </pagination>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var myApp = angular.module("myApp", ['ui.bootstrap']).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+        myApp.filter('myCurrency', ['$filter', function ($filter) {
+            return function (input) {
+                input = parseFloat(input);
+                input = input.toFixed(input % 1 === 0 ? 0 : 2);
+                return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " ₫";
+            };
+        }]);
+
+        myApp.controller("DonHangIndex", DonHangIndex);
+        function DonHangIndex($scope, $http) {
+
+            $scope.DeleteButton = function (id) {
+                var deleteItem = window.confirm("Bạn có muốn xóa đơn hàng này không ?")
+                if (deleteItem == true) {
+
+                    $scope.MaDH = Number(id);
+                    window.location.reload();
+                }
+                $http({
+                    method: "post",
+                    url: "/Admin/DonHangs/DeleteConfirmed/?id=" + $scope.MaDH,
+                    dataType: "json",
+                    data: JSON.stringify($scope.MaDH)
+
+                }).then(function (res) {
+                    $scope.alert = res.data;
+                    alert($scope.alert)
+                });
+
+            }
+
+            $scope.filteredGames = {}
+                , $scope.currentPage = 1
+                , $scope.numPerPage = 10
+                , $scope.maxSize = 5;
+
+            $http({
+                method: "get",
+                url: "/Admin/DonHangs/DataIndex",
+            }).then(function (res) {
+                $scope.games = res.data;
+
+                $scope.$watch('currentPage + numPerPage', function () {
+                    var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                    if (!$scope.games || !$scope.games.length) { return }
+                    $scope.filteredTodos = $scope.games.slice(begin, end);
+                });
+            });
+
+
+            $http({
+                method: "get",
+                url: "/Admin/DonHangs/DataIndex",
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+
+            });
+
+            $scope.ChangStatus = function (madh,tingtrang) {
+                
+                $http({
+                    method: "post",
+                    url: "/Admin/DonHangs/ChangStatus?MaDH=" + madh + "&tt=" + tingtrang,
+                    
+
+                }).then(function (res) {
+                    $scope.games = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.games || !$scope.games.length) { return }
+                        $scope.filteredTodos = $scope.games.slice(begin, end);
+                    });
+                   
+                });
+
+            }
+        }
+    </script>
+
+}
+
+
+

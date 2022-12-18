@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="122dbf9777284ac996b6541ea65d1216" Name="Diagram1">
+        <EntityTypeShape EntityType="DoAn3Model.BinhLuan" Width="1.5" PointX="8.25" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.ChiTietDonHang" Width="1.5" PointX="8.25" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.ChiTietKhoGame" Width="1.5" PointX="8.25" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.DonHang" Width="1.5" PointX="6" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.Game" Width="1.5" PointX="3" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.KhachHang" Width="1.5" PointX="3.75" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.KhoGame" Width="1.5" PointX="6" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.Like" Width="1.5" PointX="5.625" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.LoaiGame" Width="1.5" PointX="0.75" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.LoaiMay" Width="1.5" PointX="0.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.News" Width="1.5" PointX="6" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.NhaPhatHanh" Width="1.5" PointX="0.75" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.sysdiagram" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.User" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
+        <AssociationConnector Association="DoAn3Model.FK__BinhLuan__MaGame__38996AB5" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__BinhLuan__UserID__398D8EEE" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__ChiTietDo__MaGam__1332DBDC" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__ChiTietDon__MaDH__123EB7A3" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__ChiTietKh__MaGam__17036CC0" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__ChiTietKh__MaKho__160F4887" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__DonHang__MaKH__0F624AF8" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__Game__MaLoai__2A4B4B5E" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__Game__MaMay__2B3F6F97" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__Game__MaNPH__2C3393D0" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__Likes__MaGame__503BEA1C" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__KhachHang__MaKH__0C85DE4D" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__KhoGame__UserID__6FE99F9F" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__Likes__UserID__4F47C5E3" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__News__MaLoai__3C69FB99" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAn3Model.FK__News__UserID__3D5E1FD2" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

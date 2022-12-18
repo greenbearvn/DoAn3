@@ -1,0 +1,52 @@
+﻿@model DoAn3.Models.NhaPhatHanh
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<div ng-controller="Edit">
+    <form ng-submit="addData()">
+
+        <div class="form-horizontal">
+            <h4>NhaPhatHanh</h4>
+            <hr />
+            
+            <div class="form-group">
+                <h6>
+                    Tên nhà phát hành
+                </h6>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" ng-model="nphs.TenNPH" name="name" required />
+                    <p class="text-danger text-xs italic" ng-show="form.name.$touched && form.name.$invalid">Vui lòng điền đủ thông tin.</p>
+                </div>s
+            </div>
+
+            <div class="form-group">
+                <h6>
+                    Trụ sở
+                </h6>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" ng-model="nphs.TruSo" name="ts" required />
+                    <p class="text-danger text-xs italic" ng-show="form.ts.$touched && form.ts.$invalid">Vui lòng điền đủ thông tin.</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+        
+
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+        </form>
+</div>
+@section scripts{
+    <script src="~/Areas/Admin/Contents/js/AngularJsAdmin/NhaPhatHanh.js"></script>
+    }

@@ -1,0 +1,100 @@
+﻿@model DoAn3.Models.LoaiGame
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+<div ng-controller="myctrl">
+    <form ng-submit="addData()" name="form">
+       
+
+        <div class="form-horizontal">
+           
+
+            <div class="form-horizontal">
+
+
+                <div class="form-group">
+                    <h6>Tên loại</h6>
+                    <div class="col-md-10">
+                        <input type="text" ng-model="loaiGame.TenLoai" class="form-control" name="name" required />
+                        <p class="text-danger text-xs italic" ng-show="form.name.$touched && form.name.$invalid">Vui lòng điền đủ thông tin.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h6>Mô tả</h6>
+                    <div class="col-md-10">
+                        <input type="text" ng-model="loaiGame.MoTa" class="form-control" name="des" required />
+                        <p class="text-danger text-xs italic" ng-show="form.des.$touched && form.des.$invalid">Vui lòng điền đủ thông tin.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </form>
+</div>
+
+            <div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+            @section scripts{
+
+                <script>
+                    var myApp = angular.module('myApp', []);
+                    myApp.controller('myctrl', function ($scope, $http, $httpParamSerializerJQLike) {
+
+                        var maloai = document.getElementById("MaLoai").value;
+                        $scope.loaiGame = {};
+                        $scope.loaiGame.MaLoai = maloai;
+                       
+
+                        var url = window.location.pathname;
+                        var id = url.substring(url.lastIndexOf('/') + 1);
+
+
+                        $http({
+                            method: "GET",
+                            url: "/Admin/LoaiGames/EditDetailData/" + Number(id)
+
+                        }).then(function (res) {
+                            $scope.infor = res.data;
+                            $scope.loaiGame.TenLoai = $scope.infor.TenLoai;
+                            $scope.loaiGame.MoTa = $scope.infor.MoTa;
+                        });
+
+                        ///////////////////////////////////////////////////////////////////////////////////////
+                        $scope.addData = function () {
+                            Token = angular.element('input[name="__RequestVerificationToken"]').attr('value');
+                            $scope.loaiGame.__RequestVerificationToken = Token;
+                            dataRequest = $scope.loaiGame;
+                            console.log(dataRequest);
+                            $http({
+                                method: 'POST',
+                                url: '/Admin/LoaiGames/EditLoaiGame',
+                                data: $httpParamSerializerJQLike(dataRequest),
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+
+                            }).then(function (res) {
+                                console.log(res);
+                                if (res.data.msg == false) {
+                                    alert("Sua them ban ghi");
+                                }
+                                else {
+                                    alert("Sua ban ghi thanh cong");
+                                    window.location.href = "/Admin/LoaiGames/Index";
+                                }
+                            });
+                        };
+                    });
+                </script>
+            }

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<DoAn3.Models.NhaPhatHanh>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p class="btn btn-warning" >
+    <a href="/Admin/NhaPhatHanhs/Create" ><i class="fa-solid fa-plus text-success"></i></a>
+
+</p>
+<table class="table" ng-controller="nphIndex">
+    <tr>
+        <th>
+            STT
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TenNPH)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TruSo)
+        </th>
+        <th></th>
+    </tr>
+
+
+    <tr ng-repeat="data in datas | orderBy:'-MaNPH'">
+        <td>
+            {{$index+1}}
+        </td>
+        <td>
+            {{data.TenNPH}}
+        </td>
+        <td>
+            {{data.TruSo}}
+        </td>
+        <td>
+            <a class="btn btn-warning" ng-href="/Admin/NhaPhatHanhs/Edit/{{data.MaNPH}}"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a class="btn btn-primary" ng-href="/Admin/NhaPhatHanhs/Details/{{data.MaNPH}}"><i class="fa-solid fa-circle-info"></i></a>
+            <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaNPH)"><i class="fa-solid fa-trash"></i></a>
+        </td>
+    </tr>
+
+
+</table>
+@section scripts{
+    <script src="~/Areas/Admin/Contents/js/AngularJsAdmin/NhaPhatHanh.js"></script>
+    }

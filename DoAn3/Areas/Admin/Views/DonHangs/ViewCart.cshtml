@@ -1,0 +1,74 @@
+﻿@model IEnumerable<DoAn3.Models.ChiTietDonHang>
+
+@{
+    int stt = 0;
+    int? totalBill = 0;
+}
+
+
+@if (Session["cartAdmin"] != null)
+{
+    <h4>Chi tiết đơn hàng</h4>
+    <hr />
+    <table class="table">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên Game
+            </th>
+            <th>
+                Ảnh minh họa
+            </th>
+            <th>
+                Giá tiền
+            </th>
+
+            <th>
+                Trạng thái
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(stt += 1)
+                </td>
+                <td>
+                    @item.Game.TenGame
+                </td>
+                <td>
+                    <img src="@Url.Content(item.Game.AnhGame)" height="200" width="150" />
+                </td>
+                <td>
+                    @item.Game.GiaTien
+                </td>
+                <td>
+                    @item.Game.TrangThai
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    <a class="btn btn-danger text-white" href="/Admin/DonHangs/RemoveCartItem/@item.Game.MaGame">Delete</a>
+                </td>
+                <td style="display:none;visibility:hidden">@{totalBill += (item.Game.GiaTien);}</td>
+            </tr>
+        }
+    </table>
+
+
+    <div class="d-flex justify-content-center">
+        <div class="font-weight-bold">Tong Tien: </div> <div class="text-danger font-weight-bold" id="totalMoney">@(totalBill) </div><span>đ</span>
+    </div>
+}
+else
+{
+    <h5 class="text-warning">Chưa có chi tiết đơn hàng được thêm</h5>
+    <div class="d-flex justify-content-center" style="display:none;visibility:hidden">
+        <div class="font-weight-bold">Tong Tien: </div> <div class="text-danger font-weight-bold" id="totalMoney">@(totalBill) </div><span>đ</span>
+    </div>
+}
+

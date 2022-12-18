@@ -1,0 +1,11 @@
+﻿@model List<DoAn3.Models.LoaiMay>
+
+
+@foreach(var item in Model){
+   <ul class="navPages-list">
+        <li class="navPages-item">
+            <a class="navPages-action" href="pc.html">@item.TenMay</a>
+        </li>
+        
+    </ul>
+}

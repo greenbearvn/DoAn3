@@ -1,0 +1,127 @@
+﻿@model IEnumerable<DoAn3.Models.User>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+
+<div ng-controller="Index">
+    <div class="d-flex" style="justify-content:space-between">
+        <p>
+            <button class="btn btn-success"><a href="/Admin/UsersAdmin/Create">Create new</a></button>
+        </p>
+        <div class="form-group w-25">
+            <input type="text" class="form-control" placeholder="Tìm kiếm tên người dùng" ng-model="filterQuery">
+        </div>
+    </div>
+    
+    <table class="table">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên người dùng
+            </th>
+
+            <th>
+                Quyền của người dùng
+            </th>
+
+            <th></th>
+        </tr>
+
+
+        <tr ng-repeat="data in ListUsers | filter:filterQuery">
+            <td>
+                {{$index+1}}
+            </td>
+            <td>
+                {{data.UserName}}
+            </td>
+
+            <td>
+                {{data.Role}}
+            </td>
+
+            <td>
+                <a class="btn btn-warning fa-solid fa-pencil" href="@Url.Action("Edit", "UsersAdmin")/{{data.UserID}}"> </a>
+                <a class="btn btn-primary fa-solid fa-eye" href="@Url.Action("Details", "Games")/{{game.MaGame}}"> </a>
+                <a class="btn btn-success fa-solid fa-trash" ng-click="DeleteButton(data.UserID)"> </a>
+            </td>
+        </tr>
+
+
+    </table>
+    <div class="d-flex justify-content-center">
+        <pagination ng-model="currentPage"
+                    total-items="users.length"
+                    max-size="maxSize"
+                    boundary-links="true">
+        </pagination>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        var myApp = angular.module("myApp", ['ui.bootstrap']).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+        myApp.controller("Index", getDataUserIndex);
+        function getDataUserIndex($scope, $http) {
+
+            $scope.ListUsers = {}
+                , $scope.currentPage = 1
+                , $scope.numPerPage = 10
+                , $scope.maxSize = 5;
+
+
+            $scope.DeleteButton = function (id) {
+                var deleteItem = window.confirm("Bạn có muốn xóa sản phẩm này không ?")
+                if (deleteItem == true) {
+                  
+                    $scope.User = {};
+                    $scope.User.UserID = id;
+                }
+                $http({
+                    method: "post",
+                    url: "/Admin/UsersAdmin/DeleteUser/" + $scope.User ,
+                    dataType: "json",
+                    data: JSON.stringify($scope.User)
+
+                }).then(function (res) {
+                    $scope.users = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.users || !$scope.users.length) { return }
+                        $scope.ListUsers = $scope.users.slice(begin, end);
+                    });
+                });
+
+            }
+
+
+            $http({
+                method: "GET",
+                url: "/Admin/UsersAdmin/GetDataUser"
+
+
+            }).then(function (res) {
+                $scope.users = res.data;
+
+                $scope.$watch('currentPage + numPerPage', function () {
+                    var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                    if (!$scope.users || !$scope.users.length) { return }
+                    $scope.ListUsers = $scope.users.slice(begin, end);
+                });
+            });
+        }
+    </script>
+}

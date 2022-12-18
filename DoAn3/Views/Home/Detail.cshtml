@@ -1,0 +1,597 @@
+﻿@model DoAn3.Models.Game
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+
+<div class="body" ng-controller="DetailView">
+    <div class="container">
+
+        <ul class="breadcrumbs">
+            <li class="breadcrumb ">
+                <a href="/Home/Index" class="breadcrumb-label">Home</a>
+            </li>
+            <li class="breadcrumb ">
+                <a href="/Home/Category/{{sp.MaLoai}}" class="breadcrumb-label">{{sp.TenLoai}}</a>
+            </li>
+            <li class="breadcrumb is-active">
+                <a href="/Home/Detail/{{sp.MaGame}}" class="breadcrumb-label">{{sp.TenGame}}</a>
+            </li>
+        </ul>
+
+
+        <div>
+            <div class="productView">
+
+                <section class="productView-details">
+                    <div class="productView-product">
+                        <h2 class="productView-brand" itemprop="brand" itemscope itemtype="http://schema.org/Brand">
+                            <a href="smith-journal-13.html" itemprop="url"><span itemprop="name"></span></a>
+                        </h2>
+
+                        <h1 class="productView-title text-2xl" itemprop="name">{{sp.TenGame}}</h1>
+
+                        <meta itemprop="sku" content="SM13">
+
+
+
+                        <form name="LikeButtonForm" class=" flex mt-3 mb-3">
+                            @if (Session["UserID"] != null)
+                            {
+
+                                
+                                <button  type="submit" ng-click="LikeButton(sp.MaGame)" id="liked" class="inline-block px-6 py-2.5 bg-pink-600 text-white font-bold text-xs leading-tight uppercase rounded-full shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out">
+                                    <i class="fa-solid fa-heart"></i>
+                                </button>
+                                <div class="font-bold text-center text-xl p-2">{{likeNumber}}</div>
+
+                            }
+                            else
+                            {
+                                <button  type="button" class="inline-block px-6 py-2.5 bg-pink-600 text-white font-bold text-xs leading-tight uppercase rounded-full shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out">
+
+                                    <a href="/Users/Login/"><i class="fa-sharp fa-solid fa-heart"></i></a>
+
+                                </button>
+                                <div class="font-bold text-center text-xl p-2">{{likeNumber}}</div>
+                            }
+
+
+
+                        </form>
+
+                        <div class="productView-price">
+                            <div class="price-section price-section--withoutTax " itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                                <meta itemprop="url" content="https://gameworld1.mybigcommerce.com/smith-journal-13/">
+                                <meta itemprop="availability" itemtype="http://schema.org/ItemAvailability" content="http://schema.org/InStock">
+                                <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/Condition">
+                                <meta itemprop="priceCurrency" content="USD">
+                                <meta itemprop="priceValidUntil" content="2023-08-28">
+                                <div itemprop="priceSpecification" itemscope itemtype="http://schema.org/PriceSpecification">
+                                    <meta itemprop="price" content="25">
+                                    <meta itemprop="priceCurrency" content="USD">
+                                    <meta itemprop="valueAddedTaxIncluded" content="false">
+                                </div>
+                                <span data-product-price-without-tax class="price price--withoutTax">{{sp.GiaTien|myCurrency}}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex text-base"><p>Lượt xem: </p><p class="ml-3">{{sp.Views}}</p></div>
+
+                        <ul class="productView-info">
+                            <h3 class="productView-info-name">Loại game:</h3>
+                            <li class="productView-info-value" data-product-sku>{{sp.TenLoai}}</li>
+                        </ul>
+                        <ul class="productView-info">
+                            <h3 class="productView-info-name">Loại máy:</h3>
+                            <li class="productView-info-value" data-product-sku>{{sp.TenMay}}</li>
+                        </ul>
+                        <ul class="productView-info">
+                            <h3 class="productView-info-name">Nhà phát hành:</h3>
+                            <li class="productView-info-value" data-product-sku>{{sp.TenNPH}}</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="productView-images  h-full items-center object-contain flex justify-content-center" data-image-gallery>
+                    <img src="{{sp.AnhGame}}" alt="{{sp.TenGame}}" />
+                </section>
+
+
+                <section class="productView-details">
+                    <div class="productView-options">
+
+                        <form class="form" method="post" action="https://gameworld1.mybigcommerce.com/cart.php" enctype="multipart/form-data" data-cart-item-add>
+                            <input type="hidden" name="action" value="add">
+                            <input type="hidden" name="product_id" value="111">
+
+
+                            <div data-product-option-change style="display:none;">
+                            </div>
+
+
+                            <div class="form-field form-field--stock u-hiddenVisually">
+                                <label class="form-label form-label--alternate">
+                                    Current Stock:
+                                    <span data-product-stock></span>
+                                </label>
+
+                            </div>
+
+
+
+                            <div class="alertBox productAttributes-message" style="display:none">
+                                <div class="alertBox-column alertBox-icon">
+                                    <icon glyph="ic-success" class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path></svg></icon>
+                                </div>
+                                <p class="alertBox-column alertBox-message"></p>
+                            </div>
+                            <div class="form-action">
+                                <a href="@Url.Action("AddCart", "Home", new { id = @Model.MaGame })" class="button button--small card-figcaption-button">Add to Cart</a>
+                            </div>
+                            <!-- snippet location product_addtocart -->
+
+                        </form>
+
+
+                    </div>
+
+                    <div class="addthis_toolbox addthis_32x32_style" addthis:url="" addthis:title="">
+                        <ul class="socialLinks">
+                            <li class="socialLinks-item socialLinks-item--google_plusone">
+                                <a class="addthis_button_google_plusone icon icon--google_plusone" href="smith-journal-13.html">
+                                    <!-- No custom icons allowed with g+ -->
+                                </a>
+                            </li>
+                            <li class="socialLinks-item socialLinks-item--facebook">
+                                <a class="addthis_button_facebook icon icon--facebook" href="smith-journal-13.html">
+
+                                    <svg>
+                                        <use xlink:href="#icon-facebook"></use>
+                                    </svg>
+                                </a>
+                            </li>
+                            <li class="socialLinks-item socialLinks-item--email">
+                                <a class="addthis_button_email icon icon--email" href="smith-journal-13.html">
+                                    <svg>
+                                        <use xlink:href="#icon-envelope"></use>
+                                    </svg>
+                                </a>
+                            </li>
+                            <li class="socialLinks-item socialLinks-item--print">
+                                <a class="addthis_button_print icon icon--print" href="smith-journal-13.html">
+                                    <svg>
+                                        <use xlink:href="#icon-print"></use>
+                                    </svg>
+                                </a>
+                            </li>
+                            <li class="socialLinks-item socialLinks-item--twitter">
+                                <a class="addthis_button_twitter icon icon--twitter" href="smith-journal-13.html">
+                                    <svg>
+                                        <use xlink:href="#icon-twitter"></use>
+                                    </svg>
+                                </a>
+                            </li>
+                            <li class="socialLinks-item socialLinks-item--pinterest">
+                                <a class="addthis_button_pinterest icon icon--pinterest" href="smith-journal-13.html">
+                                    <svg>
+                                        <use xlink:href="#icon-pinterest"></use>
+                                    </svg>
+
+                                </a>
+                            </li>
+                        </ul>
+                        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4e94ed470ee51e32"></script>
+                        <script>
+                            if (typeof (addthis) === "object") {
+                                addthis.toolbox('.addthis_toolbox');
+                            }
+                        </script>
+                    </div>
+                    <!-- snippet location product_details -->
+                </section>
+
+
+                <article class="productView-description" itemprop="description">
+                    <ul class="tabs tabs--alt" data-tab>
+                        <li class="tab is-active">
+                            <a class="tab-title" href="#tab-description">Mo ta</a>
+                        </li>
+                    </ul>
+                    <div class="tabs-contents">
+                        <div class="tab-content is-active" id="tab-description">
+                            <p ng-bind-html="MoTa"></p>
+                            <!-- snippet location product_description -->
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+
+            <div id="previewModal" class="modal modal--large" data-reveal>
+                <a href="#" class="modal-close" aria-label="Close" role="button">
+                    <span aria-hidden="true">&times;</span>
+                </a>
+                <div class="modal-content"></div>
+                <div class="loadingOverlay"></div>
+            </div>
+
+
+            <!-- snippet location reviews -->
+
+            <ul class="tabs tabs--alt" data-tab role="tablist">
+                <li class="tab is-active" role="presentational">
+                    <a class="tab-title" href="#tab-related" role="tab" tabindex="0" aria-selected="true" controls="tab-related" ng-init="RelateGame()">Related Products</a>
+                </li>
+
+            </ul>
+
+            <div class="tabs-contents">
+                <div role="tabpanel" aria-hidden="false" class="tab-content has-jsContent is-active" id="tab-related">
+                    <section class="productCarousel">
+                        <div class="productCarousel-slide" ng-repeat="data in relateGames">
+                            <article class="card ">
+                                <figure class="card-figure">
+                                    <a href="Home/Detail/{{data.MaGame}}">
+                                        <img class="card-image" src="{{data.AnhGame}}" alt="[Sample] Orbit Terrarium - Large" title="[Sample] Orbit Terrarium - Large">
+
+                                    </a>
+                                    <figcaption class="card-figcaption">
+                                        <div class="card-figcaption-body">
+                                            <div class="card-buttons">
+                                                <a href="cart.html" class="button button--small card-figcaption-button">Add to Cart</a>
+
+
+                                                <a href="#" class="button button--small card-figcaption-button quickview" data-product-id="80">Quick view</a>
+                                            </div>
+
+                                            <div class="card-buttons card-buttons--alt">
+
+                                            </div>
+                                        </div>
+                                    </figcaption>
+                                </figure>
+                                <div class="card-body">
+                                    <h4 class="card-title">
+                                        <a href="orbit-terrarium-large.html">{{data.TenGame}}</a>
+                                    </h4>
+
+                                    <div class="card-text" data-test-info-type="price">
+                                        <div class="price-section price-section--withoutTax ">
+                                            <span data-product-price-without-tax class="price price--withoutTax">{{data.GiaTien}} đ</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+                    </section>
+                </div>
+
+
+
+
+                @if (Session["UserID"] != null)
+                {
+                    <div id="CommentSection">
+                        <div class="heading text-left font-bold text-2xl m-5 text-gray-800">New Comment</div>
+
+                        <div class="editor  flex items-left justify-left flex-col text-gray-800 border border-gray-300 p-4 shadow-lg max-w-2xl px-4 pt-2 pb-2.5">
+
+                            <textarea class="description bg-gray-100 sec p-3 h-60 border border-gray-300 outline-none" spellcheck="false" placeholder="Describe everything about this post here" ng-model="desc"></textarea>
+
+
+                            <!-- buttons -->
+                            <div class="buttons flex">
+                                <div class="btn border border-gray-300 p-1 px-4 font-semibold cursor-pointer text-gray-500 ml-auto">Cancel</div>
+                                <div class="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500" type="submit" value="Submit" id="btnSave" ng-click="Create()">Dang</div>
+                            </div>
+                        </div>
+                        <div class="flex items-left justify-left w-screen bg-white dark:bg-gray-800 container mx-auto">
+                            <div class="bg-white dark:bg-gray-800 text-black dark:text-gray-200 p-4 antialiased flex max-w-4xl">
+
+                                <div>
+                                    <div id="CommentItem" ng-repeat="data in comments | orderBy:'-MaNPH' | limitTo:6" class="w-100 mt-6">
+                                        <div class="bg-gray-100 dark:bg-gray-700 rounded-3xl px-4 pt-2 pb-2.5">
+                                            <div class="font-semibold text-sm leading-relaxed text-lg">{{data.UserName}}</div>
+                                            <div class="text-normal leading-snug md:leading-normal">{{data.NoiDung}}</div>
+                                        </div>
+                                        <div class="text-sm ml-4 mt-0.5 text-gray-500 dark:text-gray-400">{{data.ThoiGian.slice(6, -2) | date: 'dd-MM-yyyy'}}</div>
+                                        <div ng-init="ShowButtonDelete(data.MaGame,data.MaNPH,data.UserID)" ng-click="DeleteComment(data.MaGame,data.MaNPH,data.UserID)" class="bg-white dark:bg-gray-700 border border-white dark:border-gray-700 rounded-full float-right -mt-8 mr-0.5 flex shadow items-center ">
+                                            <i ng-show="true" class="fa-solid fa-trash "></i>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @*<ul class="navUser-section">
+                            <li class="navUser-item navUser-item--account text-red-500" >
+                                <a class="navUser-action" href="/Users/Login">
+                                    <span class="navUser-item-loginLabel">Đăng nhập</span>
+                                </a>
+                                <span class="navUser-or">or</span> <a class="navUser-action" href="/Users/Register">Đăng ký</a>
+                            </li>
+                        </ul>*@
+
+                    <div class="m-9">
+                        <h5 class="text-red-600 font-bold text-center ">Xin vui lòng đăng nhập hoặc đăng kí tài khoản mới để bình luận và hiển thị bình luận</h5>
+                        <div class="text-center">
+                            <a href="/Users/Login" class="font-bold text-blue-500">Đăng nhập </a>
+                            <span class="text-black-200 m-px">hoặc</span>
+                            <a href="/Users/Register" class="font-bold text-blue-500">Đăng ký </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+<div id="modal" class="modal" data-reveal data-prevent-quick-search-close>
+    <a href="#" class="modal-close" aria-label="Close" role="button">
+        <span aria-hidden="true">&times;</span>
+    </a>
+    <div class="modal-content"></div>
+    <div class="loadingOverlay"></div>
+</div>
+@if (Session["UserID"] != null)
+{
+    <p style="display:none" id="userID">@Session["UserID"].ToString()</p>
+}
+
+
+@section scripts{
+
+    <script>
+        
+        var myApp = angular.module("myApp", ['ngSanitize', 'ngAnimate']).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+        myApp.filter('myCurrency', ['$filter', function ($filter) {
+            return function (input) {
+                input = parseFloat(input);
+                input = input.toFixed(input % 1 === 0 ? 0 : 2);
+                return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " ₫";
+            };
+        }]);;
+        myApp.controller("DetailView", DetailView);
+        function DetailView($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/Home/LayLoaimay"
+
+            }).then(function (res) {
+                $scope.loaimay = res.data;
+
+            });
+
+            var url = window.location.pathname;
+            var id = url.substring(url.lastIndexOf('/') + 1);
+
+            $http({
+                method: "GET",
+                url: "/Home/DetailView/" + Number(id)
+
+            }).then(function (res) {
+                $scope.sp = res.data;
+                console.log($scope.sp)
+                $scope.MoTa = $scope.sp.MoTa;
+            });
+
+            $scope.Create = function () {
+                var action = document.getElementById("btnSave").getAttribute("value");
+                if (action == "Submit") {
+                    //get id game
+                    var url = window.location.pathname;
+                    var id = url.substring(url.lastIndexOf('/') + 1);
+                    // ngay gio
+                    const d = new Date();
+
+                    $scope.Comment = {}
+                    $scope.Comment.MaGame = id;
+                    $scope.Comment.UserID = document.getElementById("userID").innerHTML;
+                    $scope.Comment.NoiDung = $scope.desc;
+                    $scope.Comment.ThoiGian = d;
+                }
+                $http({
+                    method: "post",
+                    url: "/Comment/CreateComment",
+                    dataType: "json",
+                    data: JSON.stringify($scope.Comment)
+
+
+                }).then(function (res) {
+                    $scope.comments = res.data;
+
+                });
+            }
+
+            $http({
+                method: "GET",
+                url: "/Comment/GetCommentByGameID/" + Number(id)
+
+            }).then(function (res) {
+                $scope.comments = res.data;
+
+            });
+
+
+
+            $scope.RelateGame = function () {
+
+                $http({
+                    method: "get",
+                    url: "/Home/RelateGame/?id=" + id,
+
+                }).then(function (res) {
+                    $scope.relateGames = res.data;
+
+                });
+            }
+
+            $scope.DeleteComment = function (magame, mabinhluan) {
+
+                var userID = document.getElementById("userID").innerHTML;
+                $http({
+                    method: "post",
+                    url: "/Comment/RemoveComment?magame=" + magame + "&mabinhluan=" + mabinhluan + "&userID=" + userID,
+
+                }).then(function (res) {
+                    $scope.comments = res.data;
+
+
+                });
+            }
+
+            $http({
+                method: "GET",
+                url: "/Home/LikeNumber/" + Number(id)
+
+            }).then(function (res) {
+                $scope.likeNumber = res.data;
+                console.log($scope.likeNumber)
+
+            });
+
+            $scope.CheckGame = function () {
+
+                var userID = document.getElementById("userID").innerHTML;
+                $http({
+                    method: "GET",
+                    url: "/Home/CheckLike?magame=" + Number(id) + "&userid=" + userID,
+
+                }).then(function (res) {
+                    $scope.check = res.data;
+                    if ($scope.check == "True") {
+                        $scope.check = "true"
+                        /*$scope.dis = "false"*/
+
+                    }
+                    if ($scope.check == "False") {
+                        $scope.check = "false"
+                        /*$scope.dis = "true"*/
+                    }
+                });
+            }
+
+            
+
+            
+
+            $scope.LikeButton = function (magame) {
+
+                var userID = document.getElementById("userID").innerHTML;
+                $scope.Like = {}
+                $scope.Like.UserID = userID;
+                $scope.Like.MaGame = magame;
+                $scope.Like.TinhTrang = "xxx"
+
+                $http({
+                    method: "post",
+                    url: "/Home/Like",
+                    dataType: "json",
+                    data: JSON.stringify($scope.Like)
+                }).then(function (res) {
+                    $scope.likeNumber = res.data;
+
+
+                });
+
+                var userID = document.getElementById("userID").innerHTML;
+                $http({
+                    method: "GET",
+                    url: "/Home/CheckLike?magame=" + Number(id) + "&userid=" + userID,
+
+                }).then(function (res) {
+                    $scope.check = res.data;
+                    if ($scope.check == "True") {
+                        $scope.check = "true"
+                       /* $scope.dis = "false"*/
+
+                    }
+                    if ($scope.check == "False") {
+                        $scope.check = "false"
+                       /* $scope.dis = "true"*/
+                    }
+
+                });
+            }
+
+            $scope.ShowButtonDelete = function (magame, mabinhluan, userID) {
+
+
+                $http({
+                    method: "get",
+                    url: "/Comment/CheckComment?magame=" + magame + "&mabinhluan=" + mabinhluan + "&userID=" + userID,
+
+                }).then(function (res) {
+                    $scope.bool = res.data;
+                    if ($scope.bool == "True") {
+                        $scope.show = "true"
+                    }
+                    else {
+                        $scope.show = "false"
+                    }
+
+                });
+            }
+
+        }
+
+        myApp.controller("getLoaiMay", getLoaiMay);
+        function getLoaiMay($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/Home/LayLoaimay"
+
+            }).then(function (res) {
+                $scope.loaimay = res.data;
+
+            });
+        }
+
+        myApp.controller("recommendPost", recommendPost);
+        function recommendPost($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/News/RecommendPost"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
+
+        myApp.controller("SearchData", SearchData);
+        function SearchData($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/Home/dataSearch"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
+
+
+        
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-animate/1.8.3/angular-animate.min.js" integrity="sha512-Vhup4/4s+jnmiFsp1Sg1/6jXncRbIBc+fKemYjq1n+nEXthmeASyaWnClWsAV5Sas7WbLMLNYYHw6TxwQE4oPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.8.3/angular-sanitize.js" integrity="sha512-WsrQol2t85bun8XdIkjqTbNLgY54bCBgVZw+B+00eVritDAlCAcfYo92/53rFp63cKZpDa7t5r5lDDeKFcbUAQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+}

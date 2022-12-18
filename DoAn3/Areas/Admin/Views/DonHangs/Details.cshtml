@@ -1,0 +1,141 @@
+﻿@model DoAn3.Models.DonHang
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    @*@Html.ActionLink("Create New", "Create")*@
+</p>
+<h3 >Đơn hàng</h3>
+<div ng-controller="DonHangDetail">
+    <table class="table">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên khách hàng
+            </th>
+            <th>
+                Ngày lập
+            </th>
+            <th>
+                Tình trạng
+            </th>
+            <th>
+                Tổng tiền
+            </th>
+            <th></th>
+        </tr>
+
+
+        <tr>
+            <td>
+                {{$index + 1}}
+            </td>
+            <td>
+                {{data.TenKH}}
+            </td>
+            <td>
+                {{data.NgayLap.slice(6, -2) | date: 'dd-MM-yyyy'}}
+            </td>
+            <td>
+                {{data.TinhTrang}}
+            </td>
+            <td>
+                {{data.Tongtien | myCurrency}}
+            </td>
+
+        </tr>
+
+
+    </table>
+    <h4 class="text-primary mt-5">Chi tiết đơn hàng</h4>
+    <table class="table">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên game
+            </th>
+            <th>
+                Giá tiền
+            </th>
+            <th></th>
+        </tr>
+
+
+        <tr ng-repeat="data in cthd ">
+            <td>
+                {{$index + 1}}
+            </td>
+            <td>
+                {{data.TenGame}}
+            </td>
+            <td>
+                {{data.Gia | myCurrency}}
+            </td>
+            <td>
+                <a class="btn btn-warning" ng-href="/Admin/DonHangs/Edit/{{data.MaDH}}"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a class="btn btn-primary" ng-href="/Admin/DonHangs/Details/{{data.MaDH}}"><i class="fa-solid fa-circle-info"></i></a>
+                <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaDH)"><i class="fa-solid fa-trash"></i></a>
+            </td>
+        </tr>
+
+
+    </table>
+    <div class="d-flex ">
+        <a ng-href="/Admin/DonHangs/Edit/{{data.MaDH}}" class="btn btn-success mr-5">Sửa đơn hàng</a>
+        <a href="/Admin/DonHangs/Index" class="btn btn-success ml-5">Quay lại quản lý đơn hàng</a>
+    </div>
+</div>
+
+
+
+@section scripts{
+
+    <script>
+        var myApp = angular.module("myApp", []).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+
+        myApp.filter('myCurrency', ['$filter', function ($filter) {
+            return function (input) {
+                input = parseFloat(input);
+                input = input.toFixed(input % 1 === 0 ? 0 : 2);
+                return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " ₫";
+            };
+        }]);
+
+        var url = window.location.pathname;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+
+        myApp.controller("DonHangDetail", DonHangDetail);
+        function DonHangDetail($scope, $http) {
+
+            $http({
+                method: "get",
+                url: "/Admin/DonHangs/OrderDetail/" +Number(id),
+
+            }).then(function (res) {
+                $scope.data = res.data;
+                console.log($scope.data )
+
+            });
+
+            $http({
+                method: "get",
+                url: "/Admin/DonHangs/getCTDH/" + Number(id),
+
+            }).then(function (res) {
+                $scope.cthd = res.data;
+
+            });
+
+
+        }
+    </script>
+}

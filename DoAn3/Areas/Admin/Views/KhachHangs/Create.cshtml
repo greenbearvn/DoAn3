@@ -1,0 +1,122 @@
+﻿@model DoAn3.Models.KhachHang
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+<div ng-controller="Create">
+    <form ng-submit="addData()" name="form">
+        <div class="form-horizontal">
+            <h4>KhachHang</h4>
+            <hr />
+            
+            <div class="form-group">
+                <div class="col-md-10">
+                    <h6>
+                        Tên người dùng của khách hàng
+
+                    </h6>
+                    <select ng-model="kh.MaKH" class="custom-select">
+                        <option value="">-- Chọn tài khoản mà khách hàng sử dụng --</option>
+                        <option ng-repeat="us in users" value="{{us.UserID}}">{{us.UserName}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                
+                <div class="col-md-10">
+                    <h6>Tên khách hàng</h6>
+                    <input type="text" ng-model="kh.TenKH" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                
+                <div class="col-md-10">
+                    <h6>Địa chỉ</h6>
+                    <input type="text" ng-model="kh.DiaChi" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                
+                <div class="col-md-10">
+                    <h6>
+                        Số điện thoại
+                    </h6>
+                    <input type="text" ng-model="kh.SDT" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                
+                <div class="col-md-10">
+                    <h6>
+                        Số tài khoản ngân hàng
+                    </h6>
+                    <input type="text" ng-model="kh.SoTK" class="form-control" />
+                </div>
+            </div>
+
+            <div class="d-flex">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Tạo" class="btn btn-success" />
+                    </div>
+                </div>
+                <div>
+                    <a class="btn btn-danger" href="/Admin/KhachHangs/Index">
+                        Quay lại
+                    </a>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+
+        
+        @section scripts{
+            <script>
+                var myApp = angular.module("myApp", []).config(['$qProvider', function ($qProvider) {
+                    $qProvider.errorOnUnhandledRejections(false);
+                }]);
+
+                myApp.controller('Create', function ($scope, $http, $httpParamSerializerJQLike) {
+                    $scope.kh = {};
+                    $scope.addData = function () {
+                        Token = angular.element('input[name="__RequestVerificationToken"]').attr('value');
+                        $scope.kh.__RequestVerificationToken = Token;
+                        dataRequest = $scope.kh;
+                        console.log(dataRequest);
+                        $http({
+                            method: 'POST',
+                            url: '/Admin/KhachHangs/CreateKH',
+                            data: $httpParamSerializerJQLike(dataRequest),
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+
+                        }).then(function (res) {
+                            $scope.data = res.data;
+                            if ($scope.data == false) {
+                                alert("Loi them ban ghi");
+                            }
+                            else {
+                                alert("Them ban ghi thanh cong");
+                                window.location.href = "/Admin/KhachHangs/Index";
+                            }
+                        });
+                    };
+                    $http({
+                        method: 'get',
+                        url: '/Admin/KhachHangs/getDataUser',
+
+                    }).then(function (res) {
+                        $scope.users = res.data;
+
+                    });
+                });
+            </script>
+        }

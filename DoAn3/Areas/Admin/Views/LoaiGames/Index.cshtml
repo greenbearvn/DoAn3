@@ -1,0 +1,114 @@
+﻿@model IEnumerable<DoAn3.Models.LoaiGame>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="d-flex " style="justify-content:space-between;width:98%">
+    <p class="btn btn-primary">
+        <a href="/Admin/LoaiGames/Create" class="text-light" style="text-decoration:none"> Thêm loại game mới  </a>
+    </p>
+    <div class="form-group w-25">
+        <div class="form-group has-search">
+            <input type="text" class="form-control" placeholder="Search" ng-model="search">
+        </div>
+    </div>
+</div>
+
+<table class="table" ng-controller="LoaiGameIndex">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TenLoai)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoTa)
+        </th>
+        <th></th>
+    </tr>
+
+    
+        <tr ng-repeat="data in ListLG|filter:search">
+            <td>
+                {{data.TenLoai}}
+            </td>
+            <td>
+                {{data.MoTa}}
+            </td>
+            <td>
+                <a class="btn btn-warning" ng-href="/Admin/LoaiGames/Edit/{{data.MaLoai}}"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a class="btn btn-primary" ng-href="/Admin/LoaiGames/Details/{{data.MaLoai}}"><i class="fa-solid fa-circle-info"></i></a>
+                <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaLoai)"><i class="fa-solid fa-trash"></i></a>
+            </td>
+        </tr>
+    
+
+</table>
+<div class="d-flex justify-content-center">
+    <pagination ng-model="currentPage"
+                total-items="datas.length"
+                max-size="maxSize"
+                boundary-links="true">
+    </pagination>
+</div>
+@section scripts{
+
+    <script>
+        var myApp = angular.module("myApp", ['ui.bootstrap']);
+
+        myApp.controller("LoaiGameIndex", LoaiGameIndex);
+        function LoaiGameIndex($scope, $http) {
+
+            $scope.ListLG = {}
+                , $scope.currentPage = 1
+                , $scope.numPerPage = 10
+                , $scope.maxSize = 5;
+
+                $scope.DeleteButton = function (id) {
+                    var deleteItem = window.confirm("Bạn có muốn xóa loai game này không ?")
+                    if (deleteItem == true) {
+                      
+                        $scope.MaLoai = Number(id);
+                        
+                    }
+                    $http({
+                        method: "post",
+                        url: "/Admin/LoaiGames/DeleteConfirmed/?id=" + $scope.MaLoai,
+                        dataType: "json",
+                        data: JSON.stringify($scope.MaLoai)
+
+                    }).then(function (res) {
+                        $scope.datas = res.data;
+                        $scope.$watch('currentPage + numPerPage', function () {
+                            var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                            if (!$scope.datas || !$scope.datas.length) { return }
+                            $scope.ListLG = $scope.datas.slice(begin, end);
+                        });     
+                    });
+
+            }
+
+                $http({
+                    method: "get",
+                    url: "/Admin/LoaiGames/GetDataLoaiGame",
+
+                }).then(function (res) {
+                    $scope.datas = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.datas || !$scope.datas.length) { return }
+                        $scope.ListLG = $scope.datas.slice(begin, end);
+                    });
+                    
+                });
+
+               
+            }
+        </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+}

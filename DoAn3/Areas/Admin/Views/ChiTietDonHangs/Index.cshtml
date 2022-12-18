@@ -1,0 +1,93 @@
+﻿@model IEnumerable<DoAn3.Models.ChiTietDonHang>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table" ng-controller="CTDH">
+    <tr>
+        
+        <th>
+            Ma Don Hang
+        </th>
+        <th>
+            Ten Game
+        </th>
+        <th>
+            Gia
+        </th>
+        <th>
+
+        </th>
+    </tr>
+
+
+    <tr ng-repeat="data in datas">
+       
+        <td>
+            {{data.MaDH}}
+        </td>
+        <td>
+            {{data.TenGame}}
+        </td>
+        <td>
+            {{data.Gia}}
+        </td>
+        <td>
+            <a class="btn btn-warning" ng-href="/Admin/ChiTietDonHangs/Edit/{{data.MaDH}}"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a class="btn btn-primary" ng-href="/Admin/ChiTietDonHangs/Details/{{data.MaDH}}"><i class="fa-solid fa-circle-info"></i></a>
+            <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaDH,data.MaGame)"><i class="fa-solid fa-trash"></i></a>
+        </td>
+    </tr>
+
+
+</table>
+@section scripts{
+    <script>
+        var myApp = angular.module("myApp", []).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+
+        myApp.controller("CTDH", CTDH);
+        function CTDH($scope, $http) {
+
+            $scope.DeleteButton = function (id,magame) {
+                var deleteItem = window.confirm("Bạn có muốn xóa chi tiết đơn hàng này không ?")
+                if (deleteItem == true) {
+
+                    $scope.paramater = {}
+                    $scope.paramater.MaDH = Number(id);
+                    $scope.paramater.MaGame = Number(magame);
+                    window.location.reload();
+                }
+                $http({
+                    method: "post",
+                    url: "/Admin/ChiTietDonHangs/DeleteConfirmed/?id=" + $scope.paramater.MaDH + "&magame=" + $scope.paramater.MaGame,
+                    dataType: "json",
+                    data: JSON.stringify($scope.paramater)
+
+                }).then(function (res) {
+                    $scope.alert = res.data;
+                    alert($scope.alert)
+                });
+
+            }
+            $http({
+                method: "get",
+                url: "/Admin/ChiTietDonHangs/GetDataDetailOrder",
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+
+            });
+
+
+        }
+    </script>
+    }

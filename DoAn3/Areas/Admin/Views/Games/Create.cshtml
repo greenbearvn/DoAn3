@@ -1,0 +1,153 @@
+﻿@model DoAn3.Models.Game
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="text-capitalize ml-3">Tạo sản phẩm mới</h3>
+<div ng-controller="Create">
+    <form ng-submit="addData()" name="CreateGame">
+        <div class="form-horizontal">
+            
+            <div class="form-group">
+                
+                <div class="col-md-10">
+                    <h6 >Tên game</h6>
+                    <input type="text" class="form-control" ng-model="game.TenGame" name="TenGame" required />
+                    <p class="text-danger text-xs italic" ng-show="CreateGame.TenGame.$touched && CreateGame.TenGame.$invalid">Vui lòng điền đủ thông tin.</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                
+                <div class="col-md-10">
+
+                    <h6>Ảnh game</h6>
+
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="AnhGame" placeholder="Image link" id="AnhGame" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text" onclick="UpLoad('AnhGame')">Chọn ảnh</span>
+                        </div>
+                        <p class="text-danger text-xs italic" ng-show="CreateGame.AnhGame.$touched && CreateGame.AnhGame.$invalid">Vui lòng điền đủ thông tin.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                
+                <div class="col-md-10">
+                    <h6>Mô tả</h6>
+                    <textarea type="text" ck-editor="" ng-model="game.MoTa" id="MoTa" name="MoTa" required />  </textarea>
+                    <p class="text-danger text-xs italic" ng-show="CreateGame.MoTa.$touched && CreateGame.MoTa.$invalid">Vui lòng điền đủ thông tin.</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                
+                <div class="col-md-10">
+                    <h6>Loại game</h6>
+                    <select ng-model="game.MaLoai" class="custom-select" name="loai" required>
+                        <option value="">-- Chọn loại game --</option>
+                        <option ng-repeat="loaigame in loaigames" value="{{loaigame.MaLoai}}">{{loaigame.TenLoai}}</option>
+                    </select>
+                    <p class="text-danger text-xs italic" ng-show="CreateGame.loai.$touched && CreateGame.loai.$invalid">Vui lòng điền đủ thông tin.</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+               
+                <div class="col-md-10">
+                    <h6>
+                        Loại máy
+                    </h6>
+                    <select ng-model="game.MaMay" class="custom-select" name="may" ng-options="x.MaMay as x.TenMay for x in loaimays" required>
+                        <option value="">-- Chọn loại máy --</option>
+                    </select>
+                    <p class="text-danger text-xs italic" ng-show="CreateGame.may.$touched && CreateGame.may.$invalid">Vui lòng điền đủ thông tin.</p>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    
+                    <h6>Nhà phát hành game</h6>
+                    <select ng-model="game.MaNPH" class="custom-select" name="nph" required>
+                        <option value="">-- Chọn nhà phát hành --</option>
+
+                        <option ng-repeat="nph in nphs" value="{{nph.MaNPH}}">{{nph.TenNPH}}</option>
+                    </select>
+                    <p class="text-danger text-xs italic" ng-show="CreateGame.nph.$touched && CreateGame.nph.$invalid">Vui lòng điền đủ thông tin.</p>
+                </div>
+            </div>
+
+            
+
+            <div class="form-group">
+                
+                <div class="col-md-10">
+                    <h6>Giá tiền</h6>
+                    <input type="text" ng-model="game.GiaTien" class="form-control" name="giatien" required/>
+                </div>
+                <p class="text-danger text-xs italic" ng-show="CreateGame.giatien.$touched && CreateGame.giatien.$invalid">Vui lòng điền đủ thông tin.</p>
+            </div>
+
+            
+
+            <div class="form-group">
+              
+                <div class="col-md-10">
+                    <h6>Lượt xem</h6>
+                    <input type="text" ng-model="game.Views" class="form-control" name="view" required/>
+                </div>
+                <p class="text-danger text-xs italic" ng-show="CreateGame.view.$touched && CreateGame.view.$invalid">Vui lòng điền đủ thông tin .</p>
+            </div>
+
+
+            <div class="form-group">
+                
+                <div class="col-md-10">
+                    <h6>Trạng thái</h6>
+                    <div class="checkbox">
+
+                        <select ng-model="game.TrangThai" class="form-control" name="trangthai" required />
+                            <option value="">-- Chọn trạng thái --</option>
+
+                            <option value="true" selected>True</option>
+                            <option value="false">False</option>
+                        </select>
+                        <p class="text-danger text-xs italic" ng-show="CreateGame.trangthai.$touched && CreateGame.trangthai.$invalid">Vui lòng điền đủ thông tin </p>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="d-flex">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Tạo" class="btn btn-success" />
+                    </div>
+                </div>
+                <div>
+                    <a class="btn btn-danger" href="/Admin/Games/Index">
+                        Quay lại 
+                    </a>
+                </div>
+            </div>
+            
+
+        </div>
+
+
+        
+    </form>
+</div>
+@section scripts{
+
+    <script src="~/Areas/Admin/Contents/js/AngularJsAdmin/Game.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+}

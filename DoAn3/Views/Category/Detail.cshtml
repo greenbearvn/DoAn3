@@ -1,0 +1,289 @@
+﻿@model List<DoAn3.Models.Game>
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="body" ng-controller="getSPTheoLoaiMay">
+    <div class="container">
+
+
+        <ul class="breadcrumbs">
+            <li class="breadcrumb ">
+                <a href="gameworld1.mybigcommerce.html" class="breadcrumb-label">Home</a>
+            </li>
+            <li class="breadcrumb is-active">
+                <a href="pc.html" class="breadcrumb-label">{{tenloai.TenMay}}</a>
+            </li>
+        </ul>
+
+        <div class="page page--columns">
+            @Html.Action("FilterGames")
+
+            <main class="page-content" id="product-listing-container" >
+                <h1 class="page-heading">{{tenloai.TenMay}}</h1>
+
+
+                <!-- snippet location categories -->
+
+                <form class="actionBar" method="get" data-sort-by>
+                    <fieldset class="form-fieldset actionBar-section">
+                        <div class="form-field">
+                            <label class="form-label" for="sort">Sort By:</label>
+                            <select class="form-select form-select--small" name="sort" id="sort">
+                                <option value="featured" selected>Featured Items</option>
+                                <option value="newest">Newest Items</option>
+                                <option value="bestselling">Best Selling</option>
+                                <option value="alphaasc">A to Z</option>
+                                <option value="alphadesc">Z to A</option>
+                                <option value="avgcustomerreview">By Review</option>
+                                <option value="priceasc">Price: Ascending</option>
+                                <option value="pricedesc">Price: Descending</option>
+                            </select>
+                        </div>
+                    </fieldset>
+
+                </form>
+
+                <form>
+                    <ul class="productGrid">
+                        <li class="product" ng-repeat="data in filteredTodos">
+                            <article class="card ">
+                                <figure class="card-figure">
+                                    <a href="/Home/Detail/{{data.MaGame}}">
+                                        <img class="card-image" src="{{data.AnhGame}}" alt="[Sample] Smith Journal 13" title="[Sample] Smith Journal 13">
+                                    </a>
+                                    <figcaption class="card-figcaption">
+                                        <div class="card-figcaption-body">
+                                            <div class="card-buttons">
+                                                <a href="cart.html" class="button button--small card-figcaption-button">Add to Cart</a>
+
+                                                <label class="button button--small card-figcaption-button card-figcaption-button--compare" for="compare-111">
+                                                    Compare <input type="checkbox" name="products[]" value="111" id="compare-111" data-compare-id="111">
+                                                </label>
+
+                                                <a href="#" class="button button--small card-figcaption-button quickview" data-product-id="111">Quick view</a>
+                                            </div>
+
+                                            <div class="card-buttons card-buttons--alt">
+
+                                            </div>
+                                        </div>
+                                    </figcaption>
+                                </figure>
+                                <div class="card-body">
+                                    <p class="card-text" data-test-info-type="productRating">
+                                        <span class="rating--small">
+                                            <span class="icon icon--ratingEmpty">
+                                                <svg>
+                                                    <use xlink:href="#icon-star"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="icon icon--ratingEmpty">
+                                                <svg>
+                                                    <use xlink:href="#icon-star"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="icon icon--ratingEmpty">
+                                                <svg>
+                                                    <use xlink:href="#icon-star"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="icon icon--ratingEmpty">
+                                                <svg>
+                                                    <use xlink:href="#icon-star"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="icon icon--ratingEmpty">
+                                                <svg>
+                                                    <use xlink:href="#icon-star"></use>
+                                                </svg>
+                                            </span>
+                                            <!-- snippet location product_rating -->
+                                        </span>
+                                    </p>
+                                    <h4 class="card-title">
+                                        <a href="smith-journal-13.html">{{data.TenGame}}</a>
+                                    </h4>
+
+                                    <div class="card-text" data-test-info-type="price">
+                                        <div class="price-section price-section--withoutTax ">
+                                            <span data-product-price-without-tax class="price price--withoutTax">{{data.GiaTien}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </li>
+
+                    </ul>
+                </form>
+                
+                    <div class="flex justify-content-center">
+                        <pagination class="flex" ng-model="currentPage"
+                                    total-items="games.length"
+                                    max-size="maxSize"
+                                    boundary-links="true">
+                        </pagination>
+                    </div>
+                
+                
+            </main>
+        </div>
+
+
+    </div>
+    <div id="modal" class="modal" data-reveal data-prevent-quick-search-close>
+        <a href="#" class="modal-close" aria-label="Close" role="button">
+            <span aria-hidden="true">&times;</span>
+        </a>
+        <div class="modal-content"></div>
+        <div class="loadingOverlay"></div>
+    </div>
+
+</div>
+
+
+@section scripts{
+
+
+    <script>
+        var myApp = angular.module("myApp", ['ui.bootstrap']).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+
+        myApp.controller("getLoaiMay", getLoaiMay);
+        function getLoaiMay($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/Home/LayLoaimay"
+
+            }).then(function (res) {
+                $scope.loaimay = res.data;
+
+            });
+        }
+
+        myApp.controller("getSPTheoLoaiMay", getSPTheoLoaiMay);
+        function getSPTheoLoaiMay($scope, $http) {
+
+            var url = window.location.pathname;
+            var id = url.substring(url.lastIndexOf('/') + 1);
+
+
+            $scope.filteredGames = {}
+                , $scope.currentPage = 1
+                , $scope.numPerPage = 10
+                , $scope.maxSize = 5;
+
+            $http({
+                method: "GET",
+                url: "/Category/LaySPTheoLoaiMay?id=" + Number(id)
+
+            }).then(function (res) {
+                $scope.games = res.data;
+
+                $scope.$watch('currentPage + numPerPage', function () {
+                    var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                    if (!$scope.games || !$scope.games.length) { return }
+                    $scope.filteredTodos = $scope.games.slice(begin, end);
+                });
+            });
+
+            $http({
+                method: "GET",
+                url: "/Category/CategoryTitle?id="+Number(id)
+
+            }).then(function (res) {
+                $scope.tenloai = res.data;
+
+            });
+
+
+            // nha phat hanh
+            $http({
+                method: "GET",
+                url: "/Category/GetBrand" ,
+
+            }).then(function (res) {
+                $scope.nph = res.data;
+
+            });
+
+            /// loai game
+            $http({
+                method: "GET",
+                url: "/Category/GetTypeGame",
+
+            }).then(function (res) {
+                $scope.loaigame = res.data;
+
+            });
+
+            $scope.filters = function () {
+
+                var url = window.location.pathname;
+                var id = url.substring(url.lastIndexOf('/') + 1);
+
+                var manph = document.getElementById('nph').value;
+                var maloai = document.getElementById('loaigame').value;
+                var giaThap = document.getElementById('smallestPrice').value;
+                var giaCao = document.getElementById('biggestPrice').value;
+
+
+                $http({
+                    method: "post",
+                    url: "/Category/FitlerGames?mamay=" + id + "&manph=" + manph
+                        + "&maloai=" + maloai + "&giaThap=" + giaThap + "&giaCao=" + giaCao,
+
+                }).then(function (res) {
+                    $scope.games = res.data;
+                    
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.games || !$scope.games.length) { return }
+                        $scope.filteredTodos = $scope.games.slice(begin, end);
+                    });
+                });
+            };
+
+            $scope.reset = function () {
+                $http({
+                    method: "GET",
+                    url: "/Category/LaySPTheoLoaiMay?id=" + Number(id)
+
+                }).then(function (res) {
+                    $scope.games = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.games || !$scope.games.length) { return }
+                        $scope.filteredTodos = $scope.games.slice(begin, end);
+                    });
+                });
+            };
+        }
+
+
+        myApp.controller("recommendPost", recommendPost);
+        function recommendPost($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/NewsFront/RecommendPost"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+            //}
+        }
+        document.getElementById
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
+
+}

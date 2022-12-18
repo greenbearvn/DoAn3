@@ -1,0 +1,52 @@
+﻿@model DoAn3.Models.LoaiMay
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<div ng-controller="Edit">
+    <form ng-submit="addData()" name="form">
+      
+
+        <div class="form-horizontal">
+            <h4>LoaiMay</h4>
+            <hr />
+
+            <div class="form-group">
+                <h6>Tên máy</h6>
+                <div class="col-md-10">
+                    <input type="text" ng-model="loaiMay.TenMay" name="name" required />
+                    <p class="text-danger text-xs italic" ng-show="form.name.$touched && form.name.$invalid">Vui lòng điền đủ thông tin.</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h6>Mô tả</h6>
+                <div class="col-md-10">
+                    <input type="text" ng-model="loaiMay.MoTa" name="des" required />
+                    <p class="text-danger text-xs italic" ng-show="form.des.$touched && form.des.$invalid">Vui lòng điền đủ thông tin.</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+
+
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </form>
+</div>
+@section Scripts{
+
+    <script src="~/Areas/Admin/Contents/js/AngularJsAdmin/LoaiMay.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+}

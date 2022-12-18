@@ -1,0 +1,80 @@
+﻿@model DoAn3.Models.LoaiGame
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div ng-controller="DeleteTypeGame">
+    <h4>LoaiGame</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TenLoai)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TenLoai)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoTa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoTa)
+        </dd>
+
+    </dl>
+
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit"  class="btn btn-default" ng-click="DeleteButton()" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+</div>
+@section scripts{
+
+    <script>
+        var myApp = angular.module("myApp", []);
+
+        myApp.controller("DeleteTypeGame", DeleteTypeGame);
+        function DeleteTypeGame($scope, $http) {
+            var url = window.location.pathname;
+            var id = url.substring(url.lastIndexOf('/') + 1);
+
+
+            $scope.DeleteButton = function () {
+                var deleteItem = window.confirm("Bạn có muốn xóa loại game này không ?")
+                if (deleteItem == true) {
+
+                    $scope.MaGame = Number(id);
+
+                }
+                $http({
+                    method: "post",
+                    url: "/Admin/LoaiGames/DeleteConfirmed/" + Number(id),
+                    dataType: "json",
+                    data: JSON.stringify($scope.MaGame)
+
+                }).then(function (res) {
+                    $scope.alert = res.data;
+                    alert($scope.alert)
+                    window.open('/Admin/LoaiGames/Index', "_self");
+                });
+
+            }
+
+
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+}

@@ -1,0 +1,337 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body" ng-controller="DetailNew">
+    <div class="container">
+
+
+        <ul class="breadcrumbs">
+            <li class="breadcrumb ">
+                <a href="gameworld1.mybigcommerce.html" class="breadcrumb-label">Home</a>
+            </li>
+            <li class="breadcrumb ">
+                <a href="blog.html" class="breadcrumb-label">Blog</a>
+            </li>
+            <li class="breadcrumb is-active">
+                <a href="made-called-darkness-tree.html" class="breadcrumb-label">{{news.Title}}</a>
+            </li>
+        </ul>
+
+        <div class="page u-emthemesModez-page-responsiveSidebar">
+
+            @Html.Action("PageSideBar");
+
+            <main class="page-content">
+                <article class="blog blog--has-tags blog--has-socials">
+                    <div class="blog-post-figure">
+                        <figure class="blog-thumbnail" style="max-width:100%">
+                            <img ng-src="{{news.Banner}}" alt="Made Called Darkness Tree" title="Made Called Darkness Tree">
+                        </figure>
+                    </div>
+
+                    <div class="blog-post-body">
+                        <header class="blog-header">
+                            <h1 class="blog-title">
+                                <a href="made-called-darkness-tree.html">{{news.Title}}</a>
+                            </h1>
+                        </header>
+
+                        <div class="blog-post">
+                            <p>{{news.Content}}</p>
+                            <div class="blog-date"><span class="blog-date-date">{{news.PublicDate.slice(6, -2) | date: 'dd-MM-yyyy'}}</span></div>
+                        </div>
+
+                        <ul class="tags">
+                            <li class="tag">
+                                <a ng-href=""><span class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-green-500 text-white rounded-full">{{news.TenLoai}}</span></a>
+                            </li>
+
+                        </ul>
+
+                        <div class="addthis_toolbox addthis_32x32_style" addthis:url="" addthis:title="">
+                            <ul class="socialLinks">
+                                <li class="socialLinks-item socialLinks-item--google_plusone">
+                                    <a class="addthis_button_google_plusone icon icon--google_plusone" href="made-called-darkness-tree.html">
+                                        <!-- No custom icons allowed with g+ -->
+
+
+
+
+
+
+
+
+                                    </a>
+                                </li>
+                                <li class="socialLinks-item socialLinks-item--facebook">
+                                    <a class="addthis_button_facebook icon icon--facebook" href="made-called-darkness-tree.html">
+
+                                        <svg>
+                                            <use xlink:href="#icon-facebook"></use>
+                                        </svg>
+
+
+
+
+
+
+
+                                    </a>
+                                </li>
+                                <li class="socialLinks-item socialLinks-item--email">
+                                    <a class="addthis_button_email icon icon--email" href="made-called-darkness-tree.html">
+
+
+                                        <svg>
+                                            <use xlink:href="#icon-envelope"></use>
+                                        </svg>
+
+
+
+
+
+
+                                    </a>
+                                </li>
+                                <li class="socialLinks-item socialLinks-item--print">
+                                    <a class="addthis_button_print icon icon--print" href="made-called-darkness-tree.html">
+
+
+
+                                        <svg>
+                                            <use xlink:href="#icon-print"></use>
+                                        </svg>
+
+
+
+
+
+                                    </a>
+                                </li>
+                                <li class="socialLinks-item socialLinks-item--twitter">
+                                    <a class="addthis_button_twitter icon icon--twitter" href="made-called-darkness-tree.html">
+
+
+
+
+                                        <svg>
+                                            <use xlink:href="#icon-twitter"></use>
+                                        </svg>
+
+
+
+
+                                    </a>
+                                </li>
+                                <li class="socialLinks-item socialLinks-item--pinterest">
+                                    <a class="addthis_button_pinterest icon icon--pinterest" href="made-called-darkness-tree.html">
+
+
+
+
+
+
+
+                                        <svg>
+                                            <use xlink:href="#icon-pinterest"></use>
+                                        </svg>
+
+                                    </a>
+                                </li>
+                            </ul>
+                            <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4e94ed470ee51e32"></script>
+                            <script>
+                                if (typeof (addthis) === "object") {
+                                    addthis.toolbox('.addthis_toolbox');
+                                }
+                            </script>
+                        </div>
+
+                    </div>
+                </article>
+
+                <div class="emthemesModez-blog-bottomSection">
+                    <h2 class="page-heading ">Recent Posts</h2>
+
+                    <ul class="emthemesModez-blogGrid ">
+                        <li class="emthemesModez-blogItem" ng-repeat="data in datas |orderBy:'-NewsID'">
+                            <article class="blog  ">
+                                <div class="blog-post-figure">
+                                    <figure class="blog-thumbnail">
+                                        <a href="/News/Detail/{{data.NewsID}}">
+                                            <img ng-src="{{data.Banner}}" alt="{{data.Title}}" title="{{data.Title}}">
+                                        </a>
+                                    </figure>
+                                </div>
+
+                                <div class="blog-post-body">
+                                    <header class="blog-header">
+                                        <h2 class="blog-title">
+                                            <a href="/News/Detail/{{data.NewsID}}">{{data.Title}}</a>
+                                        </h2>
+                                    </header>
+
+                                    <div class="blog-post">
+                                        <div class="blog-summary">
+
+                                            &hellip;
+                                        </div>
+
+                                        <div class="blog-dateContainer">
+                                            <div class="blog-readmore"><a href="made-called-darkness-tree.html">Read more</a></div>
+                                            <div class="blog-date"><span class="blog-date-date">{{data.PublicDate.slice(6, -2) | date: 'dd-MM-yyyy'}}</span></div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </article>
+                        </li>
+
+                    </ul>
+                </div>
+            </main>
+
+        </div>
+
+
+    </div>
+    <div id="modal" class="modal" data-reveal data-prevent-quick-search-close>
+        <a href="#" class="modal-close" aria-label="Close" role="button">
+            <span aria-hidden="true">&times;</span>
+        </a>
+        <div class="modal-content"></div>
+        <div class="loadingOverlay"></div>
+    </div>
+</div>
+
+@section scripts{
+
+
+
+    <script>
+        var myApp = angular.module("myApp", []).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);;
+
+        myApp.controller("getLoaiMay", getLoaiMay);
+        function getLoaiMay($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/Home/LayLoaimay"
+
+            }).then(function (res) {
+                $scope.loaimay = res.data;
+
+            });
+        }
+
+        myApp.controller("getListNews", getListNews);
+        function getListNews($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/NewsFront/ListNews"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
+
+
+        myApp.controller("recommendPost", recommendPost);
+        function recommendPost($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/NewsFront/RecommendPost"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
+
+        myApp.controller("DetailNew", DetailNew);
+        function DetailNew($scope, $http) {
+            var url = window.location.pathname;
+            var id = url.substring(url.lastIndexOf('/') + 1);
+
+            $http({
+                method: "GET",
+                url: "/NewsFront/DetaiNews?id=" + Number(id)
+
+            }).then(function (res) {
+                $scope.news = res.data;
+                console.log($scope.news)
+
+            });
+
+            $http({
+                method: "GET",
+                url: "/NewsFront/RecommendPost"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+                console.log($scope.datas)
+
+            });
+
+        }
+
+        myApp.controller("getListMachine", getListMachine);
+        function getListMachine($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/NewsFront/ListMachine"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
+
+
+        myApp.controller("getListGame", getListGame);
+        function getListGame($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/NewsFront/ListGame"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
+
+
+        myApp.controller("getLoaiMay", getLoaiMay);
+        function getLoaiMay($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/Home/LayLoaimay"
+
+            }).then(function (res) {
+                $scope.loaimay = res.data;
+
+            });
+        }
+        myApp.controller("SearchData", SearchData);
+        function SearchData($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/Home/dataSearch"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+}

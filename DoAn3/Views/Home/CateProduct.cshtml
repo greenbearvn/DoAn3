@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Product</h2>
+
+<div ng-controller="laySPTheoMay" ng-init="GetData(1)">
+    <ul ng-repeat="product in products">
+        <li>{{product.TenGame}}</li>
+    </ul>
+</div>
+
+@section scripts{
+    <script>
+        myApp.controller("laySPTheoMay", laySPTheoMay);
+        function laySPTheoMay($scope, $http) {
+            $scope.GetData = function (id) {
+                $http({
+                    method: "GET",
+                    url: "/Home/LaySPTheoLoaiMay?id=" + id,
+
+                }).then(function (res) {
+                    $scope.products = res.data;
+                    console.log(res.data)
+
+                });
+            }
+
+        }</script>
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

@@ -1,0 +1,141 @@
+﻿@model IEnumerable<DoAn3.Models.KhachHang>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Quản lý khách hàng</h2>
+
+<div class="d-flex " style="justify-content:space-between;width:98%">
+    <a href="/Admin/KhachHangs/Create" class="text-light btn btn-primary " style="text-decoration:none;height:45px"> Thêm khách hàng mới  </a>
+
+    <div class="form-group w-25 ">
+        <div class="form-group has-search">
+            <input type="text" class="form-control" placeholder="Search...." ng-model="search">
+        </div>
+    </div>
+</div>
+
+<div ng-controller="KhachHangIndex">
+    <table class="table">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên khách hàng
+            </th>
+            
+            <th>
+                Địa chỉ
+            </th>
+            <th>
+                Số điện thoại
+            </th>
+            <th>
+                Số tài khoản
+            </th>
+            <th>
+                Tên tài khoản
+            </th>
+            <th></th>
+        </tr>
+
+
+        <tr ng-repeat="data in ListKH | filter:search">
+            <td>
+                {{$index +1}}
+            </td>
+            <td>
+                {{data.TenKH}}
+            </td>
+            
+            <td>
+                {{data.DiaChi}}
+            </td>
+            <td>
+                {{data.SDT}}
+            </td>
+            <td>
+                {{data.SoTK}}
+            </td>
+            <td>
+                {{data.UserName}}
+            </td>
+            <td>
+                <a class="btn btn-warning" ng-href="/Admin/KhachHangs/Edit/{{data.MaKH}}"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a class="btn btn-primary" ng-href="/Admin/KhachHangs/Details/{{data.MaKH}}"><i class="fa-solid fa-circle-info"></i></a>
+                <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaKH)"><i class="fa-solid fa-trash"></i></a>
+            </td>
+        </tr>
+
+
+    </table>
+    <div class="d-flex justify-content-center">
+        <pagination ng-model="currentPage"
+                    total-items="kh.length"
+                    max-size="maxSize"
+                    boundary-links="true">
+        </pagination>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var myApp = angular.module("myApp", ['ui.bootstrap']);
+
+        myApp.controller("KhachHangIndex", KhachHangIndex);
+        function KhachHangIndex($scope, $http) {
+            $scope.ListKH = {}
+                , $scope.currentPage = 1
+                , $scope.numPerPage = 10
+                , $scope.maxSize = 5;
+
+            $scope.DeleteButton = function (id) {
+                var deleteItem = window.confirm("Bạn có muốn xóa khách hàng này không ?")
+                if (deleteItem == true) {
+
+                    $scope.MaKH = Number(id);
+                    window.location.reload();
+                }
+                $http({
+                    method: "post",
+                    url: "/Admin/KhachHangs/DeleteConfirmed/?id=" + $scope.MaKH,
+                    dataType: "json",
+                    data: JSON.stringify($scope.MaMay)
+
+                }).then(function (res) {
+                    $scope.alert = res.data;
+                    if ($scope.alert == true) {
+                        alert("Xoa thanh cong")
+                    }
+                    else {
+                        alert("Xoa khong thanh cong")
+                    }
+                });
+
+            }
+            $http({
+                method: "get",
+                url: "/Admin/KhachHangs/DataIndex",
+
+            }).then(function (res) {
+                $scope.kh = res.data;
+
+               
+
+                $scope.$watch('currentPage + numPerPage', function () {
+                    var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                    if (!$scope.kh || !$scope.kh.length) { return }
+                    $scope.ListKH = $scope.kh.slice(begin, end);
+                });
+
+            });
+
+
+        }
+
+    </script>
+    }

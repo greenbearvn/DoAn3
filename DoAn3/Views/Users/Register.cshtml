@@ -1,0 +1,178 @@
+﻿@model DoAn3.Models.User
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <section class="h-screen bg-white w-full">
+        <h2 class="text-5xl font-bold text-center pt-16">Register</h2>
+        <div class="container h-full">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="flex justify-center items-center flex-wrap  text-gray-800">
+                <div id="alert" class="alert bg-yellow-100 rounded-lg py-5 px-6 mb-3 text-base text-yellow-700 inline-flex items-center w-50 alert-dismissible fade show" style="position:absolute;top:-90px;right:10px;z-index:1" role="alert">
+                    <strong class="mr-1">Holy guacamole! </strong> You should check in on some of those fields below.
+                    <button type="button" class="btn-close box-content w-4 h-4 p-1 ml-auto text-red-900 border-none rounded-none " data-bs-dismiss="alert" aria-label="Close"><i class="fa-solid fa-xmark text-1xl "></i></button>
+                </div>
+                <div class="md:w-8/12 lg:w-6/12 mb-12 md:mb-0">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+                         class="w-full"
+                         alt="Phone image" />
+                </div>
+
+                <div class="md:w-8/12 lg:w-5/12 lg:ml-20">
+                    <form name="register">
+                        <!-- Email input -->
+                        <div class="mb-6">
+                            <h6 class="text-1xl">Tên người dùng</h6>
+                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" } })
+                            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Password input -->
+                        <div class="mb-6">
+                            <h6 class="text-1xl">Mật khẩu</h6>
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none", @type = "password",@id="pass1" } })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-6">
+                            <h6 class="text-1xl">Nhập lại mật khẩu</h6>
+                            @*@Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none", @type = "password", @id = "pass2" } })
+        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })*@
+                            <input type="password" class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="pass2" name="repass" onkeyup="CheckPass()" />
+                            <p class="text-danger text-xs italic" ng-show="register.repass.$touched && register.repass.$invalid">Vui lòng điền đủ thông tin.</p>
+
+                        </div>
+
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="form-group form-check">
+                                <input type="checkbox"
+                                       class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                                       id="exampleCheck3"
+                                       required name="check" />
+                                <label class="form-check-label inline-block text-gray-800" for="exampleCheck2" onclick="CheckPass()">Ghi nhớ tôi</label>
+                            </div>
+                            <a href="#!"
+                               class="text-blue-600 hover:text-blue-700 focus:text-blue-700 active:text-blue-800 duration-200 transition ease-in-out">Quên mật khẩu?</a>
+                        </div>
+
+                        <!-- Submit button -->
+                        <button type="submit" value="Create" 
+                                class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+                                data-mdb-ripple="true"
+                                data-mdb-ripple-color="light">
+                            Đăng ký
+                        </button>
+
+                        <div class="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
+                            <p class="text-center font-semibold mx-4 mb-0">HOẶC</p>
+                        </div>
+                        <a class="px-7 py-3 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center mb-3"
+                           style="background-color: #7b6c6c"
+                           href="/Users/Login"
+                           role="button"
+                           data-mdb-ripple="true"
+                           data-mdb-ripple-color="light">
+                            <!-- Facebook -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 320 512"
+                                 class="w-3.5 h-3.5 mr-2">
+                                <path fill="currentColor"
+                                      d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" />
+                            </svg>Đăng nhập với tài khoản
+                        </a>
+                        <a class="px-7 py-3 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center mb-3"
+                           style="background-color: #3b5998"
+                           href="#!"
+                           role="button"
+                           data-mdb-ripple="true"
+                           data-mdb-ripple-color="light">
+                            <!-- Facebook -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 320 512"
+                                 class="w-3.5 h-3.5 mr-2">
+                                <path fill="currentColor"
+                                      d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" />
+                            </svg>Đăng nhập bằng FaceBook
+                        </a>
+                        <a class="px-7 py-3 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center"
+                           style="background-color: #55acee"
+                           href="#!"
+                           role="button"
+                           data-mdb-ripple="true"
+                           data-mdb-ripple-color="light">
+                            <!-- Twitter -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 512 512"
+                                 class="w-3.5 h-3.5 mr-2">
+                                <path fill="currentColor"
+                                      d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z" />
+                            </svg>Đăng nhập bằng Twitter
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+
+@section scripts{
+
+    <script>
+
+        document.getElementById("alert").style.display = 'none'
+
+        var pass1 = document.getElementById("pass1").value;
+        var pass2 = document.getElementById("pass2").value;
+
+
+        function CheckPass() {
+            if (pass1 != pass2) {
+                document.getElementById("alert").style.display = 'block'
+                const myTimeout = setTimeout(HideAlert, 4000);
+
+            }
+           
+        }
+
+        function HideAlert() {
+            document.getElementById("alert").style.display = 'none'
+        }
+
+        var myApp = angular.module("myApp", []);
+        myApp.controller("getLoaiMay", getLoaiMay);
+        function getLoaiMay($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/Home/LayLoaimay"
+
+            }).then(function (res) {
+                $scope.loaimay = res.data;
+
+            });
+
+        }
+
+        myApp.controller("recommendPost", recommendPost);
+        function recommendPost($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/NewsFront/RecommendPost"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+}

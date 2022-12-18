@@ -1,0 +1,105 @@
+﻿@model DoAn3.Models.News
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<div ng-controller="Edit">
+    <form ng-submit="addData()">
+
+        <div class="form-horizontal">
+            <h4>News</h4>
+            <hr />
+           
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <h6>
+                    Tiêu đề
+
+                </h6>
+                <input type="text" class="form-control" ng-model="news.Title" />
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            
+            <div class="col-md-10">
+                <h6>
+                    Nội dung
+                </h6>
+                <textarea type="text" ck-editor="" ng-model="news.Content" id="MoTa" />  </textarea>
+
+                
+            </div>
+        </div>
+
+        <div class="form-group">
+           
+            <div class="col-md-10">
+                <h6>
+                    Ảnh mô tả
+                </h6>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Image link" ng-model="news.Banner" id="Banner">
+                    <div class="input-group-append">
+                        <span class="input-group-text" onclick="UpLoad('Banner')">Chọn ảnh</span>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <img ng-src="{{news.Banner}}" />
+
+                </div>
+
+            </div>
+        </div>
+
+            
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    <h6>
+                        Loại game
+
+                    </h6>
+                    <select ng-model="news.MaLoai" class="custom-select" ng-options="x.MaLoai as x.TenLoai for x in lgs">
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">    
+                <div class="col-md-10">
+                    <h6>
+                        Tài khoản đăng
+
+                    </h6>
+                    <select ng-model="news.UserID" class="custom-select" ng-options="x.UserID as x.UserName for x in users">
+                    </select>
+                </div>
+            </div>
+
+            <div class="d-flex">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Cập nhật" class="btn btn-success" />
+                    </div>
+                </div>
+                <div>
+                    <a class="btn btn-danger" href="/Admin/DonHangs/Index">
+                        Quay lại
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+
+        
+        </form>
+</div>
+@section scripts{
+    <script src="~/Areas/Admin/Contents/js/AngularJsAdmin/News.js"></script>
+    }

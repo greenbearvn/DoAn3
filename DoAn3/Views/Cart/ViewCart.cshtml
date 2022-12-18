@@ -1,0 +1,397 @@
+﻿@model IEnumerable<DoAn3.Models.ChiTietDonHang>
+
+@{
+    ViewBag.Title = "ViewCart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int product = 0;
+    int? totalBill = 0;
+
+}
+
+
+
+<div class="container" style="background-color: #FCFCFC" ng-controller="Payment">
+
+    <div class="page">
+
+        <main class="page-content" data-cart="">
+            <ul class="breadcrumbs">
+                <li class="breadcrumb ">
+                    <a href="https://gameworld1.mybigcommerce.com/" class="breadcrumb-label">Home</a>
+                </li>
+                <li class="breadcrumb is-active">
+                    <a href="https://gameworld1.mybigcommerce.com/cart.php?suggest=6045dc73-eaeb-4fc1-a4e0-9fa2478691ed" class="breadcrumb-label">Your Cart</a>
+                </li>
+            </ul>
+
+
+            @if (Model == null)
+            {
+
+
+
+            }
+            else
+            {
+
+                if (Session["totalItem"] == null)
+                {
+                    <h1 class="page-heading" data-cart-page-title="">
+                        Your Cart (0 item)
+                    </h1>
+                    <h1 class="text-center font-bold"> Vui lòng mua sắm game </h1>
+                    <h4><a href="/Home/Index">Quay về trang chủ</a></h4>
+                }
+
+                if (Session["totalItem"] != null)
+                {
+                    <h1 class="page-heading" data-cart-page-title="">
+
+                        Your Cart (@Session["totalItem"].ToString()) item
+                    </h1>
+                }
+
+                <div data-cart-status="">
+                </div>
+
+                <div class="loadingOverlay" style="display: none;"></div>
+
+                <div data-cart-content="">
+                    <table class="cart" data-cart-quantity="1">
+                        <thead class="cart-header">
+                            <tr>
+                                <th class="cart-header-item" colspan="2">@Html.DisplayNameFor(model => model.MaGame)</th>
+                                <th class="cart-header-item">@Html.DisplayNameFor(model => model.Gia)</th>
+                                <th class="cart-header-item">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="cart-list">
+                            @foreach (var item in Model)
+                            {
+
+                                <tr class="cart-item" data-item-row="">
+                                    <td class="cart-item-block cart-item-figure">
+                                        <img class="cart-item-image" src="https://cdn11.bigcommerce.com/s-l162g981az/images/stencil/100x100/products/111/378/product01__38796.1490085945.jpg?c=2" alt="[Sample] Smith Journal 13" title="[Sample] Smith Journal 13">
+                                    </td>
+                                    <p style="display:none">@(product += 1)</p>
+                                    <td class="cart-item-block cart-item-title">
+                                        <h4 class="cart-item-name"><a href="https://gameworld1.mybigcommerce.com/smith-journal-13/">@item.Game.TenGame</a></h4>
+                                    </td>
+                                    <td class="cart-item-block cart-item-info">
+                                        <span class="cart-item-label">Price</span>
+                                        <span class="cart-item-value ">@item.Game.GiaTien</span>
+                                    </td>
+
+
+
+                                    <td class="cart-item-block cart-item-info">
+                                        <span class="cart-item-label">Total</span>
+                                        <strong class="cart-item-value ">@(item.Game.GiaTien) <span>@{totalBill += (item.Game.GiaTien);}</span></strong>
+
+                                        <a class="cart-remove icon" data-cart-itemid="6045dc73-eaeb-4fc1-a4e0-9fa2478691ed" href="/Cart/RemoveCartItem/@item.Game.MaGame" style="color:black">
+                                            <svg><use xlink:href="#icon-close"></use></svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div style="color:red">@(product)</div>
+
+                <div data-cart-totals="" style="display: flex; width: 100%; align-content: space-between; ">
+                    @if (Session["KhachHangID"] == null)
+                    {
+                        <form class="w-full max-w-lg" id="dialog" style="flex:3;margin-right:10px">
+                            <div class="flex flex-wrap -mx-3 mb-6">
+                                <div class="w-full md:w-2/2 px-3 mb-6 md:mb-0">
+                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                                        First Name
+                                    </label>
+                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="customername" type="text" placeholder="Jane">
+
+                                </div>
+                                <div class="w-full px-3">
+                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                                        Địa chỉ
+                                    </label>
+                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" placeholder="Ha Noi" id="address">
+
+                                </div>
+                                <div class="w-full px-3">
+                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
+                                        Số điện thoại
+                                    </label>
+                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="phonenumber" type="text" placeholder="03777282738">
+
+                                </div>
+                                <div class="w-full px-3">
+                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
+                                        Số tài khoản ngân hàng
+                                    </label>
+                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="banknumber" type="text" placeholder="02290120294">
+
+                                </div>
+
+                                <div class="w-full md:w-3/3 px-3 mb-6 md:mb-0">
+
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap -mx-3 mb-6">
+
+                            </div>
+
+
+                        </form>
+                    }
+                    <ul style="flex:5" class="w-64">
+                        <li class="cart-total">
+                            <div class="cart-total-label">
+                                <strong>Subtotal:</strong>
+                            </div>
+                            <div class="cart-total-value">
+                                <span>@string.Format("{0}", totalBill);</span>
+                            </div>
+                        </li>
+                        <li class="cart-total">
+                            <div class="cart-total-label">
+                                <strong>Shipping:</strong>
+                            </div>
+                            <div class="cart-total-value">
+                                <button class="shipping-estimate-show">Add Info</button>
+                                <button class="shipping-estimate-hide" style="display: none;">Cancel</button>
+                            </div>
+
+                            <div class="shipping-estimator u-hiddenVisually">
+                                <form class="form estimator-form" data-shipping-estimator="">
+                                    <dl>
+                                        <dt class="estimator-form-label">
+                                            <label class="form-label" for="shipping-country">Country</label>
+                                        </dt>
+
+                                        <dd class="estimator-form-input">
+                                            <select class="form-select" id="shipping-country" name="shipping-country" data-field-type="Country">
+                                                <option>Country</option>
+                                                <option value="232" selected="selected">
+                                                    Viet Nam
+                                                </option>
+                                            </select>
+                                            <span style="display: none;"></span>
+                                        </dd>
+
+                                        <dt class="estimator-form-label">
+                                            <label class="form-label" for="shipping-state">State/province</label>
+                                        </dt>
+
+                                        <dd class="estimator-form-input">
+                                            <input class="form-input" type="text" id="shipping-state" name="shipping-state" data-field-type="State" placeholder="State/province">
+                                        </dd>
+
+                                        <dt class="estimator-form-label">
+                                            <label class="form-label" for="shipping-city">Suburb/city</label>
+                                        </dt>
+                                        <dd class="estimator-form-input">
+                                            <input class="form-input" type="text" id="shipping-city" name="shipping-city" value="" placeholder="Suburb/city">
+                                        </dd>
+
+                                        <dt class="estimator-form-label">
+                                            <label class="form-label" for="shipping-zip">Zip/postcode</label>
+                                        </dt>
+                                        <dd class="estimator-form-input">
+                                            <input class="form-input" type="text" id="shipping-zip" name="shipping-zip" value="" placeholder="Zip/postcode">
+                                        </dd>
+                                        <button class="button button--primary button--small shipping-estimate-submit">Estimate Shipping</button>
+                                    </dl>
+                                </form>
+                                <div class="shipping-quotes"></div>
+                            </div>
+                        </li>
+                        <li class="cart-total">
+                            <div class="cart-total-label">
+                                <strong>Coupon Code:</strong>
+                            </div>
+                            <div class="cart-total-value">
+
+                                <button class="coupon-code-add">Add Coupon</button>
+
+                                <button class="coupon-code-cancel" style="display: none;">Cancel</button>
+                            </div>
+
+                            <div class="cart-form coupon-code" style="display: none;">
+                                <form class="form form--hiddenLabels coupon-form" method="post" action="/cart.php">
+                                    <label class="form-label" for="couponcode">Enter your coupon code</label>
+                                    <input class="form-input" data-error="Please enter your coupon code." id="couponcode" type="text" name="couponcode" value="" placeholder="Enter your coupon code">
+                                    <input class="button button--primary button--small" type="submit" value="Apply">
+                                    <input type="hidden" name="action" value="applycoupon">
+                                </form>
+                            </div>
+                        </li>
+                        <li class="cart-total">
+                            <div class="cart-total-label">
+                                <strong>Gift Certificate:</strong>
+                            </div>
+                            <div class="cart-total-value">
+
+                                <button class="gift-certificate-add">Gift Certificate</button>
+
+                                <button class="gift-certificate-cancel" style="display: none;">Cancel</button>
+                            </div>
+
+                            <div class="cart-form gift-certificate-code" style="display: none;">
+                                <form class="form form--hiddenLabels cart-gift-certificate-form" method="post" action="/cart.php">
+                                    <label class="form-label" for="couponcode">Enter your certificate code</label>
+                                    <input class="form-input" data-error="Please enter your valid certificate code." id="couponcode" type="text" name="certcode" value="" placeholder="Add Certificate">
+                                    <input class="button button--primary button--small" type="submit" value="Apply">
+                                    <input type="hidden" name="action" value="applycoupon">
+                                </form>
+                            </div>
+                        </li>
+                        <li class="cart-total">
+                            <div class="cart-total-label">
+                                <strong>Grand total:</strong>
+                            </div>
+                            <div class="cart-total-value cart-total-grandTotal">
+                                <span id="totalMoney">@string.Format("{0}", totalBill)</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <p style="display:none;visibility:hidden" id="UserID">@Session["UserID"].ToString()</p>
+
+                <div class="cart-actions">
+                    @*<a class="button-keke " title="Click here to proceed to checkout" value="Submit" id="opener">Check out</a>*@
+                    <a class="button button--primary" title="Click here to proceed to checkout" value="Submit" id="btnSave" ng-click="Payment()">Check out</a>
+                </div>
+                @*<div id="dialog">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p>Modal Box</p>
+                </div>
+            </div>*@
+
+            }
+
+            @if (Session["KhachHangID"] == null)
+            {
+                <h1 style="display:none;visibility:hidden" id="checkKH">null</h1>
+            }
+            else
+            {
+                <p style="display:none;visibility:hidden" id="checkKH">@Session["KhachHangID"].ToString()</p>
+
+            }
+            <!-- snippet location cart -->
+        </main>
+
+    </div>
+
+</div>
+}
+
+
+
+@section scripts{
+
+  
+    <script>
+
+
+        // Binding data with AngularJs
+        var myApp = angular.module("myApp", []).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);;
+
+        myApp.controller("Payment", Payment);
+        function Payment($scope, $http) {
+            $scope.Payment = function () {
+                var action = document.getElementById("btnSave").getAttribute("value");
+                if (action == "Submit") {
+
+                    $scope.KH = {}
+
+
+                    $scope.KH.MaKH = document.getElementById("UserID").innerHTML;
+
+                    var checkKh = document.getElementById("checkKH").innerHTML;
+
+
+                    if (checkKh == "null") {
+                        $scope.KH.TenKH = document.getElementById("customername").value;
+                        $scope.KH.DiaChi = document.getElementById("address").value;
+                        $scope.KH.SDT = document.getElementById("phonenumber").value;
+                        $scope.KH.SoTK = document.getElementById("banknumber").value;
+                    }
+                    
+
+                    $scope.Order = {}
+                    $scope.Order.MaKH = document.getElementById("UserID").innerHTML;
+                    $scope.Order.Tongtien = document.getElementById("totalMoney").innerHTML;
+                    var tongtien = Number($scope.tongtien);
+                    
+                }
+
+                $http({
+                    method: "post",
+                    url: "/Cart/CustomerInfor",
+                    dataType: "json",
+                    data: JSON.stringify($scope.KH)
+
+
+                });
+
+                $http({
+                    method: "post",
+                    url: "/Cart/Payment",
+                    dataType: "json",
+                    data: JSON.stringify($scope.Order)
+
+
+                }).then(function (res) {
+                    $scope.status = res.data;
+                    alert($scope.status)
+
+                    if ($scope.status == "Thanh toán thành công") {
+                        window.open('/Cart/Success', "_self");
+                    }
+                });;
+
+                
+
+                
+            }
+        }
+
+        myApp.controller("getLoaiMay", getLoaiMay);
+        function getLoaiMay($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/Home/LayLoaimay"
+
+            }).then(function (res) {
+                $scope.loaimay = res.data;
+
+            });
+        }
+
+        myApp.controller("SearchData", SearchData);
+        function SearchData($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/Home/dataSearch"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+}
+
+

@@ -1,0 +1,238 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body">
+    <div class="container">
+
+
+        <ul class="breadcrumbs">
+            <li class="breadcrumb ">
+                <a href="gameworld1.mybigcommerce.html" class="breadcrumb-label">Home</a>
+            </li>
+            <li class="breadcrumb is-active">
+                <a href="blog.html" class="breadcrumb-label">Blog</a>
+            </li>
+        </ul>
+
+        <div class="page u-emthemesModez-page-responsiveSidebar">
+
+            @Html.Action("PageSideBar");
+
+            <main class="page-content emthemesModez-blog--2col" ng-controller="getListNews">
+                <article class="blog  " ng-repeat="data in ListNews">
+                    <div class="blog-post-figure">
+                        <figure class="blog-thumbnail">
+                            <a ng-href="/NewsFront/Detail/{{data.NewsID}}">
+                                <img src="{{data.Banner}}" alt="Made Called Darkness Tree" title="Made Called Darkness Tree">
+                            </a>
+                        </figure>
+                    </div>
+
+                    <div class="blog-post-body">
+                        <header class="blog-header">
+                            <h2 class="blog-title">
+                                <a href="/NewsFront/Detail/{{data.NewsID}}" class="font-semibold">{{data.Title}}</a>
+                            </h2>
+                        </header>
+
+                        <div class="blog-post">
+                            <div class="blog-summary truncate overflow-hidden">
+                                {{data.Content}}
+
+                            </div>
+
+                            <div class="blog-dateContainer">
+                                <div class="blog-readmore"><a href="/NewsFront/Detail/{{data.NewsID}}">read more</a></div>
+                                <div class="blog-date"><span class="blog-date-date">{{data.PublicDate.slice(6, -2) | date: 'dd-MM-yyyy'}}</span></div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </article>
+
+                <div class="d-flex justify-content-center">
+                    <pagination class="flex" ng-model="currentPage"
+                                total-items="news.length"
+                                max-size="maxSize"
+                                boundary-links="true">
+                    </pagination>
+                </div>
+
+            </main>
+
+        </div>
+
+
+    </div>
+    
+    <div id="modal" class="modal" data-reveal data-prevent-quick-search-close>
+        <a href="#" class="modal-close" aria-label="Close" role="button">
+            <span aria-hidden="true">&times;</span>
+        </a>
+        <div class="modal-content"></div>
+        <div class="loadingOverlay"></div>
+    </div>
+</div>
+
+
+
+    @section scripts{
+
+
+
+        <script>
+            var myApp = angular.module("myApp", ['ui.bootstrap']).config(['$qProvider', function ($qProvider) {
+                $qProvider.errorOnUnhandledRejections(false);
+            }]);;
+
+            myApp.controller("getLoaiMay", getLoaiMay);
+            function getLoaiMay($scope, $http) {
+
+                $http({
+                    method: "GET",
+                    url: "/Home/LayLoaimay"
+
+                }).then(function (res) {
+                    $scope.loaimay = res.data;
+
+                });
+            }
+
+           
+
+            myApp.controller("getListNews", getListNews);
+            function getListNews($scope, $http) {
+
+                $scope.ListNews = {}
+                    , $scope.currentPage = 1
+                    , $scope.numPerPage = 10
+                    , $scope.maxSize = 5;
+
+
+                $http({
+                    method: "GET",
+                    url: "/NewsFront/ListNews"
+
+                }).then(function (res) {
+                    $scope.news = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.news || !$scope.news.length) { return }
+                        $scope.ListNews = $scope.news.slice(begin, end);
+                    });
+                });
+            }
+
+
+            myApp.controller("recommendPost", recommendPost);
+            function recommendPost($scope, $http) {
+
+                $http({
+                    method: "GET",
+                    url: "/NewsFront/RecommendPost"
+
+                }).then(function (res) {
+                    $scope.datas = res.data;
+                });
+            }
+
+            myApp.controller("DetailNew", DetailNew);
+            function DetailNew($scope, $http) {
+                var url = window.location.pathname;
+                var id = url.substring(url.lastIndexOf('/') + 1);
+
+                $http({
+                    method: "GET",
+                    url: "/NewsFront/DetaiNews?id=" + Number(id)
+
+                }).then(function (res) {
+                    $scope.news = res.data;
+                    console.log($scope.news)
+
+                });
+
+                $http({
+                    method: "GET",
+                    url: "/NewsFront/RecommendPost"
+
+                }).then(function (res) {
+                    $scope.datas = res.data;
+                    console.log($scope.datas)
+
+                });
+
+            }
+
+            myApp.controller("getListMachine", getListMachine);
+            function getListMachine($scope, $http) {
+
+                $http({
+                    method: "GET",
+                    url: "/NewsFront/ListMachine"
+
+                }).then(function (res) {
+                    $scope.datas = res.data;
+                });
+            }
+
+
+            myApp.controller("getListGame", getListGame);
+            function getListGame($scope, $http) {
+
+                $http({
+                    method: "GET",
+                    url: "/NewsFront/ListGame"
+
+                }).then(function (res) {
+                    $scope.datas = res.data;
+                });
+            }
+
+            myApp.controller("getLoaiGame", getLoaiGame);
+            function getLoaiGame($scope, $http) {
+
+                $http({
+                    method: "GET",
+                    url: "/NewsFront/GetAllGameType"
+
+                }).then(function (res) {
+                    $scope.loaigame = res.data;
+
+                });
+            }
+
+            myApp.controller("getLoaiMay", getLoaiMay);
+            function getLoaiMay($scope, $http) {
+
+                $http({
+                    method: "GET",
+                    url: "/Home/LayLoaimay"
+
+                }).then(function (res) {
+                    $scope.loaimay = res.data;
+
+                });
+            }
+
+            myApp.controller("SearchData", SearchData);
+            function SearchData($scope, $http) {
+
+                $http({
+                    method: "GET",
+                    url: "/Home/dataSearch"
+
+                }).then(function (res) {
+                    $scope.datas = res.data;
+                });
+            }
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    }
+
