@@ -5,42 +5,117 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2 style="margin-top:10%">Index</h2>
+<h3 >Quản lý loại máy</h3>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table" ng-controller="LoaiMayIndex">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TenMay)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MoTa)
-        </th>
-        <th></th>
-    </tr>
+<div class="d-flex " style="justify-content:space-between;width:98%">
+    <a href="/Admin/LoaiMays/Create" class="text-light btn btn-primary " style="text-decoration:none;height:45px"> Thêm loại máy mới  </a>
 
-
-    <tr ng-repeat="data in datas">
-        <td>
-            {{data.TenMay}}
-        </td>
-        <td>
-            {{data.MoTa}}
-        </td>
-        <td>
-            <a class="btn btn-warning" ng-href="/Admin/LoaiMays/Edit/{{data.MaMay}}"><i class="fa-solid fa-pen-to-square"></i></a>
-            <a class="btn btn-primary" ng-href="/Admin/LoaiMays/Details/{{data.MaMay}}"><i class="fa-solid fa-circle-info"></i></a>
-            <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaMay)"><i class="fa-solid fa-trash"></i></a>
-        </td>
-    </tr>
+    <div class="form-group w-25 ">
+        <div class="form-group has-search">
+            <input type="text" class="form-control" placeholder="Search...." ng-model="search">
+        </div>
+    </div>
+</div>
+<div  ng-controller="LoaiMayIndex">
+    <table class="table">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên máy
+            </th>
+            <th>
+                Mô tả
+            </th>
+            <th></th>
+        </tr>
 
 
-</table>
+        <tr ng-repeat="data in ListMachine|filter:search">
+            <td>
+                {{$index+1}}
+            </td>
+            <td>
+                {{data.TenMay}}
+            </td>
+            <td>
+                {{data.MoTa}}
+            </td>
+            <td>
+                <a class="btn btn-warning" ng-href="/Admin/LoaiMays/Edit/{{data.MaMay}}"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a class="btn btn-primary" ng-href="/Admin/LoaiMays/Details/{{data.MaMay}}"><i class="fa-solid fa-circle-info"></i></a>
+                <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaMay)"><i class="fa-solid fa-trash"></i></a>
+            </td>
+        </tr>
+
+
+    </table>
+    <div class="d-flex justify-content-center">
+        <pagination ng-model="currentPage"
+                    total-items="kh.length"
+                    max-size="maxSize"
+                    boundary-links="true">
+        </pagination>
+    </div>
+</div>
+
 
 @section scripts{
+<script>
+    var myApp = angular.module("myApp", ['ui.bootstrap']).config(['$qProvider', function ($qProvider) {
+        $qProvider.errorOnUnhandledRejections(false);
+    }]);
+    myApp.controller("LoaiMayIndex", LoaiMayIndex);
+    function LoaiMayIndex($scope, $http) {
 
-    <script src="~/Areas/Admin/Contents/js/AngularJsAdmin/LoaiMay.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        $scope.ListMachine = {}
+            , $scope.currentPage = 1
+            , $scope.numPerPage = 10
+            , $scope.maxSize = 5;
+
+        $scope.DeleteButton = function (id) {
+            var deleteItem = window.confirm("Bạn có muốn xóa loại máy này không ?")
+            if (deleteItem == true) {
+
+                $scope.MaMay = Number(id);
+                window.location.reload();
+            }
+            $http({
+                method: "post",
+                url: "/Admin/LoaiMays/DeleteConfirmed/?id=" + $scope.MaMay,
+                dataType: "json",
+                data: JSON.stringify($scope.MaMay)
+
+            }).then(function (res) {
+                $scope.machines = res.data;
+
+                $scope.$watch('currentPage + numPerPage', function () {
+                    var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                    if (!$scope.machines || !$scope.machines.length) { return }
+                    $scope.ListMachine = $scope.machines.slice(begin, end);
+                });
+            });
+
+        }
+        $http({
+            method: "get",
+            url: "/Admin/LoaiMays/GetDataLoaiMay",
+
+        }).then(function (res) {
+            $scope.machines = res.data;
+
+            $scope.$watch('currentPage + numPerPage', function () {
+                var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                if (!$scope.machines || !$scope.machines.length) { return }
+                $scope.ListMachine = $scope.machines.slice(begin, end);
+            });
+        });
+
+
+    }
+
+    </script>
 }

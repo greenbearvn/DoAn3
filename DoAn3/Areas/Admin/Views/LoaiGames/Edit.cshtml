@@ -5,7 +5,7 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+<h3>Cập nhật thông tin loại game</h3>
 <div ng-controller="myctrl">
     <form ng-submit="addData()" name="form">
        
@@ -17,24 +17,33 @@
 
 
                 <div class="form-group">
-                    <h6>Tên loại</h6>
                     <div class="col-md-10">
+                        <h6>Tên loại</h6>
+
                         <input type="text" ng-model="loaiGame.TenLoai" class="form-control" name="name" required />
                         <p class="text-danger text-xs italic" ng-show="form.name.$touched && form.name.$invalid">Vui lòng điền đủ thông tin.</p>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <h6>Mô tả</h6>
                     <div class="col-md-10">
+                        <h6>Mô tả</h6>
+
                         <input type="text" ng-model="loaiGame.MoTa" class="form-control" name="des" required />
                         <p class="text-danger text-xs italic" ng-show="form.des.$touched && form.des.$invalid">Vui lòng điền đủ thông tin.</p>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Save" class="btn btn-primary" />
+                <div class="d-flex">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Cập nhật" class="btn btn-success" />
+                        </div>
+                    </div>
+                    <div>
+                        <a class="btn btn-danger" href="/Admin/LoaiMays/Index">
+                            Quay lại
+                        </a>
                     </div>
                 </div>
             </div>
@@ -44,23 +53,22 @@
     </form>
 </div>
 
-            <div>
-                @Html.ActionLink("Back to List", "Index")
-            </div>
+            
             @section scripts{
 
                 <script>
-                    var myApp = angular.module('myApp', []);
+                    var myApp = angular.module('myApp', []).config(['$qProvider', function ($qProvider) {
+                        $qProvider.errorOnUnhandledRejections(false);
+                    }]);
                     myApp.controller('myctrl', function ($scope, $http, $httpParamSerializerJQLike) {
 
-                        var maloai = document.getElementById("MaLoai").value;
-                        $scope.loaiGame = {};
-                        $scope.loaiGame.MaLoai = maloai;
+                        
                        
 
                         var url = window.location.pathname;
                         var id = url.substring(url.lastIndexOf('/') + 1);
-
+                        $scope.loaiGame = {};
+                        $scope.loaiGame.MaLoai = id;
 
                         $http({
                             method: "GET",
@@ -87,10 +95,10 @@
                             }).then(function (res) {
                                 console.log(res);
                                 if (res.data.msg == false) {
-                                    alert("Sua them ban ghi");
+                                    alert("Lỗi cập nhật thông tin loại game");
                                 }
                                 else {
-                                    alert("Sua ban ghi thanh cong");
+                                    alert("Cập nhật thông tin loại máy thành công");
                                     window.location.href = "/Admin/LoaiGames/Index";
                                 }
                             });

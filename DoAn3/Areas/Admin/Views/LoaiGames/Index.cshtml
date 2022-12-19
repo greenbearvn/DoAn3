@@ -5,7 +5,7 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-
+<h3>Quản lý loại game</h3>
 <div class="d-flex " style="justify-content:space-between;width:98%">
     <p class="btn btn-primary">
         <a href="/Admin/LoaiGames/Create" class="text-light" style="text-decoration:none"> Thêm loại game mới  </a>
@@ -20,28 +20,34 @@
 <table class="table" ng-controller="LoaiGameIndex">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.TenLoai)
+            STT
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MoTa)
+            Tên Loại
+        </th>
+        <th>
+            Mô Tả
         </th>
         <th></th>
     </tr>
 
     
-        <tr ng-repeat="data in ListLG|filter:search">
-            <td>
-                {{data.TenLoai}}
-            </td>
-            <td>
-                {{data.MoTa}}
-            </td>
-            <td>
-                <a class="btn btn-warning" ng-href="/Admin/LoaiGames/Edit/{{data.MaLoai}}"><i class="fa-solid fa-pen-to-square"></i></a>
-                <a class="btn btn-primary" ng-href="/Admin/LoaiGames/Details/{{data.MaLoai}}"><i class="fa-solid fa-circle-info"></i></a>
-                <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaLoai)"><i class="fa-solid fa-trash"></i></a>
-            </td>
-        </tr>
+    <tr ng-repeat="data in ListLG|filter:search">
+        <td>
+            {{$index+1}}
+        </td>
+        <td>
+            {{data.TenLoai}}
+        </td>
+        <td>
+            {{data.MoTa}}
+        </td>
+        <td>
+            <a class="btn btn-warning" ng-href="/Admin/LoaiGames/Edit/{{data.MaLoai}}"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a class="btn btn-primary" ng-href="/Admin/LoaiGames/Details/{{data.MaLoai}}"><i class="fa-solid fa-circle-info"></i></a>
+            <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaLoai)"><i class="fa-solid fa-trash"></i></a>
+        </td>
+    </tr>
     
 
 </table>

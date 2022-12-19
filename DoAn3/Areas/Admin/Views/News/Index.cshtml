@@ -109,13 +109,15 @@
                     data: JSON.stringify($scope.NewsID)
 
                 }).then(function (res) {
-                    $scope.alert = res.data;
-                    if ($scope.alert == true) {
-                        alert("Xóa bài viết thành công")
-                    }
-                    else {
-                        alert("Xóa bài viết không thành công")
-                    }
+                    $scope.news = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.news || !$scope.news.length) { return }
+                        $scope.ListNews = $scope.news.slice(begin, end);
+                    });
+                    
                 });
 
             }

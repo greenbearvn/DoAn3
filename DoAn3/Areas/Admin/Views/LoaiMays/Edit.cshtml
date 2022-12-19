@@ -5,48 +5,98 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+<h3>Sửa loại máy</h3>
 
 <div ng-controller="Edit">
     <form ng-submit="addData()" name="form">
       
 
         <div class="form-horizontal">
-            <h4>LoaiMay</h4>
-            <hr />
+            
 
             <div class="form-group">
-                <h6>Tên máy</h6>
                 <div class="col-md-10">
-                    <input type="text" ng-model="loaiMay.TenMay" name="name" required />
-                    <p class="text-danger text-xs italic" ng-show="form.name.$touched && form.name.$invalid">Vui lòng điền đủ thông tin.</p>
+                    <h6>Tên máy</h6>
+
+                    <input type="text" class="form-control" ng-model="loaiMay.TenMay" name="name" required />
                 </div>
             </div>
 
             <div class="form-group">
-                <h6>Mô tả</h6>
                 <div class="col-md-10">
-                    <input type="text" ng-model="loaiMay.MoTa" name="des" required />
-                    <p class="text-danger text-xs italic" ng-show="form.des.$touched && form.des.$invalid">Vui lòng điền đủ thông tin.</p>
+                    <h6>Mô tả</h6>
+
+                    <input type="text" class="form-control" ng-model="loaiMay.MoTa" name="des" required />
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="d-flex">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Cập nhật" class="btn btn-success" />
+                    </div>
+                </div>
+                <div>
+                    <a class="btn btn-danger" href="/Admin/LoaiMays/Index">
+                        Quay lại
+                    </a>
                 </div>
             </div>
         </div>
 
 
-        <div>
-            @Html.ActionLink("Back to List", "Index")
-        </div>
+        
     </form>
 </div>
 @section Scripts{
+<script>
+    var myApp = angular.module("myApp", []);
+    myApp.controller('Edit', function ($scope, $http, $httpParamSerializerJQLike) {
 
-    <script src="~/Areas/Admin/Contents/js/AngularJsAdmin/LoaiMay.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        
+
+
+        var url = window.location.pathname;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+
+        $scope.loaiMay = {};
+        $scope.loaiMay.MaMay = id;
+
+        $http({
+            method: "GET",
+            url: "/Admin/LoaiMays/EditData/" + Number(id)
+
+        }).then(function (res) {
+            $scope.infor = res.data;
+            $scope.loaiMay.TenMay = $scope.infor.TenMay;
+            $scope.loaiMay.MoTa = $scope.infor.MoTa;
+        });
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+        $scope.addData = function () {
+            Token = angular.element('input[name="__RequestVerificationToken"]').attr('value');
+            $scope.loaiMay.__RequestVerificationToken = Token;
+            dataRequest = $scope.loaiMay;
+            console.log(dataRequest);
+            $http({
+                method: 'POST',
+                url: '/Admin/LoaiMays/EditLM',
+                data: $httpParamSerializerJQLike(dataRequest),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+
+            }).then(function (res) {
+                $scope.data = res.data;
+                if ($scope.data == false) {
+                    alert("Lỗi sửa thông tin loại máy");
+                }
+                else {
+                    alert("Cập nhật thông tin loại máy thành công");
+                    window.location.href = "/Admin/LoaiMays/Index";
+                }
+            });
+        };
+    });
+    </script>
+  
 
 }

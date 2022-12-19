@@ -201,6 +201,7 @@ namespace DoAn3.Areas.Admin.Controllers
             var query = (from dh in db.DonHang
                          join kh in db.KhachHang
                          on dh.MaKH equals kh.MaKH
+                         orderby dh.MaDH descending
                          select new { dh.MaDH, kh.TenKH, dh.NgayLap, dh.TinhTrang, dh.Tongtien }).ToList();
             return Json(query, JsonRequestBehavior.AllowGet);
 
@@ -238,18 +239,28 @@ namespace DoAn3.Areas.Admin.Controllers
         }
 
 
-        public string DeleteConfirmed(int id)
+        public JsonResult DeleteConfirmed(int id)
         {
             if (id > 0)
             {
                 var donHang = (from dh in db.DonHang where dh.MaDH == id select dh).FirstOrDefault();
                 db.DonHang.Remove(donHang);
                 db.SaveChanges();
-                return "Xóa đơn hàng thành công";
+                var query = (from dh in db.DonHang
+                             join kh in db.KhachHang
+                             on dh.MaKH equals kh.MaKH
+                             orderby dh.MaDH descending
+                             select new { dh.MaDH, kh.TenKH, dh.NgayLap, dh.TinhTrang, dh.Tongtien }).ToList();
+                return Json(query, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return "Giá trị rỗng";
+                var query = (from dh in db.DonHang
+                             join kh in db.KhachHang
+                             on dh.MaKH equals kh.MaKH
+                             orderby dh.MaDH descending
+                             select new { dh.MaDH, kh.TenKH, dh.NgayLap, dh.TinhTrang, dh.Tongtien }).ToList();
+                return Json(query, JsonRequestBehavior.AllowGet);
 
             }
 
@@ -270,6 +281,7 @@ namespace DoAn3.Areas.Admin.Controllers
             var query = (from dh in db.DonHang
                          join kh in db.KhachHang
                          on dh.MaKH equals kh.MaKH
+                         orderby dh.MaDH descending
                          select new { dh.MaDH, kh.TenKH, dh.NgayLap, dh.TinhTrang, dh.Tongtien }).ToList();
             return Json(query, JsonRequestBehavior.AllowGet);
         }

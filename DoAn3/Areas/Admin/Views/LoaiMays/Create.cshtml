@@ -5,7 +5,7 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2 style="margin-top:10%">Create</h2>
+<h3 >Thêm loại máy</h3>
 
 
 <div ng-controller="Create">
@@ -13,32 +13,39 @@
         <div class="form-horizontal">
             
             <div class="form-group">
-                <h6>Tên máy</h6>
                 <div class="col-md-10">
-                    <input type="text" ng-model="loaiMay.TenMay" name="name" required/>
+                    <h6>Tên máy</h6>
+
+                    <input type="text" class="form-control" ng-model="loaiMay.TenMay" name="name" required />
                     <p class="text-danger text-xs italic" ng-show="form.name.$touched && form.name.$invalid">Vui lòng điền đủ thông tin.</p>
                 </div>
             </div>
 
             <div class="form-group">
-                <h6>Mô tả</h6>
                 <div class="col-md-10">
-                    <input type="text" ng-model="loaiMay.MoTa" name="des" required/>
+                    <h6>Mô tả</h6>
+
+                    <input type="text" class="form-control" ng-model="loaiMay.MoTa" name="des" required />
                     <p class="text-danger text-xs italic" ng-show="form.des.$touched && form.des.$invalid">Vui lòng điền đủ thông tin.</p>
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-primary"  />
+            <div class="d-flex">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Tạo" class="btn btn-success" />
+                    </div>
+                </div>
+                <div>
+                    <a class="btn btn-danger" href="/Admin/LoaiMays/Index">
+                        Quay lại
+                    </a>
                 </div>
             </div>
         </div>
 
 
-        <div>
-            @Html.ActionLink("Back to List", "Index")
-        </div>
+        
     </form>
 </div>
 

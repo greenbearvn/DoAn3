@@ -96,8 +96,7 @@ namespace DoAn3.Areas.Admin.Controllers
         }
 
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public JsonResult EditLoaiGame([Bind(Include = "MaLoai,TenLoai,MoTa")] LoaiGame loaiGame)
         {
             if (ModelState.IsValid)

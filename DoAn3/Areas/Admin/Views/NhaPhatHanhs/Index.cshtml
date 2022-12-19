@@ -5,46 +5,115 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Quản lý nhà phát hành</h2>
 
-<p class="btn btn-warning" >
-    <a href="/Admin/NhaPhatHanhs/Create" ><i class="fa-solid fa-plus text-success"></i></a>
+<div class="d-flex " style="justify-content:space-between;width:98%">
+    <a href="/Admin/NhaPhatHanhs/Create" class="text-light btn btn-primary " style="text-decoration:none;height:45px"> Thêm nhà phát hành mới  </a>
 
-</p>
-<table class="table" ng-controller="nphIndex">
-    <tr>
-        <th>
-            STT
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TenNPH)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TruSo)
-        </th>
-        <th></th>
-    </tr>
-
-
-    <tr ng-repeat="data in datas | orderBy:'-MaNPH'">
-        <td>
-            {{$index+1}}
-        </td>
-        <td>
-            {{data.TenNPH}}
-        </td>
-        <td>
-            {{data.TruSo}}
-        </td>
-        <td>
-            <a class="btn btn-warning" ng-href="/Admin/NhaPhatHanhs/Edit/{{data.MaNPH}}"><i class="fa-solid fa-pen-to-square"></i></a>
-            <a class="btn btn-primary" ng-href="/Admin/NhaPhatHanhs/Details/{{data.MaNPH}}"><i class="fa-solid fa-circle-info"></i></a>
-            <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaNPH)"><i class="fa-solid fa-trash"></i></a>
-        </td>
-    </tr>
+    <div class="form-group w-25 ">
+        <div class="form-group has-search">
+            <input type="text" class="form-control" placeholder="Search...." ng-model="search">
+        </div>
+    </div>
+</div>
+<div ng-controller="nphIndex">
+    <table class="table" >
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên nhà phát hành
+            </th>
+            <th>
+                Trụ sở
+            </th>
+            <th></th>
+        </tr>
 
 
-</table>
+        <tr ng-repeat="data in ListNPH | orderBy:'-MaNPH' | filter:search">
+            <td>
+                {{$index+1}}
+            </td>
+            <td>
+                {{data.TenNPH}}
+            </td>
+            <td>
+                {{data.TruSo}}
+            </td>
+            <td>
+                <a class="btn btn-warning" ng-href="/Admin/NhaPhatHanhs/Edit/{{data.MaNPH}}"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a class="btn btn-primary" ng-href="/Admin/NhaPhatHanhs/Details/{{data.MaNPH}}"><i class="fa-solid fa-circle-info"></i></a>
+                <a class="btn btn-danger" href="" ng-click="DeleteButton(data.MaNPH)"><i class="fa-solid fa-trash"></i></a>
+            </td>
+        </tr>
+
+
+    </table>
+    <div class="d-flex justify-content-center">
+        <pagination ng-model="currentPage"
+                    total-items="nphs.length"
+                    max-size="maxSize"
+                    boundary-links="true">
+        </pagination>
+    </div>
+</div>
+
 @section scripts{
-    <script src="~/Areas/Admin/Contents/js/AngularJsAdmin/NhaPhatHanh.js"></script>
+    <script>
+        var myApp = angular.module("myApp", ['ui.bootstrap']).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+        myApp.controller("nphIndex", nphIndex);
+        function nphIndex($scope, $http) {
+
+            $scope.ListNPH = {}
+                , $scope.currentPage = 1
+                , $scope.numPerPage = 10
+                , $scope.maxSize = 5;
+
+            $scope.DeleteButton = function (id) {
+                var deleteItem = window.confirm("Bạn có muốn xóa nhà phát hành này không ?")
+                if (deleteItem == true) {
+
+                    $scope.MaNPH = Number(id);
+                    window.location.reload();
+                }
+                $http({
+                    method: "post",
+                    url: "/Admin/NhaPhatHanhs/DeleteConfirmed/?id=" + $scope.MaNPH,
+                    dataType: "json",
+                    data: JSON.stringify($scope.MaNPH)
+
+                }).then(function (res) {
+                    $scope.nphs = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.nphs || !$scope.nphs.length) { return }
+                        $scope.ListNPH = $scope.nphs.slice(begin, end);
+                    });
+                    
+                });
+
+            }
+            $http({
+                method: "get",
+                url: "/Admin/NhaPhatHanhs/GetAllNPH",
+
+            }).then(function (res) {
+                $scope.nphs = res.data;
+
+                $scope.$watch('currentPage + numPerPage', function () {
+                    var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                    if (!$scope.nphs || !$scope.nphs.length) { return }
+                    $scope.ListNPH = $scope.nphs.slice(begin, end);
+                });
+
+            });
+        }
+    </script>
     }

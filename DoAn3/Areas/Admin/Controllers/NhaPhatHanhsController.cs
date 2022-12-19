@@ -108,18 +108,20 @@ namespace DoAn3.Areas.Admin.Controllers
         }
 
         
-        public bool DeleteConfirmed(int? id)
+        public JsonResult DeleteConfirmed(int? id)
         {
            if(id != null)
             {
                 var nhaPhatHanh = (from nph in db.NhaPhatHanh where nph.MaNPH == id select nph).FirstOrDefault();
                 db.NhaPhatHanh.Remove(nhaPhatHanh);
                 db.SaveChanges();
-                return true;
+                var data = (from nph in db.NhaPhatHanh select new { nph.MaNPH, nph.TenNPH, nph.TruSo }).ToList();
+                return Json(data, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return false;
+                var data = (from nph in db.NhaPhatHanh select new { nph.MaNPH, nph.TenNPH, nph.TruSo }).ToList();
+                return Json(data, JsonRequestBehavior.AllowGet);
             }
         }
 

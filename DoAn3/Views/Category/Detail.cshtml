@@ -29,15 +29,14 @@
                     <fieldset class="form-fieldset actionBar-section">
                         <div class="form-field">
                             <label class="form-label" for="sort">Sort By:</label>
-                            <select class="form-select form-select--small" name="sort" id="sort">
+                            <select class="form-select form-select--small" ng-model="myOrderBy" name="sort" id="filterGame">
+                                <option value="">--- Sắp xếp danh sách gảm theo ---</option>
                                 <option value="featured" selected>Featured Items</option>
-                                <option value="newest">Newest Items</option>
-                                <option value="bestselling">Best Selling</option>
-                                <option value="alphaasc">A to Z</option>
-                                <option value="alphadesc">Z to A</option>
-                                <option value="avgcustomerreview">By Review</option>
-                                <option value="priceasc">Price: Ascending</option>
-                                <option value="pricedesc">Price: Descending</option>
+                                <option value="">-- Sắp xếp danh sách game theo --</option>
+                                <option value="-MaGame">Sắp xếp theo mã giảm dần</option>
+                                <option value="MaGame">Sắp xếp theo mã tăng dần</option>
+                                <option value="-GiaTien">Sắp xếp theo giá giảm dần</option>
+                                <option value="GiaTien">Sắp xếp theo giá tăng dần</option>
                             </select>
                         </div>
                     </fieldset>
@@ -46,7 +45,7 @@
 
                 <form>
                     <ul class="productGrid">
-                        <li class="product" ng-repeat="data in filteredTodos">
+                        <li class="product" ng-repeat="data in filteredGames | orderBy:myOrderBy">
                             <article class="card ">
                                 <figure class="card-figure">
                                     <a href="/Home/Detail/{{data.MaGame}}">
@@ -107,7 +106,7 @@
 
                                     <div class="card-text" data-test-info-type="price">
                                         <div class="price-section price-section--withoutTax ">
-                                            <span data-product-price-without-tax class="price price--withoutTax">{{data.GiaTien}}</span>
+                                            <span data-product-price-without-tax class="price price--withoutTax">{{data.GiaTien | myCurrency}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -150,6 +149,14 @@
             $qProvider.errorOnUnhandledRejections(false);
         }]);
 
+        myApp.filter('myCurrency', ['$filter', function ($filter) {
+            return function (input) {
+                input = parseFloat(input);
+                input = input.toFixed(input % 1 === 0 ? 0 : 2);
+                return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " ₫";
+            };
+        }]);
+
         myApp.controller("getLoaiMay", getLoaiMay);
         function getLoaiMay($scope, $http) {
 
@@ -165,6 +172,10 @@
 
         myApp.controller("getSPTheoLoaiMay", getSPTheoLoaiMay);
         function getSPTheoLoaiMay($scope, $http) {
+
+            $scope.orderByMe = function () {
+                $scope.myOrderBy = document.getElementById("filterGame").value;
+            }
 
             var url = window.location.pathname;
             var id = url.substring(url.lastIndexOf('/') + 1);
@@ -186,7 +197,7 @@
                     var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
 
                     if (!$scope.games || !$scope.games.length) { return }
-                    $scope.filteredTodos = $scope.games.slice(begin, end);
+                    $scope.filteredGames = $scope.games.slice(begin, end);
                 });
             });
 
@@ -266,6 +277,17 @@
             };
         }
 
+        myApp.controller("SearchData", SearchData);
+        function SearchData($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/Home/dataSearch"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
 
         myApp.controller("recommendPost", recommendPost);
         function recommendPost($scope, $http) {

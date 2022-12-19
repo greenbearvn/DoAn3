@@ -132,7 +132,7 @@
 
 
 
-                @*@Html.Action("LaySPTheoLoaiMay")*@
+                
                 <div class="emthemesModez-productsByCategoryTabs emthemesModez-productsByCategoryTabs--subcategories
             emthemesModez-productsByCategoryTabs--style2
             emthemesModez-productsByCategoryTabs--instance1
@@ -141,7 +141,7 @@
                     <ul class="tabs" data-tab-emthemesmodez-products-by-category-tabs role="tablist">
                         <li class="li-heading"><h2 class="page-heading" ng-init="GetData()" ng-click="GetData()"><span>Giảm giá nhiều nhất</span></h2></li>
                         <li class="tab " role="presentation" style="display: flex; justify-content: left" ng-repeat="lm in loaimay"><a ng-click="GetData(lm.MaMay)" class="tablinks tab-title " role="tab" tabindex="0" aria-selected="true">{{lm.TenMay}}</a></li>
-                        <li class="li-heading"><h2 class="page-heading" ng-click="GetData(0)"><span>Tat ca san pham</span></h2></li>
+                        <li class="li-heading"><h2 class="page-heading" ng-click="GetData(0)"><span>Tất cả sản phẩm</span></h2></li>
 
 
                     </ul>
@@ -150,7 +150,7 @@
                             <div class="productCarousel-slide" ng-repeat="data in products">
                                 <article class="card ">
                                     <figure class="card-figure">
-                                        <a ng-href="@Url.Action("Detail", "Home")?id={{data.MaGame}}">
+                                        <a ng-href="/Home/Detail/{{data.MaGame}}">
                                             <img class="card-image" ng-src="{{data.AnhGame}}" alt="[Sample] Smith Journal 13" title="[Sample] Smith Journal 13">
                                             <img class="card-image" src="~/Content/images/376-product04__39749.1490085920.jpg" alt="[Sample] Smith Journal 13" title="[Sample] Smith Journal 13">
                                         </a>
@@ -354,7 +354,7 @@
 
 
                 <div class="emthemesModez-section emthemesModez-section--newProducts ">
-                    <h2 class="page-heading">Recomend game</h2>
+                    <h2 class="page-heading">Sản phẩm gợi ý</h2>
 
                     <section class="productCarousel" ng-controller="getData">
 
@@ -403,7 +403,7 @@
 
 
                 <div class="emthemesModez-section emthemesModez-section--topProducts ">
-                    <h2 class="page-heading">Game co nhieu luot truy cap</h2>
+                    <h2 class="page-heading">Game có nhiều lượt truy cập</h2>
 
                     <ul class="productList productList--maxCol4" data-product-type="top_sellers" ng-controller="GetGameMostView">
                         <li class="product" ng-repeat="data in games | orderBy:'-Views'">
@@ -827,17 +827,17 @@
             });
         }
 
-            //myApp.controller("recommendPost", recommendPost);
-            //function recommendPost($scope, $http) {
+            myApp.controller("recommendPost", recommendPost);
+            function recommendPost($scope, $http) {
 
-            //    $http({
-            //        method: "GET",
-            //        url: "/NewsFront/RecommendPost"
+                $http({
+                    method: "GET",
+                    url: "/NewsFront/RecommendPost"
 
-            //    }).then(function (res) {
-            //        $scope.datas = res.data;
-            //    });
-            //}
+                }).then(function (res) {
+                    $scope.datas = res.data;
+                });
+            }
 
 
 

@@ -5,23 +5,20 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+<h3>Cập nhật thông tin đơn hàng</h3>
 
 <div ng-controller="Edit">
     <form ng-submit="addData()">
 
 
         <div class="form-horizontal container">
-            <h4>Đơn hàng</h4>
-            <hr />
-
+            
 
             <div class="form-group">
                 <div class="col-md-10">
                     <h6>Tên khách hàng</h6>
 
                     <select ng-model="dh.MaKH" class="custom-select" ng-options="x.MaKH as x.TenKH for x in kh">
-                        @*<option   value="{{item.MaKH}}">{{item.TenKH}}</option>*@
                     </select>
                 </div>
             </div>
@@ -48,7 +45,7 @@
                     <h6>
                         Ngày tạo đơn
                     </h6>
-                    <input type="date" class="form-control" ng-model="dh.NgayLap" id="ngaylap" />
+                    <input type="date" class="form-control" value="{{dh.NgayLap.slice(6, -2) | date: 'yyyy-MM-dd'}}"  id="ngaylap" />
                 </div>
             </div>
 
@@ -256,7 +253,6 @@
             $scope.dh.MaDh = id;
 
 
-            /*$scope.dh.NgayLap = document.getElementById("ngaylap").value;*/
 
             $http({
                 method: "GET",
@@ -290,7 +286,8 @@
             ///////////////////////////////////////////////////////////////////////////////////////
             $scope.addData = function () {
 
-               
+                $scope.dh.NgayLap = document.getElementById("ngaylap").value;
+
 
                 var moneyBefore = document.getElementById("totalMoneyBefore").value;
                 var moneyAfter = document.getElementById("totalMoney").innerHTML;

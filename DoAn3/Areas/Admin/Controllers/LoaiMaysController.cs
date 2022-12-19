@@ -98,7 +98,6 @@ namespace DoAn3.Areas.Admin.Controllers
             {
                 
                 LoaiMay cate = (from lm in db.LoaiMay where lm.MaMay == loaiMay.MaMay select lm).FirstOrDefault();
-                cate.MaMay = loaiMay.MaMay;
                 cate.TenMay = loaiMay.TenMay;
                 cate.MoTa = loaiMay.MoTa;
                 db.SaveChanges();
@@ -128,18 +127,20 @@ namespace DoAn3.Areas.Admin.Controllers
         }
 
       
-        public string DeleteConfirmed(int id)
+        public JsonResult DeleteConfirmed(int id)
         {
             var loaimay = (from lm in db.LoaiMay where lm.MaMay == id select lm).FirstOrDefault();
             if (loaimay != null)
             {
                 db.LoaiMay.Remove(loaimay);
                 db.SaveChanges();
-                return "Da Xoa Thanh Cong";
+                var query = (from lm in db.LoaiMay select new { lm.MaMay, lm.TenMay, lm.MoTa }).ToList();
+                return Json(query, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return "Da Xoa khong Thanh Cong";
+                var query = (from lm in db.LoaiMay select new { lm.MaMay, lm.TenMay, lm.MoTa }).ToList();
+                return Json(query, JsonRequestBehavior.AllowGet);
             }
             
             

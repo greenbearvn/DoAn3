@@ -386,6 +386,17 @@
                 $scope.datas = res.data;
             });
         }
+        myApp.controller("recommendPost", recommendPost);
+        function recommendPost($scope, $http) {
+
+            $http({
+                method: "GET",
+                url: "/NewsFront/RecommendPost"
+
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>

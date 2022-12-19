@@ -98,17 +98,17 @@ namespace DoAn3.Controllers
         { 
             if(id == null)
             {
-                var query = (from game in db.Game orderby game.Views descending  select new { game.TenGame, game.GiaTien, game.AnhGame }).Take(6).ToList();
+                var query = (from game in db.Game orderby game.Views descending  select new {game.MaGame ,game.TenGame, game.GiaTien, game.AnhGame }).Take(6).ToList();
                 return Json(query, JsonRequestBehavior.AllowGet);
             }
             else if(id == 0)
             {
-                var query = (from game in db.Game  orderby game.MaGame descending select new { game.TenGame, game.GiaTien, game.AnhGame }).Take(6).ToList();
+                var query = (from game in db.Game  orderby game.MaGame descending select new { game.MaGame, game.TenGame, game.GiaTien, game.AnhGame }).Take(6).ToList();
                 return Json(query, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                var query = (from game in db.Game where game.MaMay == id select new { game.TenGame, game.GiaTien, game.AnhGame }).Take(6).ToList();
+                var query = (from game in db.Game where game.MaMay == id select new { game.MaGame, game.TenGame, game.GiaTien, game.AnhGame }).Take(6).ToList();
                 return Json(query, JsonRequestBehavior.AllowGet);
             }
             

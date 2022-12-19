@@ -5,29 +5,38 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+<h3>Cập nhật thông tin người dùng</h3>
 
 
-    <div class="form-horizontal" ng-controller="Edit">
+   <div class="form-horizontal" ng-controller="Edit">
         
 
     <div class="form-group">
-        Tên tài khoản
         <div class="col-md-10">
+            <h6>
+                Tên tài khoản
+
+            </h6>
             <input type="text" class="form-control" ng-model="user.UserName" />
         </div>
     </div>
 
     <div class="form-group">
-        Mật khẩu
         <div class="col-md-10">
+            <h6>
+                Mật khẩu
+
+            </h6>
             <input type="password" class="form-control" ng-model="user.Password" />
         </div>
     </div>
 
         <div class="form-group">
-            Quyền người dùng
             <div class="col-md-10">
+                <h6>
+                    Quyền người dùng
+
+                </h6>
                 <select class="form-control" ng-model="user.Role">
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
@@ -35,17 +44,22 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-primary" ng-click="EditData()" />
+        <div class="d-flex">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Cập nhật" class="btn btn-success"  ng-click="EditData()"/>
+                </div>
+            </div>
+            <div>
+                <a class="btn btn-danger" href="/Admin/LoaiMays/Index">
+                    Quay lại
+                </a>
             </div>
         </div>
     </div>
 
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 @section scripts{
     <script>
 

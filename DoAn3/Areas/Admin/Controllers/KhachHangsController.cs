@@ -112,18 +112,42 @@ namespace DoAn3.Areas.Admin.Controllers
         }
 
      
-        public bool DeleteConfirmed(int? id)
+        public JsonResult DeleteConfirmed(int? id)
         {
             if(id != null)
             {
                 var khachHang = (from k in db.KhachHang where k.MaKH == id select k).FirstOrDefault();
                 db.KhachHang.Remove(khachHang);
                 db.SaveChanges();
-                return true;
+                var data = (from kh in db.KhachHang
+                            join us in db.User
+                            on kh.MaKH equals us.UserID
+                            select new
+                            {
+                                kh.MaKH,
+                                kh.TenKH,
+                                kh.DiaChi,
+                                kh.SDT,
+                                kh.SoTK,
+                                us.UserName
+                            }).ToList();
+                return Json(data, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return false;
+                var data = (from kh in db.KhachHang
+                            join us in db.User
+                            on kh.MaKH equals us.UserID
+                            select new
+                            {
+                                kh.MaKH,
+                                kh.TenKH,
+                                kh.DiaChi,
+                                kh.SDT,
+                                kh.SoTK,
+                                us.UserName
+                            }).ToList();
+                return Json(data, JsonRequestBehavior.AllowGet);
             }
             
         }
