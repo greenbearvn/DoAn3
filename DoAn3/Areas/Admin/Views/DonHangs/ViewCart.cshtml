@@ -50,9 +50,8 @@
                     @item.Game.TrangThai
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    <a class="btn btn-danger text-white" href="/Admin/DonHangs/RemoveCartItem/@item.Game.MaGame">Delete</a>
+                    
+                    <a class="btn btn-danger text-white" href="/Admin/DonHangs/RemoveCartItem/@item.Game.MaGame"><i class="fa-solid fa-trash"></i></a>
                 </td>
                 <td style="display:none;visibility:hidden">@{totalBill += (item.Game.GiaTien);}</td>
             </tr>

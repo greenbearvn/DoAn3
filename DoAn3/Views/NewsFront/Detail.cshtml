@@ -40,13 +40,13 @@
                         </header>
 
                         <div class="blog-post">
-                            <p>{{news.Content}}</p>
+                            <p ng-bind-html="Content"></p>
                             <div class="blog-date"><span class="blog-date-date">{{news.PublicDate.slice(6, -2) | date: 'dd-MM-yyyy'}}</span></div>
                         </div>
 
                         <ul class="tags">
                             <li class="tag">
-                                <a ng-href=""><span class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-green-500 text-white rounded-full">{{news.TenLoai}}</span></a>
+                                <a ng-href="/Category/Detail/{{new.MaLoai}}"><span class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-green-500 text-white rounded-full w-25">{{news.TenLoai}}</span></a>
                             </li>
 
                         </ul>
@@ -214,7 +214,7 @@
 
 
     <script>
-        var myApp = angular.module("myApp", []).config(['$qProvider', function ($qProvider) {
+        var myApp = angular.module("myApp", ['ngSanitize']).config(['$qProvider', function ($qProvider) {
             $qProvider.errorOnUnhandledRejections(false);
         }]);;
 
@@ -267,7 +267,7 @@
 
             }).then(function (res) {
                 $scope.news = res.data;
-                console.log($scope.news)
+                $scope.Content = $scope.news.Content;
 
             });
 
@@ -356,5 +356,7 @@
             });
         }
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.8.3/angular-sanitize.js" integrity="sha512-WsrQol2t85bun8XdIkjqTbNLgY54bCBgVZw+B+00eVritDAlCAcfYo92/53rFp63cKZpDa7t5r5lDDeKFcbUAQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 }

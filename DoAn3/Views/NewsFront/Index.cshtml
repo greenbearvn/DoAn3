@@ -38,9 +38,9 @@
                             </h2>
                         </header>
 
-                        <div class="blog-post">
-                            <div class="blog-summary truncate overflow-hidden">
-                                {{data.Content}}
+                        <div class="blog-pos t" >
+                            <div class="blog-summary truncate overflow-hidden h-5" ng-bind-html="data.Content">
+                               
 
                             </div>
 
@@ -69,7 +69,7 @@
 
 
     </div>
-    
+
     <div id="modal" class="modal" data-reveal data-prevent-quick-search-close>
         <a href="#" class="modal-close" aria-label="Close" role="button">
             <span aria-hidden="true">&times;</span>
@@ -81,158 +81,160 @@
 
 
 
-    @section scripts{
+@section scripts{
 
 
 
-        <script>
-            var myApp = angular.module("myApp", ['ui.bootstrap']).config(['$qProvider', function ($qProvider) {
-                $qProvider.errorOnUnhandledRejections(false);
-            }]);;
+    <script>
+        var myApp = angular.module("myApp", ['ui.bootstrap', 'ngSanitize']).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);;
 
-            myApp.controller("getLoaiMay", getLoaiMay);
-            function getLoaiMay($scope, $http) {
+        myApp.controller("getLoaiMay", getLoaiMay);
+        function getLoaiMay($scope, $http) {
 
-                $http({
-                    method: "GET",
-                    url: "/Home/LayLoaimay"
+            $http({
+                method: "GET",
+                url: "/Home/LayLoaimay"
 
-                }).then(function (res) {
-                    $scope.loaimay = res.data;
+            }).then(function (res) {
+                $scope.loaimay = res.data;
 
+            });
+        }
+
+
+
+        myApp.controller("getListNews", getListNews);
+        function getListNews($scope, $http) {
+
+            $scope.ListNews = {}
+                , $scope.currentPage = 1
+                , $scope.numPerPage = 10
+                , $scope.maxSize = 5;
+
+
+            $http({
+                method: "GET",
+                url: "/NewsFront/ListNews"
+
+            }).then(function (res) {
+                $scope.news = res.data;
+
+                $scope.$watch('currentPage + numPerPage', function () {
+                    var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                    if (!$scope.news || !$scope.news.length) { return }
+                    $scope.ListNews = $scope.news.slice(begin, end);
                 });
-            }
-
-           
-
-            myApp.controller("getListNews", getListNews);
-            function getListNews($scope, $http) {
-
-                $scope.ListNews = {}
-                    , $scope.currentPage = 1
-                    , $scope.numPerPage = 10
-                    , $scope.maxSize = 5;
+            });
+        }
 
 
-                $http({
-                    method: "GET",
-                    url: "/NewsFront/ListNews"
+        myApp.controller("recommendPost", recommendPost);
+        function recommendPost($scope, $http) {
 
-                }).then(function (res) {
-                    $scope.news = res.data;
+            $http({
+                method: "GET",
+                url: "/NewsFront/RecommendPost"
 
-                    $scope.$watch('currentPage + numPerPage', function () {
-                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
 
-                        if (!$scope.news || !$scope.news.length) { return }
-                        $scope.ListNews = $scope.news.slice(begin, end);
-                    });
-                });
-            }
+        myApp.controller("DetailNew", DetailNew);
+        function DetailNew($scope, $http) {
+            var url = window.location.pathname;
+            var id = url.substring(url.lastIndexOf('/') + 1);
 
+            $http({
+                method: "GET",
+                url: "/NewsFront/DetaiNews?id=" + Number(id)
 
-            myApp.controller("recommendPost", recommendPost);
-            function recommendPost($scope, $http) {
+            }).then(function (res) {
+                $scope.news = res.data;
+                console.log($scope.news)
 
-                $http({
-                    method: "GET",
-                    url: "/NewsFront/RecommendPost"
+            });
 
-                }).then(function (res) {
-                    $scope.datas = res.data;
-                });
-            }
+            $http({
+                method: "GET",
+                url: "/NewsFront/RecommendPost"
 
-            myApp.controller("DetailNew", DetailNew);
-            function DetailNew($scope, $http) {
-                var url = window.location.pathname;
-                var id = url.substring(url.lastIndexOf('/') + 1);
+            }).then(function (res) {
+                $scope.datas = res.data;
+                console.log($scope.datas)
 
-                $http({
-                    method: "GET",
-                    url: "/NewsFront/DetaiNews?id=" + Number(id)
+            });
 
-                }).then(function (res) {
-                    $scope.news = res.data;
-                    console.log($scope.news)
+        }
 
-                });
+        myApp.controller("getListMachine", getListMachine);
+        function getListMachine($scope, $http) {
 
-                $http({
-                    method: "GET",
-                    url: "/NewsFront/RecommendPost"
+            $http({
+                method: "GET",
+                url: "/NewsFront/ListMachine"
 
-                }).then(function (res) {
-                    $scope.datas = res.data;
-                    console.log($scope.datas)
-
-                });
-
-            }
-
-            myApp.controller("getListMachine", getListMachine);
-            function getListMachine($scope, $http) {
-
-                $http({
-                    method: "GET",
-                    url: "/NewsFront/ListMachine"
-
-                }).then(function (res) {
-                    $scope.datas = res.data;
-                });
-            }
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
 
 
-            myApp.controller("getListGame", getListGame);
-            function getListGame($scope, $http) {
+        myApp.controller("getListGame", getListGame);
+        function getListGame($scope, $http) {
 
-                $http({
-                    method: "GET",
-                    url: "/NewsFront/ListGame"
+            $http({
+                method: "GET",
+                url: "/NewsFront/ListGame"
 
-                }).then(function (res) {
-                    $scope.datas = res.data;
-                });
-            }
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
 
-            myApp.controller("getLoaiGame", getLoaiGame);
-            function getLoaiGame($scope, $http) {
+        myApp.controller("getLoaiGame", getLoaiGame);
+        function getLoaiGame($scope, $http) {
 
-                $http({
-                    method: "GET",
-                    url: "/NewsFront/GetAllGameType"
+            $http({
+                method: "GET",
+                url: "/NewsFront/GetAllGameType"
 
-                }).then(function (res) {
-                    $scope.loaigame = res.data;
+            }).then(function (res) {
+                $scope.loaigame = res.data;
 
-                });
-            }
+            });
+        }
 
-            myApp.controller("getLoaiMay", getLoaiMay);
-            function getLoaiMay($scope, $http) {
+        myApp.controller("getLoaiMay", getLoaiMay);
+        function getLoaiMay($scope, $http) {
 
-                $http({
-                    method: "GET",
-                    url: "/Home/LayLoaimay"
+            $http({
+                method: "GET",
+                url: "/Home/LayLoaimay"
 
-                }).then(function (res) {
-                    $scope.loaimay = res.data;
+            }).then(function (res) {
+                $scope.loaimay = res.data;
 
-                });
-            }
+            });
+        }
 
-            myApp.controller("SearchData", SearchData);
-            function SearchData($scope, $http) {
+        myApp.controller("SearchData", SearchData);
+        function SearchData($scope, $http) {
 
-                $http({
-                    method: "GET",
-                    url: "/Home/dataSearch"
+            $http({
+                method: "GET",
+                url: "/Home/dataSearch"
 
-                }).then(function (res) {
-                    $scope.datas = res.data;
-                });
-            }
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    }
+            }).then(function (res) {
+                $scope.datas = res.data;
+            });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.8.3/angular-sanitize.js" integrity="sha512-WsrQol2t85bun8XdIkjqTbNLgY54bCBgVZw+B+00eVritDAlCAcfYo92/53rFp63cKZpDa7t5r5lDDeKFcbUAQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+}
 

@@ -1,0 +1,257 @@
+﻿@model DoAn3.Models.KhoGame
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Thêm kho game</h3>
+
+
+<div class="form-horizontal" ng-controller="Create">
+
+
+    <div class="form-group">
+        <div class="col-md-10">
+            <select ng-model="kg.UserID" class="custom-select">
+                <option value="">-- Chọn tài khoản --</option>
+                <option ng-repeat="us in users" value="{{us.UserID}}">{{us.UserName}}</option>
+            </select>
+        </div>
+    </div>
+
+
+    @Html.Action("ViewCart")
+    <hr />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-success" ng-click="addData()" />
+        </div>
+    </div>
+    <h4> Danh sách game</h4>
+    <div class="d-flex justify-content-end">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search game" id="SearchName">
+            <div class="input-group-append">
+                <button type="button" class="btn bg-transparent" style="margin-left: -40px; z-index: 100;" ng-click="Reset()">
+                    <i class="fa fa-times"></i>
+                </button>
+                <button class="btn btn-secondary" type="button" ng-click="GetAllGame()">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <table class="table" ng-init="GetAllGame()">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên Game
+            </th>
+            <th>
+                Ảnh minh họa
+            </th>
+            <th>
+                Giá tiền
+            </th>
+
+            <th>
+                Trạng thái
+            </th>
+            <th>
+                Thể loại game
+            </th>
+            <th>
+                Thể loại máy
+            </th>
+            <th>
+                Nhà phát hành
+            </th>
+            <th>
+                UVD
+            </th>
+        </tr>
+
+        <tr ng-repeat="game in filteredTodos ">
+            <td>
+                {{$index+1}}
+            </td>
+            <td>
+                {{game.TenGame}}
+            </td>
+            <td>
+                <img ng-src="{{game.AnhGame}}" height="200" width="150" />
+            </td>
+            <td>
+                {{game.GiaTien | myCurrency}}
+            </td>
+
+            <td>
+                {{game.TrangThai}}
+            </td>
+            <td>
+                {{game.TenLoai}}
+            </td>
+            <td>
+                {{game.TenMay}}
+            </td>
+            <td>
+                {{game.TenNPH}}
+            </td>
+            <td>
+                <a class="btn btn-warning fa-solid fa-pencil" href="@Url.Action("Edit", "Games")/{{game.MaGame}}"> </a>
+                <a class="btn btn-primary fa-solid fa-circle-plus" href="@Url.Action("AddCart", "KhoGame")?id={{game.MaGame}}" @*ng-click="addItem(game.MaGame,game.TenGame,game.AnhGame)"*@></a>
+                <a class="btn btn-success fa-solid fa-trash" ng-click="DeleteButton(game.MaGame)"> </a>
+
+
+            </td>
+
+        </tr>
+
+
+    </table>
+    <div class="d-flex justify-content-center">
+        <pagination ng-model="currentPage"
+                    total-items="games.length"
+                    max-size="maxSize"
+                    boundary-links="true">
+        </pagination>
+    </div>
+</div>
+
+ 
+<a href="/Admin/KhoGame/Index" class="btn btn-danger">
+    Quay lại
+</a>
+
+@section scripts{
+    <script>
+        var myApp = angular.module("myApp", ['ui.bootstrap']).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+        myApp.filter('myCurrency', ['$filter', function ($filter) {
+            return function (input) {
+                input = parseFloat(input);
+                input = input.toFixed(input % 1 === 0 ? 0 : 2);
+                return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + " ₫";
+            };
+        }]);
+        myApp.controller('Create', function ($scope, $http, $httpParamSerializerJQLike, $window) {
+
+
+            $scope.kg = {};
+            $scope.addData = function () {
+                Token = angular.element('input[name="__RequestVerificationToken"]').attr('value');
+                $scope.kg.__RequestVerificationToken = Token;
+                dataRequest = $scope.kg;
+                console.log(dataRequest);
+                $http({
+                    method: 'post',
+                    url: '/Admin/KhoGame/CreateKG',
+                    data: $httpParamSerializerJQLike(dataRequest),
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+
+                }).then(function (res) {
+                    alert("Thêm kho game công");
+                    window.location.href = "/Admin/KhoGame/Index";
+                });
+            };
+
+          
+
+            ///////////////////////////
+
+
+
+            /////////////////////////////////////////
+            var getDataFromSession = function () {
+                var json = [];  
+                $.each($window.sessionStorage, function (i, v) {
+                    json.push(angular.fromJson(v));
+                });
+                return json;
+            }
+
+            //////////////////////
+            /// add game to session
+            $scope.addItem = function (id,tengame,anhgame) {
+                json = {
+                    id: id,
+                    tengame: tengame,
+                    img: anhgame,
+
+                }
+                $window.sessionStorage.setItem(id, JSON.stringify(json));
+                $scope.huhu = getDataFromSession();
+                console.log($scope.huhu)
+            }
+
+
+            $http({
+                method: 'get',
+                url: '/Admin/KhachHangs/getDataUser',
+
+            }).then(function (res) {
+                $scope.users = res.data;
+
+            });
+
+
+            ///////////////////////////////////////////
+            $scope.GetAllGame = function () {
+
+                var searchString = document.getElementById('SearchName').value;
+                /// game pagination
+                $scope.filteredGames = {}
+                    , $scope.currentPage = 1
+                    , $scope.numPerPage = 10
+                    , $scope.maxSize = 5;
+
+                $http({
+                    method: "get",
+                    url: "/Admin/Games/DataSearch/?name=" + searchString
+                }).then(function (res) {
+                    $scope.games = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.games || !$scope.games.length) { return }
+                        $scope.filteredTodos = $scope.games.slice(begin, end);
+                    });
+                });
+
+            };
+
+            $scope.Reset = function () {
+
+                var searchString = document.getElementById('SearchName').value;
+                searchString = " "
+                /// game pagination
+                $scope.filteredGames = {}
+                    , $scope.currentPage = 1
+                    , $scope.numPerPage = 10
+                    , $scope.maxSize = 5;
+
+                $http({
+                    method: "get",
+                    url: "/Admin/Games/DataSearch/?name=" + searchString
+                }).then(function (res) {
+                    $scope.games = res.data;
+
+                    $scope.$watch('currentPage + numPerPage', function () {
+                        var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
+
+                        if (!$scope.games || !$scope.games.length) { return }
+                        $scope.filteredTodos = $scope.games.slice(begin, end);
+                    });
+                });
+
+            };
+
+
+        });
+    </script>
+}

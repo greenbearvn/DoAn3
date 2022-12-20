@@ -138,6 +138,7 @@
     <Compile Include="Areas\Admin\Controllers\DonHangsController.cs" />
     <Compile Include="Areas\Admin\Controllers\GamesController.cs" />
     <Compile Include="Areas\Admin\Controllers\KhachHangsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\KhoGameController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoaiGamesController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoaiMaysController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsController.cs" />
@@ -2285,6 +2286,13 @@
     <Content Include="Models\DoAn3.edmx.diagram">
       <DependentUpon>DoAn3.edmx</DependentUpon>
     </Content>
+    <Content Include="Areas\Admin\Views\KhoGame\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\KhoGame\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\KhoGame\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\KhoGame\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\KhoGame\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\KhoGame\ViewCart.cshtml" />
+    <Content Include="Areas\Admin\Views\KhoGame\ViewEditCart.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -2330,6 +2338,7 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Content\ckfinder\userfiles\" />
     <Folder Include="Views\Comment\" />
+    <Folder Include="Views\GamesFavourite\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

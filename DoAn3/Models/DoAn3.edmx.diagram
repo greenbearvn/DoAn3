@@ -7,7 +7,7 @@
       <Diagram DiagramId="122dbf9777284ac996b6541ea65d1216" Name="Diagram1">
         <EntityTypeShape EntityType="DoAn3Model.BinhLuan" Width="1.5" PointX="8.25" PointY="7.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DoAn3Model.ChiTietDonHang" Width="1.5" PointX="8.25" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DoAn3Model.ChiTietKhoGame" Width="1.5" PointX="8.25" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAn3Model.ChiTietKhoGame" Width="1.5" PointX="8.75" PointY="12.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DoAn3Model.DonHang" Width="1.5" PointX="6" PointY="12.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DoAn3Model.Game" Width="1.5" PointX="3" PointY="6.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DoAn3Model.KhachHang" Width="1.5" PointX="3.75" PointY="12.5" IsExpanded="true" />

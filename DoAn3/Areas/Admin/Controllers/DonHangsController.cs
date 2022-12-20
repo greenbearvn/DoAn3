@@ -102,44 +102,7 @@ namespace DoAn3.Areas.Admin.Controllers
 
             
        
-        //public bool EditDH([Bind(Include = "MaDH,MaKH,NgayLap,TinhTrang,Tongtien")] DonHang donHang, int moneyBefore)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var litsCart = (List<ChiTietDonHang>)Session["cartEditAdmin"];
-
-        //        var data = (from dh in db.DonHang where dh.MaDH == donHang.MaDH select dh).FirstOrDefault();
-        //        data.MaDH = donHang.MaDH;
-        //        data.MaKH = donHang.MaKH;
-        //        data.NgayLap = donHang.NgayLap;
-        //        data.TinhTrang = donHang.TinhTrang;
-        //        data.Tongtien = donHang.Tongtien + moneyBefore;
-        //        db.SaveChanges();
-
-        //        if(litsCart != null)
-        //        {
-        //            foreach (var item in litsCart)
-        //            {
-        //                int intOrderId = donHang.MaDH;
-        //                //Chi tiet don hang
-        //                ChiTietDonHang ctdh = new ChiTietDonHang();
-        //                ctdh.MaDH = intOrderId;
-        //                ctdh.MaGame = item.Game.MaGame;
-        //                ctdh.Gia = item.Game.GiaTien;
-        //                db.ChiTietDonHang.Add(ctdh);
-        //                db.SaveChanges();
-
-        //            }
-        //        }
-                
-        //        RemoveSession();
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
+        
 
 
         public bool EditDH(DonHang dh, int moneyBefore)

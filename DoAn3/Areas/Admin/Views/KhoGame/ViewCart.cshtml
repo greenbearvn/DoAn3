@@ -1,0 +1,59 @@
+﻿@model IEnumerable<DoAn3.Models.ChiTietKhoGame>
+
+@{
+    int stt = 0;
+   
+}
+
+
+@if (Session["cartAdmin"] != null)
+{
+    <h4>Chi tiết đơn hàng</h4>
+    <hr />
+    <table class="table">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên Game
+            </th>
+            <th>
+                Ảnh minh họa
+            </th>
+            
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(stt += 1)
+                </td>
+                <td>
+                    @item.Game.TenGame
+                </td>
+                <td>
+                    <img src="@Url.Content(item.Game.AnhGame)" height="200" width="150" />
+                </td>
+                
+                <td>
+                    
+                    <a class="btn btn-danger text-white" href="/Admin/KhoGame/RemoveCartItem/@item.Game.MaGame"><i class="fa-solid fa-trash"></i></a>
+                </td>
+                
+            </tr>
+        }
+    </table>
+
+
+    
+}
+else
+{
+    <h5 class="text-warning">Chưa có chi tiết đơn hàng được thêm</h5>
+    
+}
+
+
