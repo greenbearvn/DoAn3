@@ -88,7 +88,7 @@
                             {
                                 <li class="navUser-item navUser-item--account">
                                     
-                                    <span class="navUser-or">or</span> <a class="navUser-action" href="/Users/Logout">Đăng xuất</a>
+                                     <a class="navUser-action" href="/Users/Logout">Đăng xuất</a>
                                 </li>
                                 <a href="/GameFavourites/GameStore/@Session["UserID"].ToString()" style="color:red">Kho game</a>
                             }
@@ -268,14 +268,14 @@
                     <div class="emthemesModez-footer-topColumns">
 
                         <div class="emthemesModez-footer-blog">
-                            <h2 class="page-heading page-heading--blogGrid-footerGrid">Recent Posts</h2>
+                            <h2 class="page-heading page-heading--blogGrid-footerGrid">Bài viết đề xuất</h2>
 
                             <ul class="emthemesModez-blogGrid emthemesModez-blogGrid--footerGrid" ng-controller="recommendPost">
                                 <li class="emthemesModez-blogItem" ng-repeat="data in datas |orderBy:'-NewsID'">
                                     <article class="blog  ">
                                         <div class="blog-post-figure">
                                             <figure class="blog-thumbnail">
-                                                <a href="/News/Detail/{{data.NewsID}}">
+                                                <a href="/NewsFront/Detail/{{data.NewsID}}">
                                                     <img ng-src="{{data.Banner}}" alt="{{data.Title}}" title="{{data.Title}}">
                                                 </a>
                                             </figure>
@@ -295,8 +295,8 @@
                                                 </div>
 
                                                 <div class="blog-dateContainer">
-                                                    <div class="blog-readmore"><a href="made-called-darkness-tree.html">Read more</a></div>
-                                                    <div class="blog-date"><span class="blog-date-date">Mar 21st 2017</span></div>
+                                                    <div class="blog-readmore"><a href="made-called-darkness-tree.html">Xem bài viết</a></div>
+                                                    <div class="blog-date"><span class="blog-date-date">{{data.PublicDate.slice(6, -2) | date: 'dd-MM-yyyy'}}</span></div>
                                                 </div>
                                             </div>
 

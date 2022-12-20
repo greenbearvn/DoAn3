@@ -5,65 +5,91 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>Chi tiết bài viết</h2>
 
-<div>
-    <h4>News</h4>
-    <hr />
-    <dl class="dl-horizontal">
+<div ng-controller="DetailNew">
+
+    <dl class="dl-horizontal container">
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            Tiêu đề bài viết
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Title)
+            {{new.Title}}
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Content)
+            Nội dung
         </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Content)
+        <dd ng-bind-html="Content">
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Banner)
+            Ảnh minh họa
         </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Banner)
+        <dd> 
+            <img ng-src="{{new.Banner}}"  alt="{{new.Title}}" title="{{new.Title}}"/>
+            
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PublicDate)
+            Ngày đăng
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.PublicDate)
+            {{new.PublicDate.slice(6, -2) | date: 'dd-MM-yyyy'}}
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.LoaiGame.TenLoai)
+            Tên loại game
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.LoaiGame.TenLoai)
+            {{new.TenLoai}}
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.User.UserName)
+            Tên tác giả
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.User.UserName)
+            {{new.UserName}}
         </dd>
 
     </dl>
+    <div class="d-flex">
+        <a ng-href="/Admin/News/Edit/{{new.NewsID}}" class="btn btn-primary">Sửa bài viết</a>
+        <a ng-href="/Admin/News/Index" class="btn btn-danger ml-2">Quay lại</a>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.NewsID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
 @section scripts{
-    }
+    <script>
+        var myApp = angular.module("myApp", ['ngSanitize']).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+
+
+        myApp.controller("DetailNew", DetailNew);
+        function DetailNew($scope, $http) {
+            var url = window.location.pathname;
+            var id = url.substring(url.lastIndexOf('/') + 1);
+
+            $http({
+                method: "GET",
+                url: "/News/DetailNew?id=" + Number(id)
+
+            }).then(function (res) {
+                $scope.new = res.data;
+                $scope.Content = $scope.new.Content;
+
+            });
+
+        }
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.8.3/angular-sanitize.js" integrity="sha512-WsrQol2t85bun8XdIkjqTbNLgY54bCBgVZw+B+00eVritDAlCAcfYo92/53rFp63cKZpDa7t5r5lDDeKFcbUAQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+}

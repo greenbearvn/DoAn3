@@ -196,6 +196,28 @@ namespace DoAn3.Areas.Admin.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult DetailNew(int id)
+        {
+            var data = (from n in db.New
+                        join lg in db.LoaiGame
+                        on n.MaLoai equals lg.MaLoai
+                        join us in db.User
+                        on n.UserID equals us.UserID
+                        where n.NewsID == id
+                        select new
+                        {
+                            n.UserID,
+                            n.NewsID,
+                            n.Title,
+                            n.Content,
+                            n.PublicDate,
+                            n.Banner,
+                            lg.TenLoai,
+                            us.UserName
+                        }).FirstOrDefault();
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetLoaiGame()
         {
             var data = (from lg in db.LoaiGame

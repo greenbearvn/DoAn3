@@ -39,8 +39,7 @@
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo" href="index.html"><img src="~/Content/assets/images/logo.svg" alt="logo" /></a>
-                <a class="navbar-brand brand-logo-mini" href="index.html"><img src="~/Content/assets/images/logo-mini.svg" alt="logo" /></a>
+                <a href="/Home/Index" class="text-3xl ">GAME WORLD</a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-stretch">
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -52,7 +51,7 @@
                             <div class="input-group-prepend bg-transparent">
                                 <i class="input-group-text border-0 mdi mdi-magnify"></i>
                             </div>
-                            <input type="text" class="form-control bg-transparent border-0" placeholder="Search products">
+                            <input type="text" class="form-control bg-transparent border-0" placeholder="Tìm kiếm game" ng-model="search">
                         </div>
                     </form>
                 </div>
@@ -263,9 +262,9 @@
 
 
                 <ul class="nav">
-                    <li class="nav-item nav-category">All Game</li>
-                    <li class="nav-item " onclick="ShowGalerry()">Index</li>
-                    <li class="nav-item" ng-repeat="data in nameGame" ng-click="GetData(data.MaGame)" >
+                    <li class="nav-item nav-category">Tất cả game</li>
+                    <li class="nav-item " onclick="ShowGalerry()">Trang chính</li>
+                    <li class="nav-item" ng-repeat="data in nameGame | filter:search" ng-click="GetData(data.MaGame)" >
                         <a class="nav-link" ng-click="GetData(data.MaGame)">
                             <span class="icon-bg"><img ng-src="{{data.AnhGame}}" width="10" height="20" /></span>
                             <span class="menu-title" ng-click="GetData(data.MaGame,data.MaKhoGame)" onclick="HiddenGalerry()">{{data.TenGame}}</span>
