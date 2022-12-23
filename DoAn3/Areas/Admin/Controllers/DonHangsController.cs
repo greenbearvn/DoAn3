@@ -8,6 +8,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using DoAn3.Models;
+using System.Text;
+using System.Web.Script.Serialization;
 
 namespace DoAn3.Areas.Admin.Controllers
 {
@@ -45,34 +47,41 @@ namespace DoAn3.Areas.Admin.Controllers
         }
 
 
-        public bool CreateDH( DonHang donHang)
+        public bool CreateDH( List<ChiTietDonHang> ListCTDH , int makh,  bool tinhtrang ,decimal tongtien)
         {
-            if (donHang != null)
+            if (makh >0)
             {
-                var litsCart = (List<ChiTietDonHang>)Session["cartAdmin"];
 
-               
+                DonHang donHang = new DonHang();
+                donHang.MaKH = makh;
+                DateTime today = DateTime.Today;
+                donHang.NgayLap = today;
+                donHang.TinhTrang = tinhtrang;
+                donHang.Tongtien = tongtien;
                 db.DonHang.Add(donHang);
+
                 db.SaveChanges();
 
-                if(litsCart != null)
+                if (ListCTDH != null)
                 {
-                    foreach (var item in litsCart)
+                    foreach (var item in ListCTDH)
                     {
                         int intOrderId = donHang.MaDH;
 
                         //Chi tiet don hang
                         ChiTietDonHang ctdh = new ChiTietDonHang();
                         ctdh.MaDH = intOrderId;
-                        ctdh.MaGame = item.Game.MaGame;
-                        ctdh.Gia = item.Game.GiaTien;
+                        ctdh.MaGame = item.MaGame;
+                        ctdh.Gia = item.Gia;
+
                         db.ChiTietDonHang.Add(ctdh);
                         db.SaveChanges();
 
                     }
                 }
                 
-                RemoveSession();
+
+
                 return true;
             }
             else
@@ -134,13 +143,37 @@ namespace DoAn3.Areas.Admin.Controllers
                     }
                 }
 
-                RemoveSession();
                 return true;
             }
             else
             {
                 return false;
             }
+        }
+
+        public bool EditAddOrderDetail(List<ChiTietDonHang> ListCTDH, int madh)
+        {
+            if (ListCTDH != null)
+            {
+                foreach (var item in ListCTDH)
+                {
+                    int intOrderId = madh;
+                    //Chi tiet don hang
+                    ChiTietDonHang ctdh = new ChiTietDonHang();
+                    ctdh.MaDH = intOrderId;
+                    ctdh.MaGame = item.MaGame;
+                    ctdh.Gia = item.Gia;
+                    db.ChiTietDonHang.Add(ctdh);
+                    db.SaveChanges();
+
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
 
@@ -334,18 +367,18 @@ namespace DoAn3.Areas.Admin.Controllers
         public JsonResult DataCart()
         {
             List<ChiTietDonHang> cart = (List<ChiTietDonHang>)Session["cartAdmin"];
-            List<ChiTietDonHang> ds = new List<ChiTietDonHang>();
+            var ds = new List<ChiTietDonHang>();
             if (cart != null)
             {
                 foreach (var c in cart)
                 {
                     ds.Add(c);
                 }
-                return Json(ds,JsonRequestBehavior.AllowGet);
+                return Json(ds, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return Json("Vui long them thong tin moi", JsonRequestBehavior.AllowGet);
+                return Json(ds, JsonRequestBehavior.AllowGet);
             }
            
         }
@@ -468,5 +501,70 @@ namespace DoAn3.Areas.Admin.Controllers
                 return false;
             }
         }
+
+       
+        public FileResult Export(int id)
+        {
+            var ctdh = (from CTDH in db.ChiTietDonHang
+                        where CTDH.MaDH == id
+                        join game in db.Game on CTDH.MaGame equals game.MaGame
+                        select new 
+                        {
+                             CTDH.MaGame,
+                            game.TenGame,
+                            game.GiaTien
+                        }).ToList<object>();
+
+            var donhang = (from dh in db.DonHang
+                        where dh.MaDH == id
+                        join kh in db.KhachHang on dh.MaKH equals kh.MaKH
+                        select new
+                        {
+                           dh.MaDH,
+                           kh.TenKH,
+                           dh.NgayLap,
+                           dh.Tongtien
+                        }).FirstOrDefault<object>();
+
+            //Building an HTML string.
+            StringBuilder sb = new StringBuilder();
+            string donHang = new JavaScriptSerializer().Serialize(donhang);
+
+            //Table start.
+            sb.Append("<table border='1' cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-family: Arial; font-size: 10pt;'>");
+            sb.Append("<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Order " + id + "</th>");
+            sb.Append("<tr>");
+            sb.Append("<td style='border: 1px solid #ccc'>");
+            sb.Append(donHang);
+            sb.Append("</td>");
+            sb.Append("</tr>");
+            //Building the Header row.
+            sb.Append("<tr>");
+            sb.Append("<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Order Detail of Order " + id+"</th>");
+            
+            sb.Append("</tr>");
+
+            //Building the Data rows.
+            for (int i = 0; i < ctdh.Count; i++)
+            {
+                string s = new JavaScriptSerializer().Serialize(ctdh[i]);
+                string[] chitiet = new[] { s };
+                sb.Append("<tr>");
+                for (int j = 0; j < chitiet.Length; j++)
+                {
+                    //Append data.
+                    sb.Append("<td style='border: 1px solid #ccc'>");
+                    sb.Append(chitiet[j]);
+                    sb.Append("</td>");
+                }
+                sb.Append("</tr>");
+            }
+
+            //Table end.
+            sb.Append("</table>");
+
+            return File(Encoding.UTF8.GetBytes(sb.ToString()), "application/vnd.ms-word", "InHoaDon.doc");
+        }
+
     }
 }

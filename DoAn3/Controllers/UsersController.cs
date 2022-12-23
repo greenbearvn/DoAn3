@@ -71,7 +71,7 @@ namespace DoAn3.Controllers
                 if (data.Count() > 0)
                 {
                     //add session
-
+                    
                     Session["username"] = data.FirstOrDefault().UserName;
                     Session["UserID"] = data.FirstOrDefault().UserID;
                     string role = user.Role;

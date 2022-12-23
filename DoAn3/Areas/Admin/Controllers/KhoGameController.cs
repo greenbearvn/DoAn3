@@ -317,64 +317,78 @@ namespace DoAn3.Areas.Admin.Controllers
             }
         }
 
-        public bool CreateKG(KhoGame kg)
+        //public bool CreateKG(KhoGame kg)
+        //{
+        //    if (kg != null)
+        //    {
+                
+
+
+        //        db.KhoGame.Add(kg);
+        //        db.SaveChanges();
+
+
+        //        RemoveSession();
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+
+        //}
+
+
+        public bool addCTKG(List<ChiTietKhoGame> litsCart,int usid)
         {
-            if (kg != null)
+
+            KhoGame kg = new KhoGame();
+            kg.UserID = usid;
+
+            db.KhoGame.Add(kg);
+
+            if (litsCart != null)
             {
-                var litsCart = (List<ChiTietKhoGame>)Session["cartAdmin"];
-
-
-                db.KhoGame.Add(kg);
-                db.SaveChanges();
-
-                if (litsCart != null)
+                foreach (var item in litsCart)
                 {
-                    foreach (var item in litsCart)
-                    {
-                        int intOrderId = kg.MaKhoGame;
+                    int intOrderId = kg.MaKhoGame;
 
-                        //Chi tiet don hang
-                        ChiTietKhoGame ctkg = new ChiTietKhoGame();
-                        ctkg.MaKhoGame = intOrderId;
-                        ctkg.MaGame = item.Game.MaGame;
-                        DateTime today = DateTime.Today;
-                        ctkg.NgayThem = today;
-                        ctkg.TinhTrang = false;
-                        db.ChiTietKhoGame.Add(ctkg);
-                        db.SaveChanges();
+                    //Chi tiet don hang
+                    ChiTietKhoGame ctkg = new ChiTietKhoGame();
+                    ctkg.MaKhoGame = intOrderId;
+                    ctkg.MaGame = item.MaGame;
+                    DateTime today = DateTime.Today;
+                    ctkg.NgayThem = today;
+                    ctkg.TinhTrang = false;
+                    db.ChiTietKhoGame.Add(ctkg);
+                    db.SaveChanges();
 
-                    }
                 }
-
-                RemoveSession();
                 return true;
             }
             else
             {
                 return false;
             }
-
         }
-        public bool EditKG(KhoGame kg)
-        {
-            if (kg != null)
-            {
-                var khogame = (from khoGame in db.KhoGame where khoGame.MaKhoGame == kg.MaKhoGame select khoGame).FirstOrDefault();
-                khogame.UserID = kg.UserID;
 
-                
+        public bool EditKG(List<ChiTietKhoGame> litsCart, int makhogame,int userid)
+        {
+            if (makhogame > 0)
+            {
+                var khogame = (from khoGame in db.KhoGame where khoGame.MaKhoGame == makhogame select khoGame).FirstOrDefault();
+                khogame.UserID = userid;
                 db.SaveChanges();
-                var litsCart = (List<ChiTietKhoGame>)Session["cartEditAdmin"];
 
                 if (litsCart != null)
                 {
                     foreach (var item in litsCart)
                     {
-                        int intOrderId = kg.MaKhoGame;
+                        int intOrderId = makhogame;
                         //Chi tiet don hang
                         ChiTietKhoGame ctkg = new ChiTietKhoGame();
                         ctkg.MaKhoGame = intOrderId;
-                        ctkg.MaGame = item.Game.MaGame;
+                        ctkg.MaGame = item.MaGame;
                         DateTime today = DateTime.Today;
                         ctkg.NgayThem = today;
                         ctkg.TinhTrang = false;
@@ -384,7 +398,6 @@ namespace DoAn3.Areas.Admin.Controllers
                     }
                 }
 
-                RemoveSession();
                 return true;
             }
             else

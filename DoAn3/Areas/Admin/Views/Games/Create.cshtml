@@ -62,7 +62,7 @@
                     <h6>
                         Loại máy
                     </h6>
-                    <select ng-model="game.MaMay" class="custom-select" name="may" ng-options="x.MaMay as x.TenMay for x in loaimays" required>
+                    <select ng-model="game.MaMay" class="custom-select" name="may" ng-options="x.MaMay as x.TenMay for x in loaimays" required id="lm">
                         <option value="">-- Chọn loại máy --</option>
                     </select>
                     <p class="text-danger text-xs italic" ng-show="CreateGame.may.$touched && CreateGame.may.$invalid">Vui lòng điền đủ thông tin.</p>
@@ -147,7 +147,109 @@
 </div>
 @section scripts{
 
-    <script src="~/Areas/Admin/Contents/js/AngularJsAdmin/Game.js"></script>
+    <script>
+        var myApp = angular.module("myApp", []).config(['$qProvider', function ($qProvider) {
+            $qProvider.errorOnUnhandledRejections(false);
+        }]);
+        myApp.directive('ckEditor', function () {
+            return {
+                require: '?ngModel',
+                link: function (scope, elm, attr, ngModel) {
+                    var ck = CKEDITOR.replace(elm[0]);
+
+                    if (!ngModel) return;
+
+                    ck.on('instanceReady', function () {
+                        ck.setData(ngModel.$viewValue);
+                    });
+
+                    function updateModel() {
+                        scope.$apply(function () {
+                            ngModel.$setViewValue(ck.getData());
+                        });
+                    }
+
+                    ck.on('change', updateModel);
+                    ck.on('key', updateModel);
+                    ck.on('dataReady', updateModel);
+
+                    ngModel.$render = function (value) {
+                        ck.setData(ngModel.$viewValue);
+                    };
+                }
+            };
+        });
+        $(document).ready(function () {
+            CKEDITOR.replace('MoTa', {
+                customConfig: '/Content/ckeditor/config.js',
+                extraAllowedContent: 'span',
+            });
+        });
+
+        function UpLoad(feild) {
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (fileURL) {
+                document.getElementById(feild).value = fileURL;
+
+            };
+            finder.popup();
+        }
+
+        myApp.controller('Create', function ($scope, $http, $httpParamSerializerJQLike) {
+            $scope.game = {};
+
+            $scope.addData = function () {
+                $scope.game.AnhGame = document.getElementById("AnhGame").value;
+                Token = angular.element('input[name="__RequestVerificationToken"]').attr('value');
+                $scope.game.__RequestVerificationToken = Token;
+                dataRequest = $scope.game;
+                console.log(dataRequest);
+                $http({
+                    method: 'post',
+                    url: '/Admin/Games/CreateGames',
+                    data: $httpParamSerializerJQLike(dataRequest),
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+
+                }).then(function (res) {
+                    $scope.data = res.data;
+                    alert("Thêm thông tin game thành công")
+                    window.location.href = "/Admin/Games/Index"
+                });
+            };
+
+            $http({
+                method: "GET",
+                url: "/Admin/Games/GetLoaiMay"
+
+
+            }).then(function (res) {
+                $scope.loaimays = res.data;
+            });
+
+
+            $http({
+                method: "GET",
+                url: "/Admin/Games/GetLoaiGame"
+
+
+            }).then(function (res) {
+                $scope.loaigames = res.data;
+            });
+
+
+            $http({
+                method: "GET",
+                url: "/Admin/Games/GetNPH"
+
+
+            }).then(function (res) {
+                $scope.nphs = res.data;
+            });
+
+        });
+
+
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 }

@@ -11,7 +11,8 @@ namespace DoAn3.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Web.Mvc;
+
     public partial class Game
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -26,6 +27,7 @@ namespace DoAn3.Models
         public int MaGame { get; set; }
         public string TenGame { get; set; }
         public string AnhGame { get; set; }
+        [AllowHtml]
         public string MoTa { get; set; }
         public Nullable<int> MaLoai { get; set; }
         public Nullable<int> MaMay { get; set; }

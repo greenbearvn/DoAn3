@@ -12,7 +12,7 @@
 
 
         <div class="form-horizontal container">
-            
+
 
             <div class="form-group">
                 <div class="col-md-10">
@@ -45,7 +45,7 @@
                     <h6>
                         Ngày tạo đơn
                     </h6>
-                    <input type="date" class="form-control" value="{{dh.NgayLap.slice(6, -2) | date: 'yyyy-MM-dd'}}"  id="ngaylap" />
+                    <input type="date" class="form-control" value="{{dh.NgayLap.slice(6, -2) | date: 'yyyy-MM-dd'}}" id="ngaylap" />
                 </div>
             </div>
 
@@ -82,9 +82,7 @@
                     Giá tiền
                 </th>
 
-                <th>
-                    Trạng thái
-                </th>
+
                 <th></th>
             </tr>
 
@@ -100,24 +98,66 @@
                     <img ng-src="{{data.AnhGame}}" height="200" width="150" />
                 </td>
                 <td>
-                    {{data.Gia}}
+                    {{data.Gia | myCurrency}}
                 </td>
+
                 <td>
-                    {{data.TrangThai}}
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    <a class="btn btn-danger text-white" ng-click="DeleteButton(data.MaDH,data.MaGame)">Delete</a>
+
+                    <a class="btn btn-danger text-white" ng-click="DeleteButton(data.MaDH,data.MaGame)"><i class="fa-solid fa-trash"></i></a>
                 </td>
                 @*<td style="display:none;visibility:hidden">@{totalBill += (item.Game.GiaTien);}</td>*@
             </tr>
 
         </table>
 
-        
 
-        @Html.Action("ViewEditcart")
+        <hr />
+        <h4>Thêm chi tiết kho game</h4>
+        <hr />
+        <table class="table">
+            <tr>
+                <th>
+                    STT
+                </th>
+                <th>
+                    Tên Game
+                </th>
+                <th>
+                    Ảnh minh họa
+                </th>
+                <th>
+                    Giá tiền
+                </th>
+
+
+                <th></th>
+            </tr>
+
+
+            <tr ng-repeat="data in session">
+                <td>
+                    {{$index+1}}
+                </td>
+                <td>
+                    {{data.TenGame}}
+                </td>
+                <td>
+                    <img src="{{data.AnhGame}}" height="200" width="150" />
+                </td>
+                <td>
+                    {{data.Gia | myCurrency}}
+                </td>
+
+                <td>
+
+                    <a class="btn btn-danger text-white" ng-click="remove($index)"><i class="fa-solid fa-trash"></i></a>
+                </td>
+
+            </tr>
+
+        </table>
+        <div class="font-weight-bold text-center">Tổng tiền: <div class="text-danger font-weight-bold" id="totalMoney">{{TongTien | myCurrency}}</div></div>
+
 
         <div class="d-flex">
             <div class="form-group">
@@ -209,7 +249,7 @@
             </td>
             <td>
                 <a class="btn btn-warning fa-solid fa-pencil" href="@Url.Action("Edit", "Games")/{{game.MaGame}}"> </a>
-                <a class="btn btn-primary fa-solid fa-circle-plus"  ng-click="addCart(game.MaGame)"></a>
+                <a class="btn btn-primary fa-solid fa-circle-plus"  ng-click="add(game.MaGame,game.TenGame,game.AnhGame,game.GiaTien)"></a>
                 <a class="btn btn-success fa-solid fa-trash" ng-click="DeleteButton(game.MaGame)"> </a>
 
 
@@ -283,6 +323,33 @@
                 });
             }
 
+            /////////////////////////////////////////////////////
+            $scope.session = [
+            ];
+
+            $scope.TongTien = 0;
+
+
+
+
+            $scope.add = function (id, name, img, price) {
+
+                $scope.session.push({ MaGame: id, TenGame: name, AnhGame: img, Gia: price });
+                $scope.TongTien += price
+
+            };
+
+            $scope.remove = function (index, gia) {
+
+                if (index > -1) {
+                    $scope.session.splice(index, 1);
+                    $scope.TongTien -= gia;
+                }
+
+            };
+
+            ////////////////////////////////////
+
             ///////////////////////////////////////////////////////////////////////////////////////
             $scope.addData = function () {
 
@@ -290,8 +357,7 @@
 
 
                 var moneyBefore = document.getElementById("totalMoneyBefore").value;
-                var moneyAfter = document.getElementById("totalMoney").innerHTML;
-                $scope.dh.Tongtien = moneyAfter /*+ moneyBefore*/;
+                $scope.dh.Tongtien = $scope.TongTien ;
                
                 Token = angular.element('input[name="__RequestVerificationToken"]').attr('value');
                 $scope.dh.__RequestVerificationToken = Token;
@@ -310,9 +376,17 @@
                     }
                     else {
                         alert("Sửa thông tin hóa đơn thành công");
-                        window.location.href = "/Admin/DonHangs/Index";
+                        window.location.reload();
                     }
                 });
+
+                $http({
+                    method: "post",
+                    url: "/Admin/DonHangs/EditAddOrderDetail?madh=" + id ,
+                    dataType: "json",
+                    data: JSON.stringify($scope.session)
+
+                })
             };
 
             ///////////////////////////////////////////////////////////////////////////////////////////////

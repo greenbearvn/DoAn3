@@ -16,11 +16,11 @@ namespace DoAn3.Controllers
         {
             var dbSQL = db.Game.ToList();
 
-            ViewBag.Category1 = (from loaiGame in db.LoaiGame where loaiGame.MaLoai == 1 select loaiGame.TenLoai).FirstOrDefault();
+            ViewBag.Category1 = (from loaiGame in db.LoaiGame where loaiGame.MaLoai == 9 select loaiGame.TenLoai).FirstOrDefault();
 
-            ViewBag.Category2 = (from loaiGame in db.LoaiGame where loaiGame.MaLoai == 2 select loaiGame.TenLoai).FirstOrDefault();
+            ViewBag.Category2 = (from loaiGame in db.LoaiGame where loaiGame.MaLoai == 13 select loaiGame.TenLoai).FirstOrDefault();
 
-            ViewBag.Category3 = (from loaiGame in db.LoaiGame where loaiGame.MaLoai == 3 select loaiGame.TenLoai).FirstOrDefault();
+            ViewBag.Category3 = (from loaiGame in db.LoaiGame where loaiGame.MaLoai == 14 select loaiGame.TenLoai).FirstOrDefault();
 
             return View(dbSQL);
 
@@ -28,7 +28,7 @@ namespace DoAn3.Controllers
 
         public ActionResult getdb()
         {
-            var dbSQL = db.Game.Select(s => new { s.MaGame, s.TenGame, s.GiaTien, s.AnhGame }).Take(12).ToList();
+            var dbSQL = db.Game.Select(s => new { s.MaGame, s.TenGame, s.GiaTien, s.AnhGame }).Take(6).ToList();
             return Json(dbSQL, JsonRequestBehavior.AllowGet);
         }
 
@@ -50,19 +50,19 @@ namespace DoAn3.Controllers
         // category 1
         public ActionResult CateGory1()
         {
-            var listLCategory1 = (from sp in db.Game where sp.MaLoai == 1 select new { sp.TenGame, sp.GiaTien, sp.AnhGame }).Take(4).ToList();
+            var listLCategory1 = (from sp in db.Game where sp.MaLoai == 9 select new { sp.TenGame, sp.GiaTien, sp.AnhGame }).Take(4).ToList();
             return Json(listLCategory1, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult CateGory2()
         {
-            var listLCategory2 = (from sp in db.Game where sp.MaLoai == 2 select new { sp.TenGame, sp.GiaTien, sp.AnhGame }).Take(4).ToList();
+            var listLCategory2 = (from sp in db.Game where sp.MaLoai == 13 select new { sp.TenGame, sp.GiaTien, sp.AnhGame }).Take(4).ToList();
             return Json(listLCategory2, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult CateGory3()
         {
-            var listLCategory3 = (from sp in db.Game where sp.MaLoai == 3 select new { sp.TenGame, sp.GiaTien ,sp.AnhGame }).Take(4).ToList();
+            var listLCategory3 = (from sp in db.Game where sp.MaLoai == 14 select new { sp.TenGame, sp.GiaTien ,sp.AnhGame }).Take(4).ToList();
             return Json(listLCategory3, JsonRequestBehavior.AllowGet);
         }
 
@@ -189,7 +189,7 @@ namespace DoAn3.Controllers
             var loaiMay = (from game in db.Game where game.MaGame == id select game).FirstOrDefault();
             int maloai = loaiMay.MaLoai.GetValueOrDefault();
 
-            var data  = (from game in db.Game where game.MaLoai == maloai orderby game.MaGame descending select new {game.MaGame,game.TenGame,game.AnhGame,game.GiaTien}).Take(8).ToList();
+            var data  = (from game in db.Game where game.MaLoai == maloai orderby game.MaGame descending select new {game.MaGame,game.TenGame,game.AnhGame,game.GiaTien}).Take(4).ToList();
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }

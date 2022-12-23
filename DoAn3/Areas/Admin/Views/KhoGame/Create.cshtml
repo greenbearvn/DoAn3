@@ -20,14 +20,70 @@
         </div>
     </div>
 
-
-    @Html.Action("ViewCart")
+    <h4>Thêm chi tiết kho game</h4>
     <hr />
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-success" ng-click="addData()" />
+    <table class="table">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên Game
+            </th>
+            <th>
+                Ảnh minh họa
+            </th>
+            <th>
+                Ngày thêm
+            </th>
+            <th>
+                Tình trạng
+            </th>
+
+            <th></th>
+        </tr>
+
+        
+        <tr ng-repeat="data in session">
+            <td>
+                {{$index+1}}
+            </td>
+            <td>
+                {{data.TenGame}}
+            </td>
+            <td>
+                <img src="{{data.AnhGame}}" height="200" width="150" />
+            </td>
+            <td>
+                {{data.NgayThem}}
+            </td>
+            <td>
+                {{data.TinhTrang}}
+            </td>
+
+
+            <td>
+
+                <a class="btn btn-danger text-white" ng-click="remove($index)"><i class="fa-solid fa-trash"></i></a>
+            </td>
+
+        </tr>
+        
+    </table>
+
+
+    <hr />
+    <div class="d-flex">
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Thêm kho game" class="btn btn-success" ng-click="addData()" />
+            </div>
         </div>
+        <a href="/Admin/KhoGame/Index" class="btn btn-danger" style="height:40px">
+            Quay lại
+        </a>
     </div>
+    
     <h4> Danh sách game</h4>
     <div class="d-flex justify-content-end">
         <div class="input-group">
@@ -102,7 +158,7 @@
             </td>
             <td>
                 <a class="btn btn-warning fa-solid fa-pencil" href="@Url.Action("Edit", "Games")/{{game.MaGame}}"> </a>
-                <a class="btn btn-primary fa-solid fa-circle-plus" href="@Url.Action("AddCart", "KhoGame")?id={{game.MaGame}}" @*ng-click="addItem(game.MaGame,game.TenGame,game.AnhGame)"*@></a>
+                <a class="btn btn-primary fa-solid fa-circle-plus" @*href="@Url.Action("AddCart", "KhoGame")?id={{game.MaGame}}"*@ ng-click="add(game.MaGame,game.TenGame,game.AnhGame)"></a>
                 <a class="btn btn-success fa-solid fa-trash" ng-click="DeleteButton(game.MaGame)"> </a>
 
 
@@ -122,9 +178,7 @@
 </div>
 
  
-<a href="/Admin/KhoGame/Index" class="btn btn-danger">
-    Quay lại
-</a>
+
 
 @section scripts{
     <script>
@@ -141,17 +195,42 @@
         myApp.controller('Create', function ($scope, $http, $httpParamSerializerJQLike, $window) {
 
 
+            /////////////////////////////////////////////////////
+            $scope.session = [
+            ];
+
+
+            $scope.add = function (id, name, img) {
+                var d = new Date();
+                var date = d.getDate();
+                var m = d.getMonth() + 1;
+                var y = d.getFullYear()
+                var datetime = date + "-" + m + "-" + y;
+                var status = false;
+                $scope.session.push({ MaGame: id, TenGame: name, AnhGame: img, NgayThem: datetime, TinhTrang: status });
+            };
+
+            $scope.remove = function (index) {
+
+                if (index > -1) { 
+                    $scope.session.splice(index, 1);
+                }
+
+            };
+
+
+
+            ////////////////////////////////////
+
             $scope.kg = {};
             $scope.addData = function () {
-                Token = angular.element('input[name="__RequestVerificationToken"]').attr('value');
-                $scope.kg.__RequestVerificationToken = Token;
-                dataRequest = $scope.kg;
-                console.log(dataRequest);
+                
+
                 $http({
-                    method: 'post',
-                    url: '/Admin/KhoGame/CreateKG',
-                    data: $httpParamSerializerJQLike(dataRequest),
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+                    method: "post",
+                    url: "/Admin/KhoGame/addCTKG?usid=" + $scope.kg.UserID,
+                    dataType: "json",
+                    data: JSON.stringify($scope.session)
 
                 }).then(function (res) {
                     alert("Thêm kho game công");
@@ -160,35 +239,7 @@
             };
 
           
-
-            ///////////////////////////
-
-
-
-            /////////////////////////////////////////
-            var getDataFromSession = function () {
-                var json = [];  
-                $.each($window.sessionStorage, function (i, v) {
-                    json.push(angular.fromJson(v));
-                });
-                return json;
-            }
-
-            //////////////////////
-            /// add game to session
-            $scope.addItem = function (id,tengame,anhgame) {
-                json = {
-                    id: id,
-                    tengame: tengame,
-                    img: anhgame,
-
-                }
-                $window.sessionStorage.setItem(id, JSON.stringify(json));
-                $scope.huhu = getDataFromSession();
-                console.log($scope.huhu)
-            }
-
-
+        
             $http({
                 method: 'get',
                 url: '/Admin/KhachHangs/getDataUser',

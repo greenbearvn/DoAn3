@@ -100,20 +100,20 @@ namespace DoAn3.Areas.Admin.Controllers
         }
 
  
-        public string CreateGame([Bind(Include = "MaGame,TenGame,AnhGame,MoTa,MaLoai,MaMay,MaNPH,SoLuong,GiaTien,Likes,Views,Favouries,TrangThai")] Game game)
+        
+
+        public bool CreateGames(Game game)
         {
             if (game != null)
             {
-               
                 db.Game.Add(game);
                 db.SaveChanges();
-                return "Them game thanh cong";
-
-
+                return true;
             }
-            return "tao khong thanh cong";
-
-
+            else
+            {
+                return false;
+            }
         }
 
 

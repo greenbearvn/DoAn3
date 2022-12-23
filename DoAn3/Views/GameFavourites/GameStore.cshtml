@@ -57,7 +57,7 @@
                 </div>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item  dropdown d-none d-md-block">
-                        <a class="nav-link dropdown-toggle" id="reportDropdown" href="#" data-toggle="dropdown" aria-expanded="false"> Reports </a>
+                        <a class="nav-link dropdown-toggle" id="reportDropdown" href="#" data-toggle="dropdown" aria-expanded="false">  </a>
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="reportDropdown">
                             <a class="dropdown-item" href="#">
                                 <i class="mdi mdi-file-pdf mr-2"></i>PDF
@@ -73,7 +73,7 @@
                         </div>
                     </li>
                     <li class="nav-item  dropdown d-none d-md-block">
-                        <a class="nav-link dropdown-toggle" id="projectDropdown" href="#" data-toggle="dropdown" aria-expanded="false"> Projects </a>
+                        <a class="nav-link dropdown-toggle" id="projectDropdown" href="#" data-toggle="dropdown" aria-expanded="false">  </a>
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="projectDropdown">
                             <a class="dropdown-item" href="#">
                                 <i class="mdi mdi-eye-outline mr-2"></i>View Project
@@ -90,7 +90,7 @@
                                 <i class="flag-icon flag-icon-us" title="us" id="us"></i>
                             </div>
                             <div class="nav-language-text">
-                                <p class="mb-1 text-black">English</p>
+                                <p class="mb-1 text-black"></p>
                             </div>
                         </a>
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="languageDropdown">
@@ -116,7 +116,6 @@
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                             <div class="nav-profile-img">
-                                <img src="~/Content/assets/images/faces/face28.png" alt="image">
                             </div>
                             <div class="nav-profile-text">
                                 <p class="mb-1 text-black">{{username.UserName}}</p>
@@ -293,25 +292,17 @@
                     </li>
                     <li class="nav-item sidebar-user-actions">
                         <div class="sidebar-user-menu">
-                            <a href="#" class="nav-link">
-                                <i class="mdi mdi-settings menu-icon"></i>
-                                <span class="menu-title">Settings</span>
+                            <a href="/Home/Index" class="nav-link">
+                                <i class="fa-solid fa-house"></i>
+                                <span class="menu-title">Trang chủ</span>
                             </a>
                         </div>
                     </li>
                     <li class="nav-item sidebar-user-actions">
                         <div class="sidebar-user-menu">
-                            <a href="#" class="nav-link">
-                                <i class="mdi mdi-speedometer menu-icon"></i>
-                                <span class="menu-title">Take Tour</span>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item sidebar-user-actions">
-                        <div class="sidebar-user-menu">
-                            <a href="#" class="nav-link">
+                            <a href="/Users/Logout" class="nav-link">
                                 <i class="mdi mdi-logout menu-icon"></i>
-                                <span class="menu-title">Log Out</span>
+                                <span class="menu-title">Đăng xuất</span>
                             </a>
                         </div>
                     </li>
@@ -339,10 +330,7 @@
                                     </div>
                                     <div class="infor  w-70 m-4">
                                         <h2 class="mb-0 text-dark font-bold text-2xl">{{data.TenGame}}</h2>
-                                        <div class="time-play mt-12">
-                                            <div class="text-base flex"><p class="">You are play</p><p class="ml-4">2 h 30 min</p></div>
-                                            <div class="text-base flex"><p class="">You are play</p><p class="ml-4">2 h 30 min</p></div>
-                                        </div>
+                                        
                                         <div class="mt-10">
                                             <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" ng-click="Download(data.MaGame,kg.MaKhoGame)">
                                                 <i class="fa-solid fa-download"></i>
@@ -367,12 +355,12 @@
 
                         <div class=" bg-white rounded-lg w-full mt-6">
                             <ul class="list-none flex justify-content-center p-4">
-                                <li class="flex-auto">Store Page</li>
-                                <li class="flex-auto">Store Page</li>
-                                <li class="flex-auto">Store Page</li>
-                                <li class="flex-auto">Store Page</li>
-                                <li class="flex-auto">Store Page</li>
-                                <li class="flex-auto">Store Page</li>
+                                <li class="flex-auto text-black-900"></li>
+                                <li class="flex-auto text-black-900">Tính năng</li>
+                                <li class="flex-auto text-black-900">Mô tả</li>
+                                <li class="flex-auto text-black-900">Lối chơi</li>
+                                <li class="flex-auto text-black-900">Hướng dẫn</li>
+                                <li class="flex-auto text-black-900">Mẹo</li>
                             </ul>
                         </div>
                         <div class=" bg-white rounded-lg w-full mt-6">

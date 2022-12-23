@@ -11,11 +11,13 @@ namespace DoAn3.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Web.Mvc;
+
     public partial class News
     {
         public int NewsID { get; set; }
         public string Title { get; set; }
+        [AllowHtml]
         public string Content { get; set; }
         public string Banner { get; set; }
         public System.DateTime PublicDate { get; set; }

@@ -78,14 +78,14 @@
                                         <h4 class="cart-item-name"><a href="/Detail/@item.Game.TenGame">@item.Game.TenGame</a></h4>
                                     </td>
                                     <td class="cart-item-block cart-item-info">
-                                        <span class="cart-item-value ">@item.Game.GiaTien</span>
+                                        <span class="cart-item-value ">@string.Format("{0:0,##0}", item.Game.GiaTien)  VNĐ</span>
                                     </td>
 
 
 
                                     <td class="cart-item-block cart-item-info">
-                                        <span class="cart-item-label">Total</span>
-                                        <strong class="cart-item-value ">@(item.Game.GiaTien) <span>@{totalBill += (item.Game.GiaTien);}</span></strong>
+                                        <span class="cart-item-label">Tổng tiền</span>
+                                        <strong class="cart-item-value ">@string.Format("{0:0,##0}", item.Game.GiaTien)  VNĐ <span>@{totalBill += (item.Game.GiaTien);}</span></strong>
 
                                         <a class="cart-remove icon" data-cart-itemid="6045dc73-eaeb-4fc1-a4e0-9fa2478691ed" href="/Cart/RemoveCartItem/@item.Game.MaGame" style="color:black">
                                             <svg><use xlink:href="#icon-close"></use></svg>
@@ -149,7 +149,7 @@
                                     <strong>Tạm tính:</strong>
                                 </div>
                                 <div class="cart-total-value">
-                                    <span>@string.Format("{0}", totalBill)</span>
+                                    <span>@string.Format("{0:0,##0}", totalBill)  VNĐ</span>
                                 </div>
                             </li>
                             
@@ -158,7 +158,7 @@
                                     <strong>Tổng tiền:</strong>
                                 </div>
                                 <div class="cart-total-value cart-total-grandTotal">
-                                    <span id="totalMoney">@string.Format("{0}", totalBill)</span>
+                                    <span>@string.Format("{0:0,##0}", totalBill)  VNĐ</span>
                                 </div>
                             </li>
                         </ul>
@@ -171,7 +171,7 @@
 
                 <div class="cart-actions">
                     @*<a class="button-keke " title="Click here to proceed to checkout" value="Submit" id="opener">Check out</a>*@
-                    <a class="button button--primary" title="Click here to proceed to checkout" value="Submit" id="btnSave" ng-click="Payment()">Check out</a>
+                    <a class="button button--primary" title="Click here to proceed to checkout" value="Submit" id="btnSave" ng-click="Payment()">Mua ngay</a>
                 </div>
                 @*<div id="dialog">
                 <div class="modal-content">

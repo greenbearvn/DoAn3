@@ -52,7 +52,8 @@ namespace DoAn3.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                news.PublicDate = new DateTime();
+                DateTime today = DateTime.Today;
+                news.PublicDate = today;
                 db.New.Add(news);
                 db.SaveChanges();
                 return true;
