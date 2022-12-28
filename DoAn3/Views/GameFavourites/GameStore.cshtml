@@ -263,7 +263,7 @@
                 <ul class="nav">
                     <li class="nav-item nav-category">Tất cả game</li>
                     <li class="nav-item " onclick="ShowGalerry()">Trang chính</li>
-                    <li class="nav-item" ng-repeat="data in nameGame | filter:search" ng-click="GetData(data.MaGame)" >
+                    <li class="nav-item" ng-repeat="data in nameGame | filter:search" ng-click="GetData(data.MaGame)">
                         <a class="nav-link" ng-click="GetData(data.MaGame)">
                             <span class="icon-bg"><img ng-src="{{data.AnhGame}}" width="10" height="20" /></span>
                             <span class="menu-title" ng-click="GetData(data.MaGame,data.MaKhoGame)" onclick="HiddenGalerry()">{{data.TenGame}}</span>
@@ -314,7 +314,7 @@
                         <img class="rounded-lg" ng-src="{{data.AnhGame}}"
                              alt="{{data.TenGame}}" width="250" height="300">
                     </div>
-                    
+
                 </div>
             </div>
             <!-- partial -->
@@ -330,11 +330,11 @@
                                     </div>
                                     <div class="infor  w-70 m-4">
                                         <h2 class="mb-0 text-dark font-bold text-2xl">{{data.TenGame}}</h2>
-                                        
+
                                         <div class="mt-10">
                                             <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" ng-click="Download(data.MaGame,kg.MaKhoGame)">
                                                 <i class="fa-solid fa-download"></i>
-                                                <span class="text-xl"  >{{TinhTrang}}</span>
+                                                <span class="text-xl">{{TinhTrang}}</span>
                                             </button>
                                             <div class="btn btn-primary">
                                                 <i class=" fa-solid fa-trash " ng-click="Delete(data.MaGame,kg.MaKhoGame)"> </i>
@@ -364,7 +364,7 @@
                             </ul>
                         </div>
                         <div class=" bg-white rounded-lg w-full mt-6">
-                            <p class="mb-0 text-black text-l p-6">{{data.MoTa}}</p>
+                            <p class="mb-0 text-black text-l p-6" ng-bind-html="data.MoTa"></p>
                         </div>
                     </div>
 
@@ -374,9 +374,9 @@
             <!-- content-wrapper ends -->
             <!-- partial -->
         </div>
-            <!-- main-panel ends -->
-        </div>
-        <!-- page-body-wrapper ends -->
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
     </div>
 
 
@@ -394,15 +394,15 @@
                 var galerry = document.getElementById("gallery");
                 galerry.style.display = 'block';
                 var game = document.getElementById("game");
-                game.style.display ='none'
+                game.style.display = 'none'
             }
 
 
-            var myApp = angular.module("myApp", []).config(['$qProvider', function ($qProvider) {
+            var myApp = angular.module("myApp", ['ngSanitize']).config(['$qProvider', function ($qProvider) {
                 $qProvider.errorOnUnhandledRejections(false);
             }]);;
 
-            
+
 
             myApp.controller("GetGameFavourite", GetGameFavourite);
             function GetGameFavourite($scope, $http) {
@@ -427,7 +427,7 @@
 
                 }).then(function (res) {
                     $scope.kg = res.data;
-                   
+
 
                 });
 
@@ -435,11 +435,11 @@
 
 
                 $scope.Delete = function (gid, mkg) {
-                    
+
 
                     $http({
                         method: "post",
-                        url: "/GameFavourites/DeleteGameFavourites?magame=" + gid + "&makg=" + mkg +"&userid=" +id,
+                        url: "/GameFavourites/DeleteGameFavourites?magame=" + gid + "&makg=" + mkg + "&userid=" + id,
 
                     }).then(function (res) {
                         $scope.check = res.data;
@@ -465,12 +465,12 @@
                     }).then(function (res) {
                         $scope.game = res.data;
 
-
+                        window.location.reload();
                     });
                 }
 
 
-                $scope.GetData = function (gid,mkg) {
+                $scope.GetData = function (gid, mkg) {
                     $http({
                         method: "GET",
                         url: "/GameFavourites/GetProduct?id=" + gid,
@@ -483,7 +483,7 @@
 
                     $http({
                         method: "GET",
-                        url: "/GameFavourites/Tinhtrang?magame=" + gid +"&makg="+mkg,
+                        url: "/GameFavourites/Tinhtrang?magame=" + gid + "&makg=" + mkg,
 
                     }).then(function (res) {
                         $scope.game = res.data;
@@ -506,7 +506,7 @@
 
                 }).then(function (res) {
                     $scope.gameNumber = res.data;
-                    
+
 
                 });
 
@@ -527,7 +527,7 @@
 
                 }).then(function (res) {
                     $scope.galerry = res.data;
-                  
+
 
                 });
 
@@ -547,6 +547,8 @@
             }
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.8.3/angular-sanitize.js" integrity="sha512-WsrQol2t85bun8XdIkjqTbNLgY54bCBgVZw+B+00eVritDAlCAcfYo92/53rFp63cKZpDa7t5r5lDDeKFcbUAQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     }
     <!-- Custom js for this page -->
 

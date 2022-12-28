@@ -10,7 +10,7 @@
 <div class="bg-white" ng-controller="DetailGame">
     <h4>Game</h4>
     <hr />
-    <dl class="dl-horizontal container" >
+    <dl class="dl-horizontal container">
         <dt>
             Tên game
         </dt>
@@ -32,12 +32,12 @@
             Mô tả
         </dt>
 
-        <dd>
+        <dd ng-bind-html="MoTa">
 
-            {{game.MoTa}}
+
         </dd>
 
-      
+
 
         <dt>
             Giá tiền
@@ -47,9 +47,9 @@
             {{game.GiaTien}}
         </dd>
 
-        
 
-        
+
+
 
         <dt>
             Số  lượt xem
@@ -59,12 +59,12 @@
             {{game.Views}}
         </dd>
 
-        
 
-        
+
+
 
         <dt>
-            Trạng thái 
+            Trạng thái
         </dt>
 
         <dd>
@@ -73,7 +73,7 @@
         </dd>
 
         <dt>
-            tên loại
+            Tên loại
         </dt>
 
         <dd>
@@ -109,7 +109,7 @@
 @section scripts{
 
     <script>
-        var myApp = angular.module("myApp", []).config(['$qProvider', function ($qProvider) {
+        var myApp = angular.module("myApp", ['ngSanitize']).config(['$qProvider', function ($qProvider) {
             $qProvider.errorOnUnhandledRejections(false);
         }]);
 
@@ -126,12 +126,15 @@
 
             }).then(function (res) {
                 $scope.game = res.data;
-                console.log(game)
+                $scope.MoTa = $scope.game.MoTa;
+                console.log($scope.game)
+
             });
 
         }
-        
+
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.8.3/angular-sanitize.js" integrity="sha512-WsrQol2t85bun8XdIkjqTbNLgY54bCBgVZw+B+00eVritDAlCAcfYo92/53rFp63cKZpDa7t5r5lDDeKFcbUAQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 }

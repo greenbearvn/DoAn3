@@ -63,6 +63,7 @@ namespace DoAn3.Areas.Admin.Controllers
                              game.MaGame,
                              game.TenGame,
                              game.AnhGame,
+                             game.MoTa,
                              game.GiaTien,
                              game.TrangThai,
                              lg.TenLoai,

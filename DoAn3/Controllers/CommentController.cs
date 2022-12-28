@@ -25,7 +25,6 @@ namespace DoAn3.Controllers
                 db.SaveChanges();
 
                 var allComment = (from cm in db.BinhLuan join us in db.User on cm.UserID equals us.UserID where cm.MaGame == comment.MaGame select new { cm.MaNPH, cm.MaGame, cm.UserID, us.UserName, cm.NoiDung, cm.ThoiGian }).ToList();
-
                 return Json(allComment,JsonRequestBehavior.AllowGet);
             }
             else

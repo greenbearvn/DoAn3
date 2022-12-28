@@ -156,7 +156,7 @@
                                         <figcaption class="card-figcaption">
                                             <div class="card-figcaption-body">
                                                 <div class="card-buttons">
-                                                    <a href="" class="button button--small card-figcaption-button">Add to Cart</a>
+                                                    <a href="@Url.Action("AddCart", "Home")?id={{data.MaGame}}" class="button button--small card-figcaption-button">Add to Cart</a>
 
 
                                                     <a href="/Home/Detail/{{data.MaGame}}" class="button button--small card-figcaption-button quickview" data-product-id="111">Quick view</a>
@@ -528,7 +528,6 @@
                                         </div>
                                     </article>
                                 </li>
-
                             </ul>
                         </div>
                     </div>

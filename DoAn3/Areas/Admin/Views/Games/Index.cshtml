@@ -226,7 +226,7 @@
                         var begin = (($scope.currentPage - 1) * $scope.numPerPage), end = begin + $scope.numPerPage;
 
                         if (!$scope.games || !$scope.games.length) { return }
-                        $scope.filteredTodos = $scope.games.slice(begin, end);
+                        $scope.filteredGames = $scope.games.slice(begin, end);
                     });
                 });
 

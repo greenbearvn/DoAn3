@@ -131,7 +131,7 @@
                                 <p class="alertBox-column alertBox-message"></p>
                             </div>
                             <div class="form-action">
-                                <a href="@Url.Action("AddCart", "Home", new { id = @Model.MaGame })" class="button button--small card-figcaption-button">Add to Cart</a>
+                                <a href="@Url.Action("AddCart", "Home", new { id = @Model.MaGame })" class="button button--small card-figcaption-button">Thêm vào giỏ hàng</a>
                             </div>
                             <!-- snippet location product_addtocart -->
 
@@ -199,7 +199,7 @@
                 <article class="productView-description" itemprop="description">
                     <ul class="tabs tabs--alt" data-tab>
                         <li class="tab is-active">
-                            <a class="tab-title" href="#tab-description">Mo ta</a>
+                            <a class="tab-title" href="#tab-description">Mô tả</a>
                         </li>
                     </ul>
                     <div class="tabs-contents">
@@ -236,7 +236,7 @@
                         <div class="productCarousel-slide" ng-repeat="data in relateGames">
                             <article class="card ">
                                 <figure class="card-figure">
-                                    <a href="Home/Detail/{{data.MaGame}}">
+                                    <a href="{{data.MaGame}}">
                                         <img class="card-image" src="{{data.AnhGame}}" alt="[Sample] Orbit Terrarium - Large" title="[Sample] Orbit Terrarium - Large">
 
                                     </a>
@@ -262,7 +262,7 @@
 
                                     <div class="card-text" data-test-info-type="price">
                                         <div class="price-section price-section--withoutTax ">
-                                            <span data-product-price-without-tax class="price price--withoutTax">{{data.GiaTien}} đ</span>
+                                            <span data-product-price-without-tax class="price price--withoutTax">{{data.GiaTien | number}} đ</span>
                                         </div>
                                     </div>
                                 </div>
@@ -282,13 +282,13 @@
 
                         <div class="editor  flex items-left justify-left flex-col text-gray-800 border border-gray-300 p-4 shadow-lg max-w-2xl px-4 pt-2 pb-2.5">
 
-                            <textarea class="description bg-gray-100 sec p-3 h-60 border border-gray-300 outline-none" spellcheck="false" placeholder="Describe everything about this post here" ng-model="desc"></textarea>
+                            <textarea class="description bg-gray-100 sec p-3 h-60 border border-gray-300 outline-none" spellcheck="false" placeholder="Vui lòng viết nội dung bình luận tại đây" ng-model="desc"></textarea>
 
 
                             <!-- buttons -->
                             <div class="buttons flex">
-                                <div class="btn border border-gray-300 p-1 px-4 font-semibold cursor-pointer text-gray-500 ml-auto">Cancel</div>
-                                <div class="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500" type="submit" value="Submit" id="btnSave" ng-click="Create()">Dang</div>
+                                <div class="btn border border-gray-300 p-1 px-4 font-semibold cursor-pointer text-gray-500 ml-auto">Hủy</div>
+                                <div class="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500" type="submit" value="Submit" id="btnSave" ng-click="Create()">Bình luận</div>
                             </div>
                         </div>
                         <div class="flex items-left justify-left w-screen bg-white dark:bg-gray-800 container mx-auto">
@@ -301,9 +301,7 @@
                                             <div class="text-normal leading-snug md:leading-normal">{{data.NoiDung}}</div>
                                         </div>
                                         <div class="text-sm ml-4 mt-0.5 text-gray-500 dark:text-gray-400">{{data.ThoiGian.slice(6, -2) | date: 'dd-MM-yyyy'}}</div>
-                                        <div ng-init="ShowButtonDelete(data.MaGame,data.MaNPH,data.UserID)" ng-click="DeleteComment(data.MaGame,data.MaNPH,data.UserID)" class="bg-white dark:bg-gray-700 border border-white dark:border-gray-700 rounded-full float-right -mt-8 mr-0.5 flex shadow items-center ">
-                                            <i ng-show="true" class="fa-solid fa-trash "></i>
-                                        </div>
+                                        
                                     </div>
 
                                 </div>
@@ -313,14 +311,7 @@
                 }
                 else
                 {
-                    @*<ul class="navUser-section">
-                            <li class="navUser-item navUser-item--account text-red-500" >
-                                <a class="navUser-action" href="/Users/Login">
-                                    <span class="navUser-item-loginLabel">Đăng nhập</span>
-                                </a>
-                                <span class="navUser-or">or</span> <a class="navUser-action" href="/Users/Register">Đăng ký</a>
-                            </li>
-                        </ul>*@
+                   
 
                     <div class="m-9">
                         <h5 class="text-red-600 font-bold text-center ">Xin vui lòng đăng nhập hoặc đăng kí tài khoản mới để bình luận và hiển thị bình luận</h5>
@@ -437,6 +428,11 @@
 
                 }).then(function (res) {
                     $scope.relateGames = res.data;
+                    for (let [i, game] of $scope.relateGames.entries()) {
+                        if (game.TenGame === $scope.sp.TenGame) {
+                            $scope.relateGames.splice(i, 1);
+                        }
+                    }
 
                 });
             }

@@ -10,6 +10,9 @@ using System.Web.Mvc;
 using DoAn3.Models;
 using System.Text;
 using System.Web.Script.Serialization;
+using System.Web.UI.WebControls;
+using System.IO;
+using System.Web.UI;
 
 namespace DoAn3.Areas.Admin.Controllers
 {
@@ -317,7 +320,7 @@ namespace DoAn3.Areas.Admin.Controllers
 
         public JsonResult getCTDH(int id)
         {
-            var query = (from cthdh in db.ChiTietDonHang join game in db.Game on cthdh.MaGame equals game.MaGame where cthdh.MaDH == id select new { cthdh.MaDH, game.TenGame, cthdh.Gia }).ToList();
+            var query = (from cthdh in db.ChiTietDonHang join game in db.Game on cthdh.MaGame equals game.MaGame where cthdh.MaDH == id select new { cthdh.MaDH, game.TenGame,game.AnhGame, cthdh.Gia }).ToList();
             
             return Json(query, JsonRequestBehavior.AllowGet);
         }
@@ -564,6 +567,56 @@ namespace DoAn3.Areas.Admin.Controllers
             sb.Append("</table>");
 
             return File(Encoding.UTF8.GetBytes(sb.ToString()), "application/vnd.ms-word", "InHoaDon.doc");
+        }
+
+        public ActionResult ExportToWord(int id)
+        {
+            // get the data from database
+
+            var order = (from dh in db.DonHang
+                         join kh in db.KhachHang
+                         on dh.MaKH equals kh.MaKH
+                         where dh.MaDH == id
+                         select new { dh.MaDH, kh.MaKH, kh.TenKH, dh.NgayLap, dh.TinhTrang, dh.Tongtien }).FirstOrDefault();
+
+            var data = (from cthdh in db.ChiTietDonHang join game in db.Game on cthdh.MaGame equals game.MaGame
+                        join nph in db.NhaPhatHanh on game.MaNPH equals nph.MaNPH
+                        join loaimay in db.LoaiMay on game.MaMay equals loaimay.MaMay
+                        join lg in db.LoaiGame on game.MaLoai equals lg.MaLoai
+                        where cthdh.MaDH == id select new { cthdh.MaDH, game.TenGame,  cthdh.Gia }).ToList();
+            // instantiate the GridView control from System.Web.UI.WebControls namespace
+            // set the data source
+            //GridView gr = new GridView();
+            //gr.DataSource = order;
+            //gr.DataBind();
+            GridView gridview = new GridView();
+
+            gridview.DataSource = data;
+            
+            gridview.DataBind();
+
+            // Clear all the content from the current response
+            Response.ClearContent();
+            Response.Buffer = true;
+            // set the header
+            Response.AddHeader("content-disposition", "attachment;filename = InHoaDon.doc");
+            Response.ContentType = "application/ms-word";
+            Response.Charset = "";
+            // create HtmlTextWriter object with StringWriter
+            using (StringWriter sw = new StringWriter())
+            {
+                using (HtmlTextWriter htw = new HtmlTextWriter(sw))
+                {
+                    // render the GridView to the HtmlTextWriter
+                    gridview.RenderControl(htw);
+                    //gr.RenderControl(htw);
+                    // Output the GridView content saved into StringWriter
+                    Response.Output.Write(sw.ToString());
+                    Response.Flush();
+                    Response.End();
+                }
+            }
+            return View();
         }
 
     }
