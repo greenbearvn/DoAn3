@@ -172,6 +172,7 @@ namespace DoAn3.Areas.Admin.Controllers
                             ctkg.MaKhoGame,
                             game.MaGame,
                             game.TenGame,
+                            game.AnhGame,
                             ctkg.NgayThem,
                             ctkg.TinhTrang
                         }).ToList();

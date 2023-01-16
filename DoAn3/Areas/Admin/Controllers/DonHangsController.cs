@@ -57,30 +57,22 @@ namespace DoAn3.Areas.Admin.Controllers
 
                 DonHang donHang = new DonHang();
                 donHang.MaKH = makh;
-                DateTime today = DateTime.Today;
-                donHang.NgayLap = today;
+                DateTime thisDay = DateTime.Today;
+                donHang.NgayLap = thisDay;
                 donHang.TinhTrang = tinhtrang;
                 donHang.Tongtien = tongtien;
-                db.DonHang.Add(donHang);
 
+                db.DonHang.Add(donHang);
                 db.SaveChanges();
 
-                if (ListCTDH != null)
+                foreach(var item in ListCTDH)
                 {
-                    foreach (var item in ListCTDH)
-                    {
-                        int intOrderId = donHang.MaDH;
-
-                        //Chi tiet don hang
-                        ChiTietDonHang ctdh = new ChiTietDonHang();
-                        ctdh.MaDH = intOrderId;
-                        ctdh.MaGame = item.MaGame;
-                        ctdh.Gia = item.Gia;
-
-                        db.ChiTietDonHang.Add(ctdh);
-                        db.SaveChanges();
-
-                    }
+                    ChiTietDonHang ctdh = new ChiTietDonHang();
+                    ctdh.MaDH = donHang.MaDH;
+                    ctdh.MaGame = item.MaGame;
+                    ctdh.Gia = item.Gia;
+                    db.ChiTietDonHang.Add(ctdh);
+                    db.SaveChanges();
                 }
                 
 
@@ -320,7 +312,7 @@ namespace DoAn3.Areas.Admin.Controllers
 
         public JsonResult getCTDH(int id)
         {
-            var query = (from cthdh in db.ChiTietDonHang join game in db.Game on cthdh.MaGame equals game.MaGame where cthdh.MaDH == id select new { cthdh.MaDH, game.TenGame,game.AnhGame, cthdh.Gia }).ToList();
+            var query = (from cthdh in db.ChiTietDonHang join game in db.Game on cthdh.MaGame equals game.MaGame where cthdh.MaDH == id select new { cthdh.MaDH,game.MaGame, game.TenGame,game.AnhGame, cthdh.Gia }).ToList();
             
             return Json(query, JsonRequestBehavior.AllowGet);
         }
@@ -407,19 +399,7 @@ namespace DoAn3.Areas.Admin.Controllers
             }
         }
 
-        public ActionResult RemoveCartItem(int id)
-        {
-
-            List<ChiTietDonHang> cart = (List<ChiTietDonHang>)Session["cartAdmin"];
-            if (cart != null)
-            {
-
-                cart.RemoveAll(s => s.MaGame == id);
-                Session["cartAdmin"] = cart;
-
-            }
-            return RedirectToAction("Create", "DonHangs");
-        }
+        
 
         public ActionResult RemoveCartEditItem(int id, int mhd)
         {
@@ -487,22 +467,15 @@ namespace DoAn3.Areas.Admin.Controllers
             }
         }
 
-        public bool RemoveCartItem(int? id, int? magame)
+        public bool RemoveCartItem(int id, int magame)
         {
-            if (id != null && magame != null)
-            {
-                var chiTietDonHang = (from cdth in db.ChiTietDonHang where cdth.MaDH == id && cdth.MaGame == magame select cdth).FirstOrDefault();
-                var donHang = (from dh in db.DonHang where dh.MaDH == id select dh).FirstOrDefault();
-                var tinhtien = donHang.Tongtien - chiTietDonHang.Gia;
-                donHang.Tongtien = tinhtien;
-                db.ChiTietDonHang.Remove(chiTietDonHang);
-                db.SaveChanges();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var chiTietDonHang = (from cdth in db.ChiTietDonHang where cdth.MaDH == id && cdth.MaGame == magame select cdth).FirstOrDefault();
+            var donHang = (from dh in db.DonHang where dh.MaDH == id select dh).FirstOrDefault();
+            var tinhtien = donHang.Tongtien - chiTietDonHang.Gia;
+            donHang.Tongtien = tinhtien;
+            db.ChiTietDonHang.Remove(chiTietDonHang);
+            db.SaveChanges();
+            return true;
         }
 
        
@@ -617,6 +590,26 @@ namespace DoAn3.Areas.Admin.Controllers
                 }
             }
             return View();
+        }
+
+        public JsonResult DeleteOrderDetail(int magame, int mahoadon)
+        {
+            var orderdetail = (from od in db.ChiTietDonHang  where od.MaDH == mahoadon && od.MaGame == magame select od).FirstOrDefault();
+            if (orderdetail != null)
+            {
+                db.ChiTietDonHang.Remove(orderdetail);
+                db.SaveChanges();
+                var query = (from cthdh in db.ChiTietDonHang join game in db.Game on cthdh.MaGame equals game.MaGame where cthdh.MaDH == mahoadon select new { cthdh.MaDH,game.MaGame, game.TenGame, game.AnhGame, cthdh.Gia }).ToList();
+
+                return Json(query, JsonRequestBehavior.AllowGet);
+
+            }
+            else
+            {
+                var query = (from cthdh in db.ChiTietDonHang join game in db.Game on cthdh.MaGame equals game.MaGame where cthdh.MaDH == mahoadon select new { cthdh.MaDH, game.MaGame, game.TenGame, game.AnhGame, cthdh.Gia }).ToList();
+
+                return Json(query, JsonRequestBehavior.AllowGet);
+            }
         }
 
     }

@@ -87,7 +87,7 @@
                             @if  (Session["UserID"] != null && Session["User"] != null)
                             {
                                 <li class="navUser-item navUser-item--account">
-                                    
+                                    <span class="navUser-item-loginLabel">User</span>
                                      <a class="navUser-action" href="/Users/Logout">Đăng xuất</a>
                                 </li>
                                 <a href="/GameFavourites/GameStore/@Session["UserID"].ToString()" style="color:red">Kho game</a>
